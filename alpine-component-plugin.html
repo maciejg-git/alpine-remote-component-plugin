@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title></title>
+    <link href="/output.css" rel="stylesheet" />
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/litewind-alpine@0.x.x/plugins/use-floating/dist/cdn.min.js"
+    ></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/litewind-alpine@0.x.x/components/dropdown/dist/cdn.min.js"
+    ></script>
+    <script type="module" src="/builds/cdn.js"></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+  </head>
+  <body>
+    <div x-data="{isVisible: false}">
+      <button @click="isVisible = !isVisible">toggle component</button>
+      <div
+        x-data
+        x-remote-component="/input.html"
+        data-prop="input"
+        x-rc-config:swap="outer"
+        x-rc-config:trigger="load"
+        x-rc-config:attrs="data"
+        x-rc-config:mime="text/html"
+      >
+        <template data-template="menu">
+          <div x-remote-component="/input2.html" data-input="text"></div>
+        </template>
+        <template data-template="text">
+          <div x-remote-component="/text.html" data-input="text"></div>
+        </template>
+      </div>
+
+      <div class="my-10">event trigger</div>
+
+      <button @click="$dispatch('load-component')">dispatch event</button>
+      <div
+        x-data
+        x-remote-component="/input.html"
+        data-prop="input"
+        x-rc-config:swap="outer"
+        x-rc-config:trigger="event"
+        x-rc-config:attrs="data"
+        x-rc-config:mime="text/html"
+        @load-component.window.stop="remoteComponent.trigger"
+      >
+        <template data-template="menu">
+          <div x-remote-component="/input2.html" data-input="text"></div>
+        </template>
+        <template data-template="text">
+          <div x-remote-component="/text.html" data-input="text"></div>
+        </template>
+      </div>
+
+      <div class="my-10">inner</div>
+
+      <div
+        x-data
+        x-remote-component="/input.html"
+        data-prop="input"
+        x-rc-config:swap="inner"
+        x-rc-config:trigger="load"
+        x-rc-config:attrs="data"
+        x-rc-config:mime="text/html"
+      >
+        <template data-template="menu">
+          <div x-remote-component="/input2.html" data-input="text"></div>
+        </template>
+        <template data-template="text">
+          <div x-remote-component="/text.html" data-input="text"></div>
+        </template>
+      </div>
+
+      <div class="my-10">dropdown</div>
+
+      <div
+        x-data
+        x-remote-component="/dropdown.html"
+        data-prop="input"
+        x-rc-config:swap="outer"
+        x-rc-config:trigger="load"
+        x-rc-config:attrs="data"
+        data-trigger-event="hover"
+      >
+        <template data-template="menu">
+          <div x-remote-component="/dropdown-menu.html" data-input="text"></div>
+        </template>
+      </div>
+
+      <div class="my-10">id component</div>
+
+      <div
+        x-data
+        x-remote-component="#inputid"
+        data-prop="input"
+        x-rc-config:swap="outer"
+        x-rc-config:trigger="load"
+        x-rc-config:attrs="data"
+      >
+        <template data-template="menu">
+          <div x-remote-component="#inputid2" data-input="text"></div>
+        </template>
+      </div>
+    </div>
+
+    <template id="inputid">
+      <div>
+        input id
+        <div data-template="menu"></div>
+      </div>
+    </template>
+    <template id="inputid2">
+      <div>input id 2</div>
+    </template>
+  </body>
+</html>
