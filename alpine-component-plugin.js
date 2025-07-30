@@ -8,12 +8,10 @@ export default function (Alpine) {
 
   let parseResponse = (html) => {
     const parser = new DOMParser();
-    let fragment = parser.parseFromString(
+    return parser.parseFromString(
       `<body><template>${html}</template></body>`,
       "text/html"
     );
-
-    return fragment;
   };
 
   let copyAttributes = (fromEl, toEl) => {
@@ -38,24 +36,33 @@ export default function (Alpine) {
 
   Alpine.directive(
     "remote-component",
-    (el, { value, modifiers, expression }, { cleanup }) => {
+    (el, { value, modifiers, expression }, { evaluate, cleanup }) => {
       Alpine.addScopeToNode(el, {
         _rc_config: { ...defaultConfig }
       })
       let config = Alpine.$data(el)._rc_config || {}
 
-      let initRemoteComponent = async () => {
+      let initRemoteComponent = async (event) => {
         let html = ""
         let fragment = null
+        let exp = expression
 
-        if (isPath(expression)) {
-          html = await sendRequest(expression);
+        if (!isPath(expression) && !isId(expression)) {
+          exp = evaluate(expression)
+        }
+
+        if (isPath(exp)) {
+          html = await sendRequest(exp);
 
           fragment = parseResponse(html);
           fragment = fragment.querySelector("template").content;
         }
-        if (isId(expression)) {
-          fragment = document.querySelector(expression).content
+        if (isId(exp)) {
+          fragment = document.querySelector(exp)?.content
+        }
+
+        if (!fragment) {
+          return
         }
 
         let toTemplates = fragment.querySelectorAll("[data-template]");
@@ -82,7 +89,9 @@ export default function (Alpine) {
 
       Alpine.addScopeToNode(el, {
         remoteComponent: {
-          trigger: initRemoteComponent,
+          trigger(ev) {
+            initRemoteComponent(ev)
+          }
         }
       })
 
@@ -96,7 +105,7 @@ export default function (Alpine) {
 
       })
     }
-  );
+  ).before("on");
 
   Alpine.directive(
     "rc-config",
