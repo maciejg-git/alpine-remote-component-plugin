@@ -15,9 +15,8 @@ export default function (Alpine) {
   };
 
   let copyAttributes = (fromEl, toEl) => {
-    if (toEl.nodeType !==  Node.ELEMENT_NODE) {
-      return
-    }
+    if (toEl.nodeType !==  Node.ELEMENT_NODE) return
+
     for (let attr of fromEl.attributes) {
       if (attr.name.startsWith("data-") || attr.name.startsWith(":data-")) {
         toEl.setAttribute(attr.name, attr.value);
@@ -43,7 +42,6 @@ export default function (Alpine) {
       let config = Alpine.$data(el)._rc_config || {}
 
       let initRemoteComponent = async (event) => {
-        let html = ""
         let fragment = null
         let exp = expression
 
@@ -52,27 +50,24 @@ export default function (Alpine) {
         }
 
         if (isPath(exp)) {
-          html = await sendRequest(exp);
-
-          fragment = parseResponse(html);
-          fragment = fragment.querySelector("template").content;
+          let html = await sendRequest(exp);
+          let parsed = parseResponse(html);
+          fragment = parsed.querySelector("template")?.content;
         }
         if (isId(exp)) {
-          fragment = document.querySelector(exp)?.content
+          fragment = document.querySelector(exp)?.content.cloneNode(true)
         }
 
-        if (!fragment) {
-          return
-        }
+        if (!fragment) return
 
         let toTemplates = fragment.querySelectorAll("[data-template]");
         toTemplates.forEach((t) => {
           let fromTemplate = el.querySelector(
             `[data-template='${t.dataset.template}']`
           );
-          if (!fromTemplate) {
-            return;
-          }
+
+          if (!fromTemplate) return;
+
           t.replaceWith(fromTemplate.content.cloneNode(true));
         });
 
@@ -82,7 +77,7 @@ export default function (Alpine) {
 
         if (config.swap === "inner") {
           el.replaceChildren(fragment)
-        } else {
+        } else if (config.swap === "outer" ){
           el.replaceWith(fragment);
         }
       };
