@@ -16,23 +16,24 @@ Start using the plugin with two directives.
 - any other string is evaluated by Alpine
 
 `x-rc` - is used to set component options:
-    - `x-rc:name` - sets component name. This is optional but can be useful in event listeners to identify component.
-    - `x-rc:swap` - specifies where to insert component. Valid values are: `inner` and `outer`.
-    - `x-rc:trigger` - defines condition that triggers component. Valid triggers are: `load`, `event`, `custom` and `reactive`.
-    - `x-rc:watch` - is used only for `reactive` trigger. The value is the property name that will be watched.
-    - `x-rc:attrs`
-    - `x-rc:mime`
+
+- `x-rc:name` - sets component name. This is optional but can be useful in event listeners to identify component.
+- `x-rc:swap` - specifies where to insert component. Valid values are: `inner` and `outer`.
+- `x-rc:trigger` - defines condition that triggers component. Valid triggers are: `load`, `event`, `custom` and `reactive`.
+- `x-rc:watch` - is used only for `reactive` trigger. The value is the property name that will be watched.
+- `x-rc:attrs`
+- `x-rc:mime`
 
 ### Magics
 
-`$rsTrigger` - is used to manually trigger the component, for example, in an event listener.
+- `$rsTrigger` - is used to manually trigger the component, for example, in an event listener.
 
 ### Events
 
 The plugin dispatches three types of events to notify the page about current state of the component. These include:
-`rc-init` - dispatched immedietely after triggering component
-`rc-loaded` - dispatched after successful component fetch
-`rc-inserted` - dispatched after component fragment has been inserted into the DOM
+- `rc-init` - dispatched immedietely after triggering component
+- `rc-loaded` - dispatched after successful component fetch
+- `rc-inserted` - dispatched after component fragment has been inserted into the DOM
 
 ### data-template elements
 
