@@ -39,7 +39,27 @@
         </template>
       </div>
 
-      <div class="my-10 border-t border-gray-200">dynamic</div>
+      <div class="my-10 border-t border-gray-200 font-semibold text-lg">reactive x-show</div>
+
+      <div
+        x-data
+        x-remote-component="/input.html"
+        data-prop="input"
+        x-rc-config:swap="outer"
+        x-rc-config:trigger="reactive"
+        x-rc-config:watch="isOpen"
+        x-rc-config:attrs="data"
+        x-rc-config:mime="text/html"
+      >
+        <template data-template="menu">
+          <div x-remote-component="/input2.html" data-input="text"></div>
+        </template>
+        <template data-template="text">
+          <div x-remote-component="/text.html" data-input="text"></div>
+        </template>
+      </div>
+
+      <div class="my-10 border-t border-gray-200 font-semibold text-lg">dynamic</div>
 
       <button @click="dynamicComponent = '/input2.html'">toggle dynamic component</button>
       <div
@@ -59,7 +79,7 @@
         </template>
       </div>
 
-      <div class="my-10 border-t border-gray-200">event trigger</div>
+      <div class="my-10 border-t border-gray-200 font-semibold text-lg">event trigger</div>
 
       <button @click="$dispatch('load-component')">dispatch event</button>
       <div
@@ -70,7 +90,7 @@
         x-rc-config:trigger="event"
         x-rc-config:attrs="data"
         x-rc-config:mime="text/html"
-        @load-component.window.stop="remoteComponent.trigger"
+        @load-component.window.stop="$rcTrigger"
       >
         <template data-template="menu">
           <div x-remote-component="/input2.html" data-input="text"></div>
@@ -80,7 +100,7 @@
         </template>
       </div>
 
-      <div class="my-10 border-t border-gray-200">inner</div>
+      <div class="my-10 border-t border-gray-200 font-semibold text-lg">inner</div>
 
       <div
         x-data
@@ -99,7 +119,7 @@
         </template>
       </div>
 
-      <div class="my-10 border-t border-gray-200">dropdown</div>
+      <div class="my-10 border-t border-gray-200 font-semibold text-lg">dropdown</div>
 
       <div
         x-data
@@ -115,7 +135,7 @@
         </template>
       </div>
 
-      <div class="my-10 border-t border-gray-200">id component</div>
+      <div class="my-10 border-t border-gray-200 font-semibold text-lg">id component</div>
 
       <div
         x-data
@@ -130,7 +150,7 @@
         </template>
       </div>
 
-      <div class="my-10 border-t border-gray-200">x-for id component</div>
+      <div class="my-10 border-t border-gray-200 font-semibold text-lg">x-for id component</div>
 
       <button @click="components.splice(1, 1)">remove component</button>
       <button @click="components.push('component4')">add component</button>
@@ -149,6 +169,8 @@
         </div>
       </template>
     </div>
+
+    <div class="my-10 border-t border-gray-200 font-semibold text-lg">recursive id component</div>
 
     <div x-data="{ tree: [
       {
@@ -188,22 +210,38 @@
           { name: 'Sixth item', id: 16 },
         ],
       },
-    ]}">
+    ], 
+    handleItemClick() {
+      this.isOpen = !this.isOpen
+    }}">
+      <div class="flex flex-col items-start">
+        <button @click="tree[0].children.splice(3, 1)">remove file</button>
+        <button @click="tree[0].children[4].children.splice(2, 1)">remove fourth</button>
+        <button @click="tree[0].children.push({ name: 'added', id: 20 })">add at end</button>
+        <button 
+          @click="tree[0].children[4].children[1].children = [
+            { name: 'added2', id: 21 },
+            { name: 'added3', id: 22 }
+          ]"
+        >add children</button>
+      </div>
       <ul>
-        <template x-for="c in tree">
-          <li x-remote-component="#node" x-rc-config:swap="inner">
+        <template x-for="c in tree" :key="c.id">
+          <li x-remote-component="#node" x-rc-config:swap="inner" x-data="{isOpen: true}">
 
           </li>
         </template>
       </ul>
     </div>
 
+    <div class="my-10 border-t border-gray-200 font-semibold text-lg">id partial components</div>
+
     <template id="node">
-      <span x-text="c.name"></span>
+      <span x-text="c.name" @click="handleItemClick"></span>
       <template x-if="c.children">
-        <ul>
-          <template x-for="c in c.children">
-            <li x-remote-component="#node" x-rc-config:swap="inner"></li>
+        <ul x-show="isOpen">
+          <template x-for="c in c.children" :key="c.id">
+            <li x-remote-component="#node" x-rc-config:swap="inner" class="ml-6" x-data="{isOpen: true}"></li>
           </template>
         </ul>
       </template>

@@ -24,6 +24,19 @@ export default function (Alpine) {
     }
   };
 
+  let swapInnerTemplates = (el, fragment) => {
+    let toTemplates = fragment.querySelectorAll("[data-template]");
+    toTemplates.forEach((t) => {
+      let fromTemplate = el.querySelector(
+        `[data-template='${t.dataset.template}']`
+      );
+
+      if (!fromTemplate) return;
+
+      t.replaceWith(fromTemplate.content.cloneNode(true));
+    });
+  }
+
   let isPath = (s) => s[0] === '/'
   let isId = (s) => s[0] === '#'
 
@@ -37,9 +50,12 @@ export default function (Alpine) {
     "remote-component",
     (el, { value, modifiers, expression }, { evaluate, cleanup }) => {
       Alpine.addScopeToNode(el, {
-        _rc_config: { ...defaultConfig }
+        _rcConfig: { ...defaultConfig }
       })
-      let config = Alpine.$data(el)._rc_config || {}
+      Alpine.addScopeToNode(el, Alpine.reactive({
+        _rcIsLoading: false,
+      }))
+      let config = Alpine.$data(el)._rcConfig || {}
 
       let initRemoteComponent = async (event) => {
         let fragment = null
@@ -50,26 +66,18 @@ export default function (Alpine) {
         }
 
         if (isPath(exp)) {
+          Alpine.$data(el)._rcIsLoading = true
           let html = await sendRequest(exp);
+          Alpine.$data(el)._rcIsLoading = false
           let parsed = parseResponse(html);
           fragment = parsed.querySelector("template")?.content;
-        }
-        if (isId(exp)) {
+        } else if (isId(exp)) {
           fragment = document.querySelector(exp)?.content.cloneNode(true)
         }
 
         if (!fragment) return
 
-        let toTemplates = fragment.querySelectorAll("[data-template]");
-        toTemplates.forEach((t) => {
-          let fromTemplate = el.querySelector(
-            `[data-template='${t.dataset.template}']`
-          );
-
-          if (!fromTemplate) return;
-
-          t.replaceWith(fromTemplate.content.cloneNode(true));
-        });
+        swapInnerTemplates(el, fragment)
 
         if (config.attrs) {
           copyAttributes(el, fragment.firstChild);
@@ -111,7 +119,13 @@ export default function (Alpine) {
           return { ...acc, [p]: true }
         }, {})
       } 
-      Alpine.$data(el)._rc_config[value] = exp
+      Alpine.$data(el)._rcConfig[value] = exp
     }
   )
+
+  Alpine.magic("rcTrigger", (el, { Alpine }) => {
+    return (ev) => {
+      Alpine.$data(el)?.remoteComponent.trigger(ev)
+    }
+  })
 }
