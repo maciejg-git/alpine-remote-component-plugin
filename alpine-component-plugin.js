@@ -37,6 +37,17 @@ export default function (Alpine) {
     });
   }
 
+  let dispatch = (el, name, detail = {}) => {
+    el.dispatchEvent(
+      new CustomEvent(name, {
+        detail,
+        bubbles: true,
+        composed: true,
+        cancelable: true,
+      })
+    )
+  }
+
   let isPath = (s) => s[0] === '/'
   let isId = (s) => s[0] === '#'
 
@@ -44,6 +55,9 @@ export default function (Alpine) {
     swap: "outer",
     trigger: "load",
     attrs: "data",
+    mime: "text/html",
+    watch: null,
+    name: "",
   }
 
   Alpine.directive(
@@ -55,9 +69,12 @@ export default function (Alpine) {
       Alpine.addScopeToNode(el, Alpine.reactive({
         _rcIsLoading: false,
       }))
+
       let config = Alpine.$data(el)._rcConfig || {}
 
       let initRemoteComponent = async (event) => {
+        dispatch(el, "rc-init", Alpine.$data(el)._rcConfig)
+
         let fragment = null
         let exp = expression
 
@@ -67,8 +84,13 @@ export default function (Alpine) {
 
         if (isPath(exp)) {
           Alpine.$data(el)._rcIsLoading = true
+
           let html = await sendRequest(exp);
+
           Alpine.$data(el)._rcIsLoading = false
+
+          dispatch(el, "rc-loaded", Alpine.$data(el)._rcConfig)
+
           let parsed = parseResponse(html);
           fragment = parsed.querySelector("template")?.content;
         } else if (isId(exp)) {
@@ -85,8 +107,14 @@ export default function (Alpine) {
 
         if (config.swap === "inner") {
           el.replaceChildren(fragment)
-        } else if (config.swap === "outer" ){
+
+          dispatch(el, "rc-inserted", Alpine.$data(el)._rcConfig)
+        } else if (config.swap === "outer" ) {
+          let fragmentFirstChild = fragment.firstChild
+
           el.replaceWith(fragment);
+
+          dispatch(fragmentFirstChild, "rc-inserted", Alpine.$data(el)._rcConfig)
         }
       };
 
@@ -99,6 +127,10 @@ export default function (Alpine) {
       })
 
       Alpine.nextTick(() => {
+        if (config.trigger === "reactive" && config.watch) {
+          Alpine.$data(el).$watch(config.watch, initRemoteComponent)
+        }
+
         if (config.trigger === "load") {
           initRemoteComponent();
         }
@@ -111,7 +143,7 @@ export default function (Alpine) {
   ).before("on");
 
   Alpine.directive(
-    "rc-config",
+    "rc",
     (el, { value, modifiers, expression }) => {
       let exp = expression
       if (value === "attrs") {

@@ -13,6 +13,8 @@
       defer
       src="https://cdn.jsdelivr.net/npm/litewind-alpine@0.x.x/components/dropdown/dist/cdn.min.js"
     ></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/litewind-alpine@0.x.x/components/datepicker/dist/cdn.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/litewind-alpine@0.x.x/components/input/dist/cdn.min.js"></script>
     <script type="module" src="/builds/cdn.js"></script>
     <script
       defer
@@ -20,62 +22,82 @@
     ></script>
   </head>
   <body>
-    <div x-data="{isVisible: false, dynamicComponent: '/input.html', components: ['component', 'component2', 'component3']}">
+    <div x-data="{isVisible: false, dynamicComponent: '/components/input.html', components: ['component', 'component2', 'component3']}">
       <button @click="isVisible = !isVisible">toggle component</button>
       <div
         x-data
-        x-remote-component="/input.html"
+        x-remote-component="/components/input.html"
         data-prop="input"
-        x-rc-config:swap="outer"
-        x-rc-config:trigger="load"
-        x-rc-config:attrs="data"
-        x-rc-config:mime="text/html"
+        x-rc:swap="outer"
+        x-rc:name="input component"
+        x-rc:trigger="load"
+        x-rc:attrs="data"
+        x-rc:mime="text/html"
       >
+        <template data-template="$attrs" data-prop="input x-ignore">
+        </template>
         <template data-template="menu">
-          <div x-remote-component="/input2.html" data-input="text"></div>
+          <div x-remote-component="/components/input2.html" data-input="text"></div>
         </template>
         <template data-template="text">
-          <div x-remote-component="/text.html" data-input="text"></div>
+          <div x-remote-component="/components/text.html" data-input="text"></div>
         </template>
+      </div>
+
+      <div class="my-10 border-t border-gray-200 font-semibold text-lg">text element</div>
+
+      <div
+        x-data
+        x-remote-component="/components/text.html"
+        data-prop="input"
+        x-rc:swap="outer"
+        x-rc:name="input component"
+        x-rc:trigger="load"
+        x-rc:attrs="data"
+        x-rc:mime="text/html"
+      >
       </div>
 
       <div class="my-10 border-t border-gray-200 font-semibold text-lg">reactive x-show</div>
 
-      <div
-        x-data
-        x-remote-component="/input.html"
-        data-prop="input"
-        x-rc-config:swap="outer"
-        x-rc-config:trigger="reactive"
-        x-rc-config:watch="isOpen"
-        x-rc-config:attrs="data"
-        x-rc-config:mime="text/html"
-      >
-        <template data-template="menu">
-          <div x-remote-component="/input2.html" data-input="text"></div>
-        </template>
-        <template data-template="text">
-          <div x-remote-component="/text.html" data-input="text"></div>
-        </template>
+      <div x-data="{isOpen: false}">
+        <button @click="isOpen = !isOpen">toggle reactive component</button>
+        <div
+          x-data
+          x-remote-component="/components/input.html"
+          data-prop="input"
+          x-rc:swap="outer"
+          x-rc:trigger="reactive"
+          x-rc:watch="isOpen"
+          x-rc:attrs="data"
+          x-rc:mime="text/html"
+        >
+          <template data-template="menu">
+            <div x-remote-component="/components/input2.html" data-input="text"></div>
+          </template>
+          <template data-template="text">
+            <div x-remote-component="/components/text.html" data-input="text"></div>
+          </template>
+        </div>
       </div>
 
       <div class="my-10 border-t border-gray-200 font-semibold text-lg">dynamic</div>
 
-      <button @click="dynamicComponent = '/input2.html'">toggle dynamic component</button>
+      <button @click="dynamicComponent = '/components/input2.html'">toggle dynamic component</button>
       <div
         x-data
         x-remote-component="dynamicComponent"
         data-prop="input"
-        x-rc-config:swap="outer"
-        x-rc-config:trigger="load"
-        x-rc-config:attrs="data"
-        x-rc-config:mime="text/html"
+        x-rc:swap="outer"
+        x-rc:trigger="load"
+        x-rc:attrs="data"
+        x-rc:mime="text/html"
       >
         <template data-template="menu">
-          <div x-remote-component="/input2.html" data-input="text"></div>
+          <div x-remote-component="/components/input2.html" data-input="text"></div>
         </template>
         <template data-template="text">
-          <div x-remote-component="/text.html" data-input="text"></div>
+          <div x-remote-component="/components/text.html" data-input="text"></div>
         </template>
       </div>
 
@@ -84,19 +106,19 @@
       <button @click="$dispatch('load-component')">dispatch event</button>
       <div
         x-data
-        x-remote-component="/input.html"
+        x-remote-component="/components/input.html"
         data-prop="input"
-        x-rc-config:swap="outer"
-        x-rc-config:trigger="event"
-        x-rc-config:attrs="data"
-        x-rc-config:mime="text/html"
+        x-rc:swap="outer"
+        x-rc:trigger="event"
+        x-rc:attrs="data"
+        x-rc:mime="text/html"
         @load-component.window.stop="$rcTrigger"
       >
         <template data-template="menu">
-          <div x-remote-component="/input2.html" data-input="text"></div>
+          <div x-remote-component="/components/input2.html" data-input="text"></div>
         </template>
         <template data-template="text">
-          <div x-remote-component="/text.html" data-input="text"></div>
+          <div x-remote-component="/components/text.html" data-input="text"></div>
         </template>
       </div>
 
@@ -104,18 +126,18 @@
 
       <div
         x-data
-        x-remote-component="/input.html"
+        x-remote-component="/components/input.html"
         data-prop="input"
-        x-rc-config:swap="inner"
-        x-rc-config:trigger="load"
-        x-rc-config:attrs="data"
-        x-rc-config:mime="text/html"
+        x-rc:swap="inner"
+        x-rc:trigger="load"
+        x-rc:attrs="data"
+        x-rc:mime="text/html"
       >
         <template data-template="menu">
-          <div x-remote-component="/input2.html" x-rc-config:swap="inner" data-input="text"></div>
+          <div x-remote-component="/components/input2.html" x-rc:swap="inner" data-input="text"></div>
         </template>
         <template data-template="text">
-          <div x-remote-component="/text.html" data-input="text"></div>
+          <div x-remote-component="/components/text.html" data-input="text"></div>
         </template>
       </div>
 
@@ -123,16 +145,33 @@
 
       <div
         x-data
-        x-remote-component="/dropdown.html"
+        x-remote-component="/components/dropdown.html"
         data-prop="input"
-        x-rc-config:swap="outer"
-        x-rc-config:trigger="load"
-        x-rc-config:attrs="data"
+        x-rc:swap="outer"
+        x-rc:trigger="load"
+        x-rc:attrs="data"
         data-trigger-event="hover"
       >
         <template data-template="menu">
-          <div x-remote-component="/dropdown-menu.html" data-input="text"></div>
+          <div x-remote-component="/components/dropdown-menu.html" data-input="text"></div>
         </template>
+      </div>
+
+      <div class="my-10 border-t border-gray-200 font-semibold text-lg">datepicker dropdown</div>
+
+      <div x-data="{date: ''}">
+        <div
+          x-data
+          x-remote-component="/components/datepicker-dropdown.html"
+          data-prop="input"
+          x-rc:swap="outer"
+          x-rc:trigger="load"
+          x-rc:attrs="data"
+        >
+          <template data-template="menu">
+            <div x-remote-component="/dropdown-menu.html" data-input="text"></div>
+          </template>
+        </div>
       </div>
 
       <div class="my-10 border-t border-gray-200 font-semibold text-lg">id component</div>
@@ -141,9 +180,9 @@
         x-data
         x-remote-component="#inputid"
         data-prop="input"
-        x-rc-config:swap="outer"
-        x-rc-config:trigger="load"
-        x-rc-config:attrs="data"
+        x-rc:swap="outer"
+        x-rc:trigger="load"
+        x-rc:attrs="data"
       >
         <template data-template="menu">
           <div x-remote-component="#inputid2" data-input="text"></div>
@@ -159,9 +198,9 @@
           x-data
           x-remote-component="#inputid"
           data-prop="input"
-          x-rc-config:swap="inner"
-          x-rc-config:trigger="load"
-          x-rc-config:attrs="data"
+          x-rc:swap="inner"
+          x-rc:trigger="load"
+          x-rc:attrs="data"
         >
           <template data-template="menu">
             <div x-remote-component="#inputiditem" data-input="text"></div>
@@ -227,7 +266,7 @@
       </div>
       <ul>
         <template x-for="c in tree" :key="c.id">
-          <li x-remote-component="#node" x-rc-config:swap="inner" x-data="{isOpen: true}">
+          <li x-remote-component="#node" x-rc:swap="inner" x-data="{isOpen: true}">
 
           </li>
         </template>
@@ -241,13 +280,13 @@
       <template x-if="c.children">
         <ul x-show="isOpen">
           <template x-for="c in c.children" :key="c.id">
-            <li x-remote-component="#node" x-rc-config:swap="inner" class="ml-6" x-data="{isOpen: true}"></li>
+            <li x-remote-component="#node" x-rc:swap="inner" class="ml-6" x-data="{isOpen: true}"></li>
           </template>
         </ul>
       </template>
     </template>
 
-    <template x-data x-remote-component="/idcomponents.html"></template>
+    <template x-data x-remote-component="/components/idcomponents.html"></template>
 
     <template id="inputid">
       <div>
