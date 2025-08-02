@@ -56,7 +56,7 @@ export default function (Alpine) {
   const defaultConfig = {
     swap: "outer",
     trigger: "load",
-    attrs: "data",
+    attrs: true,
     watch: null,
     name: "",
     "process-templates-first": false,
@@ -103,9 +103,7 @@ export default function (Alpine) {
 
         swapInnerTemplates(el, fragment)
 
-        if (config.attrs) {
-          copyAttributes(el, fragment.firstChild);
-        }
+        copyAttributes(el, fragment.firstChild);
 
         if (config.swap === "inner") {
           el.replaceChildren(fragment)

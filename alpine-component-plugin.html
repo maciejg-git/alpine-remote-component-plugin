@@ -32,7 +32,6 @@
         x-rc:swap="outer"
         x-rc:name="input component"
         x-rc:trigger="load"
-        x-rc:attrs="data"
       >
         <template data-template="menu">
           <div x-remote-component="/components/input2.html" data-input="text"></div>
@@ -51,7 +50,6 @@
         x-rc:swap="outer"
         x-rc:name="input component"
         x-rc:trigger="load"
-        x-rc:attrs="data"
       >
       </div>
 
@@ -65,7 +63,6 @@
         x-rc:swap="outer"
         x-rc:name="input component"
         x-rc:trigger="event"
-        x-rc:attrs="data"
         x-rc:process-templates-first
         @load-component-init.window.stop="$rcTrigger"
       >
@@ -86,7 +83,6 @@
         x-rc:swap="outer"
         x-rc:name="input component"
         x-rc:trigger="load"
-        x-rc:attrs="data"
       >
       </div>
 
@@ -101,7 +97,6 @@
           x-rc:swap="outer"
           x-rc:trigger="reactive"
           x-rc:watch="isOpen"
-          x-rc:attrs="data"
         >
           <template data-template="menu">
             <div x-remote-component="/components/input2.html" data-input="text"></div>
@@ -121,7 +116,6 @@
         data-prop="input"
         x-rc:swap="outer"
         x-rc:trigger="load"
-        x-rc:attrs="data"
       >
         <template data-template="menu">
           <div x-remote-component="/components/input2.html" data-input="text"></div>
@@ -140,7 +134,6 @@
         data-prop="input"
         x-rc:swap="outer"
         x-rc:trigger="event"
-        x-rc:attrs="data"
         @load-component.window.stop="$rcTrigger"
       >
         <template data-template="menu">
@@ -160,7 +153,6 @@
         data-prop="input"
         x-rc:swap="outer"
         x-rc:trigger="event"
-        x-rc:attrs="data"
         x-rc:process-templates-first
         @load-component.window.stop="$rcTrigger"
       >
@@ -185,7 +177,6 @@
         data-prop="input"
         x-rc:swap="inner"
         x-rc:trigger="load"
-        x-rc:attrs="data"
       >
         <template data-template="menu">
           <div x-remote-component="/components/input2.html" x-rc:swap="inner" data-input="text"></div>
@@ -203,7 +194,6 @@
         data-prop="input"
         x-rc:swap="outer"
         x-rc:trigger="load"
-        x-rc:attrs="data"
         _data-trigger-event="hover"
       >
         <template data-template="menu">
@@ -220,7 +210,6 @@
           data-prop="input"
           x-rc:swap="outer"
           x-rc:trigger="load"
-          x-rc:attrs="data"
         >
           <template data-template="menu">
             <div x-remote-component="/dropdown-menu.html" data-input="text"></div>
@@ -236,7 +225,6 @@
         data-prop="input"
         x-rc:swap="outer"
         x-rc:trigger="load"
-        x-rc:attrs="data"
       >
         <template data-template="menu">
           <div x-remote-component="#inputid2" data-input="text"></div>
@@ -254,7 +242,6 @@
           data-prop="input"
           x-rc:swap="inner"
           x-rc:trigger="load"
-          x-rc:attrs="data"
         >
           <template data-template="menu">
             <div x-remote-component="#inputiditem" data-input="text"></div>
@@ -271,7 +258,6 @@
         x-rc:swap="outer"
         x-rc:name="input component"
         x-rc:trigger="intersect"
-        x-rc:attrs="data"
         x-rc:process-templates-first
         x-intersect="$rcTrigger"
       >
