@@ -18,8 +18,10 @@ export default function (Alpine) {
     if (toEl.nodeType !==  Node.ELEMENT_NODE) return
 
     for (let attr of fromEl.attributes) {
-      if (attr.name.startsWith("data-") || attr.name.startsWith(":data-")) {
-        toEl.setAttribute(attr.name, attr.value);
+      if (attr.name.startsWith("rc-")) {
+        toEl.setAttribute(attr.name.substring(3), attr.value);
+      } else if (attr.name.startsWith("_")) {
+        toEl.setAttribute(attr.name.substring(1), attr.value);
       }
     }
   };
@@ -55,9 +57,9 @@ export default function (Alpine) {
     swap: "outer",
     trigger: "load",
     attrs: "data",
-    mime: "text/html",
     watch: null,
     name: "",
+    "process-templates-first": false,
   }
 
   Alpine.directive(
@@ -127,6 +129,13 @@ export default function (Alpine) {
       })
 
       Alpine.nextTick(() => {
+        if (config["process-templates-first"]) {
+          let templates = el.querySelectorAll('[data-template]')
+          templates.forEach((element) => {
+            Alpine.initTree(element.content.firstElementChild)
+          })
+        }
+
         if (config.trigger === "reactive" && config.watch) {
           Alpine.$data(el).$watch(config.watch, initRemoteComponent)
         }
@@ -150,7 +159,10 @@ export default function (Alpine) {
         exp = expression.split(",").reduce((acc, p) => {
           return { ...acc, [p]: true }
         }, {})
-      } 
+      }
+      if (value === "process-templates-first") {
+        exp = true
+      }
       Alpine.$data(el)._rcConfig[value] = exp
     }
   )
