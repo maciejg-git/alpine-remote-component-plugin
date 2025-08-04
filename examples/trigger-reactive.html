@@ -1,0 +1,27 @@
+<div x-data="{ loadComponentA: false, loadComponentB: false }">
+  <button
+    @click="loadComponentA = true"
+    class="rounded-md bg-violet-400 px-4 py-2 font-semibold text-gray-100"
+  >
+    Load component
+  </button>
+
+  <div
+    x-remote-component="/examples/components/component-a.html"
+    x-rc:trigger="reactive"
+    x-rc:watch="loadComponentA"
+  ></div>
+
+  <button
+    @click="loadComponentB = true"
+    class="rounded-md bg-violet-400 px-4 py-2 font-semibold text-gray-100"
+  >
+    Load component
+  </button>
+
+  <div
+    x-remote-component="/examples/components/component-b.html"
+    x-rc:trigger="reactive"
+    x-init="$watch('loadComponentB', $rcTrigger)"
+  ></div>
+</div>

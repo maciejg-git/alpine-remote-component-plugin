@@ -23,7 +23,7 @@
     ></script>
   </head>
   <body>
-    <div x-data="{isVisible: false, dynamicComponent: '/components/input.html', components: ['component', 'component2', 'component3']}">
+    <div x-data="{isVisible: false, dynamicComponent: '/components/input.html', dynamicComponentSwap: '/components/input.html', components: ['component', 'component2', 'component3']}">
       <button @click="isVisible = !isVisible">toggle component</button>
       <div
         x-data
@@ -109,7 +109,6 @@
 
       <div class="my-10 border-t border-gray-200 font-semibold text-lg">dynamic</div>
 
-      <button @click="dynamicComponent = '/components/input2.html'">toggle dynamic component</button>
       <div
         x-data
         x-remote-component="dynamicComponent"
@@ -123,6 +122,22 @@
         <template data-template="text">
           <div x-remote-component="/components/text.html" data-input="text"></div>
         </template>
+      </div>
+
+      <div class="my-10 border-t border-gray-200 font-semibold text-lg">dynamic swap</div>
+
+      <div class="flex flex-col items-start">
+        <button @click="dynamicComponentSwap = '/components/input.html'">toggle dynamic component</button>
+        <button @click="dynamicComponentSwap = '/components/input2.html'">toggle dynamic component 2</button>
+      </div>
+      <div
+        x-data
+        x-remote-component="dynamicComponentSwap"
+        data-prop="input"
+        x-rc:swap="inner"
+        x-rc:trigger="dynamic"
+        x-rc:watch="dynamicComponentSwap"
+      >
       </div>
 
       <div class="my-10 border-t border-gray-200 font-semibold text-lg">event trigger</div>
@@ -233,8 +248,11 @@
 
       <div class="my-10 border-t border-gray-200 font-semibold text-lg">x-for id component</div>
 
-      <button @click="components.splice(1, 1)">remove component</button>
-      <button @click="components.push('component4')">add component</button>
+      <div class="flex flex-col items-start">
+        <button @click="components.splice(2, 1)">remove component</button>
+        <button @click="components.push('component4')">add component</button>
+        <button @click="components.splice(1, 0, 'component5')">insert after 1 component</button>
+      </div>
       <template x-for="item in components">
         <div
           x-data
@@ -270,6 +288,16 @@
       </div>
 
       <div x-remote-component="/examples/simple-id-component.html"></div>
+      <div x-remote-component="/examples/simple-path-component.html"></div>
+      <div x-remote-component="/examples/data-template-components.html"></div>
+      <div x-remote-component="/examples/simple-data-template.html"></div>
+      <div x-remote-component="/examples/simple-dynamic-component.html"></div>
+      <div x-remote-component="/examples/data-template-nested-components.html"></div>
+      <div x-remote-component="/examples/trigger-load.html"></div>
+      <div x-remote-component="/examples/trigger-event.html"></div>
+      <div x-remote-component="/examples/trigger-reactive.html"></div>
+      <div x-remote-component="/examples/swap-inner.html"></div>
+      <div x-remote-component="/examples/swap-outer.html"></div>
     </div>
 
     <div class="my-10 border-t border-gray-200 font-semibold text-lg">recursive id component</div>

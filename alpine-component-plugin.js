@@ -59,6 +59,7 @@ export default function (Alpine) {
     attrs: true,
     watch: null,
     name: "",
+    initialized: false,
     "process-templates-first": false,
   }
 
@@ -75,6 +76,9 @@ export default function (Alpine) {
       let config = Alpine.$data(el)._rcConfig || {}
 
       let initRemoteComponent = async (event) => {
+        if (config.initialized && config.trigger !== "dynamic") return
+        config.initialized = true
+
         dispatch(el, "rc-init", Alpine.$data(el)._rcConfig)
 
         let fragment = null
@@ -100,6 +104,10 @@ export default function (Alpine) {
         }
 
         if (!fragment) return
+
+        if (config.trigger === "dynamic") {
+          el.replaceChildren()
+        }
 
         swapInnerTemplates(el, fragment)
 
@@ -134,8 +142,14 @@ export default function (Alpine) {
           })
         }
 
-        if (config.trigger === "reactive" && config.watch) {
-          Alpine.$data(el).$watch(config.watch, initRemoteComponent)
+        if ((config.trigger === "reactive" || config.trigger === "dynamic") && config.watch) {
+          let watched = evaluate(config.watch)
+          if (watched) {
+            initRemoteComponent()
+          }
+          if (!watched || config.trigger === "dynamic") {
+            Alpine.$data(el).$watch(config.watch, initRemoteComponent)
+          }
         }
 
         if (config.trigger === "load") {
