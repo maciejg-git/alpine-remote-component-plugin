@@ -15,8 +15,6 @@ export default function (Alpine) {
   };
 
   let copyAttributes = (fromEl, toEl) => {
-    if (toEl.nodeType !==  Node.ELEMENT_NODE) return
-
     for (let attr of fromEl.attributes) {
       if (attr.name.startsWith("rc-")) {
         toEl.setAttribute(attr.name.substring(3), attr.value);
@@ -50,6 +48,8 @@ export default function (Alpine) {
     )
   }
 
+  let delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+
   let isPath = (s) => s[0] === '/'
   let isId = (s) => s[0] === '#'
 
@@ -60,6 +60,8 @@ export default function (Alpine) {
     watch: null,
     name: "",
     initialized: false,
+    requestDelay: 0,
+    swapDelay: 0,
     "process-templates-first": false,
   }
 
@@ -76,7 +78,7 @@ export default function (Alpine) {
       let config = Alpine.$data(el)._rcConfig || {}
 
       let initRemoteComponent = async (event) => {
-        if (config.initialized && config.trigger !== "dynamic") return
+        if (config.initialized) return
         config.initialized = true
 
         dispatch(el, "rc-init", Alpine.$data(el)._rcConfig)
@@ -88,10 +90,18 @@ export default function (Alpine) {
           exp = evaluate(expression)
         }
 
+        if (config.requestDelay) {
+          await delay(config.requestDelay)
+        }
+
         if (isPath(exp)) {
           Alpine.$data(el)._rcIsLoading = true
 
           let html = await sendRequest(exp);
+
+          if (config.swapDelay) {
+            await delay(config.swapDelay)
+          }
 
           Alpine.$data(el)._rcIsLoading = false
 
@@ -105,13 +115,9 @@ export default function (Alpine) {
 
         if (!fragment) return
 
-        if (config.trigger === "dynamic") {
-          el.replaceChildren()
-        }
-
         swapInnerTemplates(el, fragment)
 
-        copyAttributes(el, fragment.firstChild);
+        copyAttributes(el, fragment.firstElementChild);
 
         if (config.swap === "inner") {
           el.replaceChildren(fragment)
@@ -142,13 +148,16 @@ export default function (Alpine) {
           })
         }
 
-        if ((config.trigger === "reactive" || config.trigger === "dynamic") && config.watch) {
+        if (config.trigger === "reactive" && config.watch) {
           let watched = evaluate(config.watch)
           if (watched) {
             initRemoteComponent()
-          }
-          if (!watched || config.trigger === "dynamic") {
-            Alpine.$data(el).$watch(config.watch, initRemoteComponent)
+          } else {
+            Alpine.$data(el).$watch(config.watch, (value) => {
+              if (value) {
+                initRemoteComponent()
+              }
+            })
           }
         }
 
@@ -167,15 +176,18 @@ export default function (Alpine) {
     "rc",
     (el, { value, modifiers, expression }) => {
       let exp = expression
-      if (value === "attrs") {
-        exp = expression.split(",").reduce((acc, p) => {
-          return { ...acc, [p]: true }
-        }, {})
-      }
+      let config = Alpine.$data(el)._rcConfig
       if (value === "process-templates-first") {
         exp = true
       }
-      Alpine.$data(el)._rcConfig[value] = exp
+      if (value === "trigger") {
+        exp = expression.split(" ")
+        config.trigger = exp[0]
+        if (exp[1]) config.requestDelay = parseInt(exp[1])
+        if (exp[2]) config.swapDelay = parseInt(exp[2])
+        return
+      }
+      config[value] = exp
     }
   )
 
@@ -183,5 +195,8 @@ export default function (Alpine) {
     return (ev) => {
       Alpine.$data(el)?.remoteComponent.trigger(ev)
     }
+  })
+  Alpine.magic("rcLoading", (el) => {
+    return Alpine.$data(el)?._rcIsLoading
   })
 }
