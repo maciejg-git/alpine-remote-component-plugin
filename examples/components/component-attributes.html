@@ -1,0 +1,9 @@
+<div
+  class="max-w-min rounded-lg border-2 border-dashed border-gray-300 bg-gray-100 p-4"
+>
+  <div class="mb-4 text-lg font-semibold">Component A</div>
+  <div class="font-semibold">Element attributes:</div>
+  <pre
+    x-text="JSON.stringify(Array.from($el.parentElement.attributes, (attr) => `${attr.name}: ${attr.value}`), null, 2)"
+  ></pre>
+</div>

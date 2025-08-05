@@ -1,0 +1,30 @@
+<button
+  @click="$dispatch('load-component-delayed')"
+  class="rounded-md bg-violet-400 px-4 py-2 font-semibold text-gray-100"
+>
+  Load component
+</button>
+
+<div
+  x-remote-component="/examples/components/component-a.html"
+  x-rc:trigger="event 1000 2000"
+  @load-component-delayed.window.stop="$rcTrigger"
+>
+  <svg
+    viewBox="25 25 50 50"
+    fill="none"
+    class="animate-spinner-rotate h-10 w-10"
+    x-show="$rcLoading"
+  >
+    <circle
+      cx="50"
+      cy="50"
+      r="20"
+      stroke="currentColor"
+      stroke-width="4"
+      stroke-miterlimit="10"
+      stroke-linecap="round"
+      class="animate-spinner-dash"
+    />
+  </svg>
+</div>
