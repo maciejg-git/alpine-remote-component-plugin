@@ -8,13 +8,13 @@
 <div
   x-remote-component="/examples/components/component-a.html"
   x-rc:trigger="event 1000 2000"
-  @load-component-delayed.window.stop="$rcTrigger"
+  @load-component-delayed.window.stop="_rc.trigger"
 >
   <svg
     viewBox="25 25 50 50"
     fill="none"
     class="animate-spinner-rotate h-10 w-10"
-    x-show="$rcLoading"
+    x-show="_rcIsLoading"
   >
     <circle
       cx="50"

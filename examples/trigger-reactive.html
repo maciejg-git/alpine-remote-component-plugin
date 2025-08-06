@@ -22,6 +22,6 @@
   <div
     x-remote-component="/examples/components/component-b.html"
     x-rc:trigger="reactive"
-    x-init="$watch('loadComponentB', $rcTrigger)"
+    x-init="$watch('loadComponentB', () => $data._rc.trigger())"
   ></div>
 </div>

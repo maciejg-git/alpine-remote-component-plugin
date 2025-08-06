@@ -8,7 +8,7 @@
 <div
   x-remote-component="/examples/components/component-a.html"
   x-rc:trigger="event"
-  @load-component.window.stop="$rcTrigger"
+  @load-component.window.stop="_rc.trigger"
 ></div>
 
 <button
@@ -27,18 +27,18 @@
 <div
   x-remote-component="/examples/components/component-a.html"
   x-rc:trigger="event"
-  @load-component-name.window.stop="$event.detail === 'a' && $rcTrigger"
+  @load-component-name.window.stop="$event.detail === 'a' && _rc.trigger"
 ></div>
 <div
   x-remote-component="/examples/components/component-b.html"
   x-rc:trigger="event"
-  @load-component-name.window.stop="$event.detail === 'b' && $rcTrigger"
+  @load-component-name.window.stop="$event.detail === 'b' && _rc.trigger"
 ></div>
 
 <div
   x-remote-component="/examples/components/component-a.html"
   x-rc:trigger="event"
-  @load-component.stop="$rcTrigger"
+  @load-component.stop="_rc.trigger"
 >
   <button
     @click="$dispatch('load-component')"
