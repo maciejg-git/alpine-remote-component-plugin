@@ -22,11 +22,8 @@ Start using the plugin with two directives.
 - `x-rc:trigger` - defines condition that triggers component. Valid triggers are: `load`, `event`, `reactive`, `intersect` and `custom`.
 - `x-rc:watch` - is used only for `reactive` trigger. The value is the property name that will be watched.
 - `x-rc:process-templates-first`
-- `x-rc:attrs`
 
-### Magics
-
-- `$rcTrigger` - is used to manually trigger the component, for example, in an event listener.
+You can also use `x-rc` without property to set all options from an object, similar to native `x-bind` directive.
 
 ### Events
 
@@ -37,6 +34,6 @@ The plugin dispatches three types of events to notify the page about current sta
 
 ### data-template elements
 
-The component elements marked with `data-template` attribute are special elements that can be replaced with custom content. The replaced content can be anything, including other components. This enables kind of slot functionality and enhances reusuability of the component. See the examples below.
+The component elements marked with `data-template` attribute are special elements that can be replaced with custom content. The replaced content can be anything, including other components. This enables kind of `<slot>` functionality and enhances reusuability of the component. See the examples below.
 
 ## Examples
