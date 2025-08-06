@@ -41,6 +41,49 @@
         </template>
       </div>
 
+      <div class="my-10 border-t border-gray-200 font-semibold text-lg">delay</div>
+
+      <div x-data="{isVisible: true}">
+        <button @click="isVisible = false">remove element</button>
+        <template x-if="isVisible">
+          <div>
+            <div
+              x-data
+              x-remote-component="/components/input.html"
+              data-prop="input"
+              x-rc:swap="outer"
+              x-rc:name="input component"
+              x-rc:trigger="load 5000 5000"
+            >
+              <template data-template="menu">
+                <div x-remote-component="/components/input2.html" data-input="text"></div>
+              </template>
+              <template data-template="text">
+                <div x-remote-component="/components/text.html" data-input="text"></div>
+              </template>
+            </div>
+          </div>
+        </template>
+      </div>
+
+      <div class="my-10 border-t border-gray-200 font-semibold text-lg">rc bind object</div>
+
+      <div x-data="{component: {swap: 'inner', trigger: 'event'}}">
+        <div
+          x-data
+          x-remote-component="/components/input.html"
+          data-prop="input"
+          x-rc="component"
+        >
+          <template data-template="menu">
+            <div x-remote-component="/components/input2.html" data-input="text"></div>
+          </template>
+          <template data-template="text">
+            <div x-remote-component="/components/text.html" data-input="text"></div>
+          </template>
+        </div>
+      </div>
+
       <div class="my-10 border-t border-gray-200 font-semibold text-lg">svg</div>
 
       <div
@@ -64,7 +107,7 @@
         x-rc:name="input component"
         x-rc:trigger="event"
         x-rc:process-templates-first
-        @load-component-init.window.stop="$rcTrigger"
+        @load-component-init.window.stop="_rc.trigger"
       >
         <template data-template="menu">
           <div x-remote-component="/components/input2.html" data-input="text"></div>
@@ -144,12 +187,12 @@
 
       <button @click="$dispatch('load-component')">dispatch event</button>
       <div
-        x-data
         x-remote-component="/components/input.html"
         data-prop="input"
         x-rc:swap="outer"
         x-rc:trigger="event"
-        @load-component.window.stop="$rcTrigger"
+        @load-component.window.stop="_rc.trigger"
+        _class="font-semibold p-4"
       >
         <template data-template="menu">
           <div x-remote-component="/components/input2.html" data-input="text"></div>
@@ -169,13 +212,13 @@
         x-rc:swap="outer"
         x-rc:trigger="event"
         x-rc:process-templates-first
-        @load-component.window.stop="$rcTrigger"
+        @load-component.window.stop="_rc.trigger"
       >
         <template data-template="menu">
           <div
             x-remote-component="/components/input2.html"
             x-rc:trigger="event"
-            @load-component-inner.window.stop="$rcTrigger"
+            @load-component-inner.window.stop="_rc.trigger"
             data-input="text"
           ></div>
         </template>
@@ -277,7 +320,7 @@
         x-rc:name="input component"
         x-rc:trigger="intersect"
         x-rc:process-templates-first
-        x-intersect="$rcTrigger"
+        x-intersect="_rc.trigger"
       >
         <template data-template="menu">
           <div x-remote-component="/components/input2.html" data-input="text"></div>
@@ -303,6 +346,7 @@
       <div x-remote-component="/examples/trigger-intersect.html"></div>
       <div x-remote-component="/examples/trigger-custom.html"></div>
       <div x-remote-component="/examples/trigger-delay.html"></div>
+      <div x-remote-component="/examples/events.html"></div>
     </div>
 
     <div class="my-10 border-t border-gray-200 font-semibold text-lg">recursive id component</div>

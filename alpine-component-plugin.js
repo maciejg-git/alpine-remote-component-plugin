@@ -14,8 +14,16 @@ export default function (Alpine) {
     );
   };
 
+  let mergeClasses = (...classes) => {
+    return [ ...new Set(classes.flatMap((c) => c.split(/\s+/)))].join(" ")
+  }
+
   let copyAttributes = (fromEl, toEl) => {
     for (let attr of fromEl.attributes) {
+      if (attr.name === "_class") {
+        toEl.className = mergeClasses(attr.value, toEl.className)
+        continue
+      }
       if (attr.name.startsWith("rc-")) {
         toEl.setAttribute(attr.name.substring(3), attr.value);
       } else if (attr.name.startsWith("_")) {
@@ -56,7 +64,6 @@ export default function (Alpine) {
   const defaultConfig = {
     swap: "outer",
     trigger: "load",
-    attrs: true,
     watch: null,
     name: "",
     initialized: false,
@@ -68,20 +75,11 @@ export default function (Alpine) {
   Alpine.directive(
     "remote-component",
     (el, { value, modifiers, expression }, { evaluate, cleanup }) => {
-      Alpine.addScopeToNode(el, {
-        _rcConfig: { ...defaultConfig }
-      })
-      Alpine.addScopeToNode(el, Alpine.reactive({
-        _rcIsLoading: false,
-      }))
-
-      let config = Alpine.$data(el)._rcConfig || {}
-
-      let initRemoteComponent = async (event) => {
+      let initRemoteComponent = async () => {
         if (config.initialized) return
         config.initialized = true
 
-        dispatch(el, "rc-init", Alpine.$data(el)._rcConfig)
+        dispatch(el, "rc-init", config)
 
         let fragment = null
         let exp = expression
@@ -90,11 +88,11 @@ export default function (Alpine) {
           exp = evaluate(expression)
         }
 
-        if (config.requestDelay) {
-          await delay(config.requestDelay)
-        }
-
         if (isPath(exp)) {
+          if (config.requestDelay) {
+            await delay(config.requestDelay)
+          }
+
           Alpine.$data(el)._rcIsLoading = true
 
           let html = await sendRequest(exp);
@@ -105,7 +103,7 @@ export default function (Alpine) {
 
           Alpine.$data(el)._rcIsLoading = false
 
-          dispatch(el, "rc-loaded", Alpine.$data(el)._rcConfig)
+          dispatch(el, "rc-loaded", config)
 
           let parsed = parseResponse(html);
           fragment = parsed.querySelector("template")?.content;
@@ -122,23 +120,27 @@ export default function (Alpine) {
         if (config.swap === "inner") {
           el.replaceChildren(fragment)
 
-          dispatch(el, "rc-inserted", Alpine.$data(el)._rcConfig)
+          dispatch(el, "rc-inserted", config)
         } else if (config.swap === "outer" ) {
           let fragmentFirstChild = fragment.firstChild
 
           el.replaceWith(fragment);
 
-          dispatch(fragmentFirstChild, "rc-inserted", Alpine.$data(el)._rcConfig)
+          dispatch(fragmentFirstChild, "rc-inserted", config)
         }
       };
 
       Alpine.addScopeToNode(el, {
-        remoteComponent: {
-          trigger(ev) {
-            initRemoteComponent(ev)
-          }
+        _rc: {
+          config: { ...defaultConfig },
+          trigger: initRemoteComponent,
         }
       })
+      Alpine.addScopeToNode(el, Alpine.reactive({
+        _rcIsLoading: false,
+      }))
+
+      let config = Alpine.$data(el)._rc.config
 
       Alpine.nextTick(() => {
         if (config["process-templates-first"]) {
@@ -174,9 +176,14 @@ export default function (Alpine) {
 
   Alpine.directive(
     "rc",
-    (el, { value, modifiers, expression }) => {
+    (el, { value, modifiers, expression }, { evaluate }) => {
       let exp = expression
-      let config = Alpine.$data(el)._rcConfig
+      let config = Alpine.$data(el)._rc.config
+      if (value === null) {
+        exp = evaluate(exp)
+        config = Object.assign(config, defaultConfig, exp)
+        return
+      }
       if (value === "process-templates-first") {
         exp = true
       }
@@ -190,13 +197,4 @@ export default function (Alpine) {
       config[value] = exp
     }
   )
-
-  Alpine.magic("rcTrigger", (el, { Alpine }) => {
-    return (ev) => {
-      Alpine.$data(el)?.remoteComponent.trigger(ev)
-    }
-  })
-  Alpine.magic("rcLoading", (el) => {
-    return Alpine.$data(el)?._rcIsLoading
-  })
 }
