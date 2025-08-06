@@ -41,6 +41,25 @@
         </template>
       </div>
 
+      <div class="my-10 border-t border-gray-200 font-semibold text-lg">trigger from init event</div>
+
+      <div
+        x-data
+        x-remote-component="/components/input.html"
+        data-prop="input"
+        x-rc:swap="outer"
+        x-rc:name="input component"
+        x-rc:trigger="custom"
+        @rc-init="$event.detail.trigger()"
+      >
+        <template data-template="menu">
+          <div x-remote-component="/components/input2.html" data-input="text"></div>
+        </template>
+        <template data-template="text">
+          <div x-remote-component="/components/text.html" data-input="text"></div>
+        </template>
+      </div>
+
       <div class="my-10 border-t border-gray-200 font-semibold text-lg">delay</div>
 
       <div x-data="{isVisible: true}">
@@ -202,6 +221,26 @@
         </template>
       </div>
 
+      <div class="my-10 border-t border-gray-200 font-semibold text-lg">classes</div>
+
+      <button @click="$dispatch('load-component')">dispatch event</button>
+      <div
+        x-remote-component="/components/input.html"
+        data-prop="input"
+        x-rc:swap="outer"
+        x-rc:trigger="event"
+        x-rc:class-loaded="opacity-0 transition"
+        x-rc:class-inserted="opacity-100 transition"
+        @load-component.window.stop="_rc.trigger"
+      >
+        <template data-template="menu">
+          <div x-remote-component="/components/input2.html" data-input="text"></div>
+        </template>
+        <template data-template="text">
+          <div x-remote-component="/components/text.html" data-input="text"></div>
+        </template>
+      </div>
+
       <div class="my-10 border-t border-gray-200 font-semibold text-lg">event trigger templates first</div>
 
       <button @click="$dispatch('load-component-inner')">dispatch event</button>
@@ -347,6 +386,8 @@
       <div x-remote-component="/examples/trigger-custom.html"></div>
       <div x-remote-component="/examples/trigger-delay.html"></div>
       <div x-remote-component="/examples/events.html"></div>
+      <div x-remote-component="/examples/process-templates-first.html"></div>
+      <div x-remote-component="/examples/rc.html"></div>
     </div>
 
     <div class="my-10 border-t border-gray-200 font-semibold text-lg">recursive id component</div>
@@ -413,6 +454,64 @@
       </ul>
     </div>
 
+    <div class="my-10 border-t border-gray-200 font-semibold text-lg">recursive id component</div>
+
+    <div x-data="{ tree: {
+        name: 'Directory',
+        id: 17,
+        children: [
+          { name: 'Some item', id: 1 },
+          { name: 'Another item', id: 2 },
+          { name: 'Third', id: 3 },
+          { name: 'File' },
+          {
+            name: 'Sub directory',
+            id: 5,
+            children: [
+              {
+                name: 'Another sub directory',
+                id: 6,
+                children: [
+                  { name: 'Content', id: 7 },
+                  { name: 'Another item', id: 8 },
+                ],
+              },
+              { name: 'Fourth', id: 9 },
+              { name: 'Another file', id: 10 },
+              { name: 'Video file', id: 11 },
+              { name: 'Secret item', id: 12 },
+              {
+                name: 'More content here',
+                id: 13,
+                children: [
+                  { name: 'Another video file', id: 14 },
+                  { name: 'Fifth', id: 15 },
+                ],
+              },
+            ],
+          },
+          { name: 'Sixth item', id: 16 },
+        ],
+      }, 
+    handleItemClick() {
+      this.isOpen = !this.isOpen
+    }}">
+      <div class="flex flex-col items-start">
+        <button @click="tree[0].children.splice(3, 1)">remove file</button>
+        <button @click="tree[0].children[4].children.splice(2, 1)">remove fourth</button>
+        <button @click="tree[0].children.push({ name: 'added', id: 20 })">add at end</button>
+        <button 
+          @click="tree[0].children[4].children[1].children = [
+            { name: 'added2', id: 21 },
+            { name: 'added3', id: 22 }
+          ]"
+        >add children</button>
+      </div>
+      <ul>
+        <li x-data="{c: tree, isOpen: true}" x-remote-component="#node" x-rc:swap="inner"></li>
+      </ul>
+    </div>
+
     <div class="my-10 border-t border-gray-200 font-semibold text-lg">id partial components</div>
 
     <template id="node">
@@ -426,7 +525,17 @@
       </template>
     </template>
 
-    <template x-data x-remote-component="/components/idcomponents.html"></template>
+    <div x-data>
+      <div x-remote-component="/components/input.html" x-rc:trigger="event" @id-loaded.window="_rc.trigger()">
+        <template data-template="menu">
+          <div x-remote-component="#remoteid"></div>
+        </template>
+      </div>
+    </div>
+
+    <div x-data @rc-loaded="$dispatch('id-loaded')">
+      <template x-data x-remote-component="/components/idcomponents.html"></template>
+    </div>
 
     <template id="inputid">
       <div>

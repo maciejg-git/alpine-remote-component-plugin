@@ -1,8 +1,9 @@
 <div
   x-data="{ events: [] }"
-  @rc-init="events.push({ event: $event.type, detail: $event.detail })"
-  @rc-loaded="events.push({ event: $event.type, detail: $event.detail })"
-  @rc-inserted="events.push({ event: $event.type, detail: $event.detail })"
+  @rc-init="events.unshift({ event: $event.type, detail: $event.detail })"
+  @rc-before-load="events.unshift({ event: $event.type, detail: $event.detail })"
+  @rc-loaded="events.unshift({ event: $event.type, detail: $event.detail })"
+  @rc-inserted="events.unshift({ event: $event.type, detail: $event.detail })"
 >
   <button
     @click="$dispatch('load-component-events')"
@@ -17,7 +18,7 @@
     @load-component-events.window.stop="_rc.trigger"
   ></div>
 
-  <ul class="text-sm">
+  <ul class="text-sm max-h-[400px] overflow-y-auto">
     <template x-for="ev in events">
       <li class="py-2">
         <pre x-text="JSON.stringify(ev, null, 2)"></pre>

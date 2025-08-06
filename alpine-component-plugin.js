@@ -79,7 +79,7 @@ export default function (Alpine) {
         if (config.initialized) return
         config.initialized = true
 
-        dispatch(el, "rc-init", config)
+        dispatch(el, "rc-before-load", config)
 
         let fragment = null
         let exp = expression
@@ -150,6 +150,8 @@ export default function (Alpine) {
           })
         }
 
+        dispatch(el, "rc-init", Alpine.$data(el)._rc)
+
         if (config.trigger === "reactive" && config.watch) {
           let watched = evaluate(config.watch)
           if (watched) {
@@ -177,21 +179,32 @@ export default function (Alpine) {
   Alpine.directive(
     "rc",
     (el, { value, modifiers, expression }, { evaluate }) => {
+      let parseTriggerValue = (s) => {
+        let [trigger, requestDelay = 0, swapDelay = 0] = s.split(" ")
+        return [trigger, parseInt(requestDelay), parseInt(swapDelay)]
+      }
+
       let exp = expression
       let config = Alpine.$data(el)._rc.config
       if (value === null) {
-        exp = evaluate(exp)
-        config = Object.assign(config, defaultConfig, exp)
+        let newConfig = { ...evaluate(exp) }
+        if (newConfig.trigger) {
+          let parsed = parseTriggerValue(newConfig.trigger)
+          newConfig.trigger = parsed[0]
+          newConfig.requestDelay = parsed[1]
+          newConfig.swapDelay = parsed[2]
+        }
+        config = Object.assign(config, defaultConfig, newConfig)
         return
       }
       if (value === "process-templates-first") {
         exp = true
       }
       if (value === "trigger") {
-        exp = expression.split(" ")
-        config.trigger = exp[0]
-        if (exp[1]) config.requestDelay = parseInt(exp[1])
-        if (exp[2]) config.swapDelay = parseInt(exp[2])
+        let parsed = parseTriggerValue(exp)
+        config.trigger = parsed[0]
+        config.requestDelay = parsed[1]
+        config.swapDelay = parsed[2]
         return
       }
       config[value] = exp

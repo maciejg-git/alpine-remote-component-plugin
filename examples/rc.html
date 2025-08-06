@@ -1,0 +1,25 @@
+<div
+  x-data="{components: [
+    {
+      path: '/examples/components/component-a.html',
+      content: 'Content goes here.',
+      rc: { name: 'a', swap: 'inner', trigger: 'load 500 1000' },
+    },
+    {
+      path: '/examples/components/component-b.html',
+      content: 'Content goes here.',
+      rc: { name: 'b', swap: 'inner', trigger: 'load 500 1000' },
+    }
+  ]}"
+>
+  <template x-for="component in components">
+    <div
+      x-remote-component="component.path"
+      x-rc="component.rc"
+    >
+      <template data-template="content">
+        <span x-text="component.content"></span>
+      </template>
+    </div>
+  </template>
+</div>
