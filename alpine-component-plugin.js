@@ -1,9 +1,12 @@
 export default function (Alpine) {
   let sendRequest = async (url) => {
-    let res = await fetch(url);
-    let html = await res.text();
-
-    return html;
+    try {
+      let res = await fetch(url);
+      if(!res.ok) throw res.status
+      return await res.text();
+    } catch(error) {
+      throw error
+    }
   };
 
   let parseResponse = (html) => {
@@ -20,7 +23,7 @@ export default function (Alpine) {
 
   let copyAttributes = (fromEl, toEl) => {
     for (let attr of fromEl.attributes) {
-      if (attr.name === "_class") {
+      if (attr.name === "_class" || attr.name === "rc-class") {
         toEl.className = mergeClasses(attr.value, toEl.className)
         continue
       }
@@ -77,7 +80,6 @@ export default function (Alpine) {
     (el, { value, modifiers, expression }, { evaluate, cleanup }) => {
       let initRemoteComponent = async () => {
         if (config.initialized) return
-        config.initialized = true
 
         dispatch(el, "rc-before-load", config)
 
@@ -94,22 +96,37 @@ export default function (Alpine) {
           }
 
           Alpine.$data(el)._rcIsLoading = true
+          Alpine.$data(el)._rcIsLoadingWithDelay = true
 
-          let html = await sendRequest(exp);
+          let html
+
+          try {
+            html = await sendRequest(exp);
+          } catch(error) {
+            Alpine.$data(el)._rcError = error
+            Alpine.$data(el)._rcIsLoading = false
+            Alpine.$data(el)._rcIsLoadingWithDelay = false
+            dispatch(el, "rc-error", {error, config})
+            return
+          }
+
+          Alpine.$data(el)._rcError = null
+          Alpine.$data(el)._rcIsLoading = false
+          dispatch(el, "rc-loaded", config)
 
           if (config.swapDelay) {
             await delay(config.swapDelay)
           }
 
-          Alpine.$data(el)._rcIsLoading = false
-
-          dispatch(el, "rc-loaded", config)
+          Alpine.$data(el)._rcIsLoadingWithDelay = false
 
           let parsed = parseResponse(html);
           fragment = parsed.querySelector("template")?.content;
         } else if (isId(exp)) {
           fragment = document.querySelector(exp)?.content.cloneNode(true)
         }
+
+        config.initialized = true
 
         if (!fragment) return
 
@@ -138,6 +155,8 @@ export default function (Alpine) {
       })
       Alpine.addScopeToNode(el, Alpine.reactive({
         _rcIsLoading: false,
+        _rcIsLoadingWithDelay: false,
+        _rcError: null,
       }))
 
       let config = Alpine.$data(el)._rc.config
@@ -150,7 +169,7 @@ export default function (Alpine) {
           })
         }
 
-        dispatch(el, "rc-init", Alpine.$data(el)._rc)
+        dispatch(el, "rc-initialized", Alpine.$data(el)._rc)
 
         if (config.trigger === "reactive" && config.watch) {
           let watched = evaluate(config.watch)

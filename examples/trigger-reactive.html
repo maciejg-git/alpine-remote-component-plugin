@@ -1,4 +1,4 @@
-<div x-data="{ loadComponentA: false, loadComponentB: false }">
+<div x-data="{ loadComponentA: false }">
   <button
     @click="loadComponentA = true"
     class="rounded-md bg-violet-400 px-4 py-2 font-semibold text-gray-100"
@@ -11,17 +11,86 @@
     x-rc:trigger="reactive"
     x-rc:watch="loadComponentA"
   ></div>
+</div>
 
+<div x-data="{ loadComponentA: false }">
   <button
-    @click="loadComponentB = true"
+    @click="loadComponentA = true"
     class="rounded-md bg-violet-400 px-4 py-2 font-semibold text-gray-100"
   >
     Load component
   </button>
 
   <div
-    x-remote-component="/examples/components/component-b.html"
+    x-remote-component="/examples/components/component-a.html"
     x-rc:trigger="reactive"
-    x-init="$watch('loadComponentB', () => $data._rc.trigger())"
+    x-init="$watch('loadComponentA', () => $data._rc.trigger())"
+  ></div>
+</div>
+
+<div x-data="{ loadComponentA: false }">
+  <button
+    @click="loadComponentA = true"
+    class="rounded-md bg-violet-400 px-4 py-2 font-semibold text-gray-100"
+  >
+    Load component
+  </button>
+  <button
+    @click="loadComponentA = false"
+    class="rounded-md bg-violet-400 px-4 py-2 font-semibold text-gray-100"
+  >
+    Unload component
+  </button>
+
+  <template x-if="loadComponentA">
+    <div
+      x-remote-component="/examples/components/component-a.html"
+      x-rc:swap="inner"
+      x-rc:trigger="load"
+    ></div>
+  </template>
+</div>
+
+<div x-data="{ isVisible: false }">
+  <button
+    @click="isVisible = true"
+    class="rounded-md bg-violet-400 px-4 py-2 font-semibold text-gray-100"
+  >
+    Show component
+  </button>
+  <button
+    @click="isVisible = false"
+    class="rounded-md bg-violet-400 px-4 py-2 font-semibold text-gray-100"
+  >
+    Hide component
+  </button>
+
+  <div
+    x-remote-component="/examples/components/component-a.html"
+    x-rc:swap="inner"
+    x-rc:trigger="load"
+    x-show="isVisible"
+  ></div>
+</div>
+
+<div x-data="{ isVisible: false }">
+  <button
+    @click="isVisible = true"
+    class="rounded-md bg-violet-400 px-4 py-2 font-semibold text-gray-100"
+  >
+    Show component
+  </button>
+  <button
+    @click="isVisible = false"
+    class="rounded-md bg-violet-400 px-4 py-2 font-semibold text-gray-100"
+  >
+    Hide component
+  </button>
+
+  <div
+    x-remote-component="/examples/components/component-a.html"
+    x-rc:swap="outer"
+    x-rc:trigger="load"
+    _x-show="isVisible"
   ></div>
 </div>

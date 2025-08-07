@@ -41,6 +41,26 @@
         </template>
       </div>
 
+      <div class="my-10 border-t border-gray-200 font-semibold text-lg">fetch error</div>
+
+      <div
+        x-data
+        x-remote-component="/components/input4.html"
+        data-prop="input"
+        x-rc:swap="outer"
+        x-rc:name="input component"
+        x-rc:trigger="load"
+      >
+      <span x-text="_rcIsLoading"></span>
+      <span x-text="_rcError"></span>
+        <template data-template="menu">
+          <div x-remote-component="/components/input2.html" data-input="text"></div>
+        </template>
+        <template data-template="text">
+          <div x-remote-component="/components/text.html" data-input="text"></div>
+        </template>
+      </div>
+
       <div class="my-10 border-t border-gray-200 font-semibold text-lg">trigger from init event</div>
 
       <div
@@ -50,7 +70,7 @@
         x-rc:swap="outer"
         x-rc:name="input component"
         x-rc:trigger="custom"
-        @rc-init="$event.detail.trigger()"
+        @rc-initialized="$event.detail.trigger()"
       >
         <template data-template="menu">
           <div x-remote-component="/components/input2.html" data-input="text"></div>
@@ -388,6 +408,7 @@
       <div x-remote-component="/examples/events.html"></div>
       <div x-remote-component="/examples/process-templates-first.html"></div>
       <div x-remote-component="/examples/rc.html"></div>
+      <div x-remote-component="/examples/errors.html"></div>
     </div>
 
     <div class="my-10 border-t border-gray-200 font-semibold text-lg">recursive id component</div>

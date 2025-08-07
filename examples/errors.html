@@ -1,0 +1,30 @@
+<div
+  x-data="{ 
+    component: 'component-2',
+    fix() {
+      this.component = 'component-a'
+    }
+  }"
+>
+  <div x-remote-component="`/examples/components/${component}.html`">
+    <div
+      x-show="_rcError"
+      class="w-max rounded-lg border border-red-300 bg-red-200 p-2"
+    >
+      <div>Component failed to load: <span x-text="_rcError"></span></div>
+      <div>
+        <button @click="fix();_rc.trigger()">
+          Try again
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  x-data="{ component: 'component-2' }"
+  @rc-error="console.log($event.detail.error)"
+>
+  <div x-remote-component="`/examples/components/${component}.html`">
+  </div>
+</div>

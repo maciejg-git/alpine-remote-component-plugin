@@ -1,6 +1,6 @@
 <div
   x-data="{ events: [] }"
-  @rc-init="events.unshift({ event: $event.type, detail: $event.detail })"
+  @rc-initialized="events.unshift({ event: $event.type, detail: $event.detail })"
   @rc-before-load="events.unshift({ event: $event.type, detail: $event.detail })"
   @rc-loaded="events.unshift({ event: $event.type, detail: $event.detail })"
   @rc-inserted="events.unshift({ event: $event.type, detail: $event.detail })"
