@@ -11,9 +11,19 @@ Start using the plugin with two directives.
 ### Directives
 
 `x-remote-component` - the main directive that defines component source. The value can be:
-- ID string that starts with `#`
+- element ID string that starts with `#`
 - path string that starts with `/`
-- any other string is evaluated by Alpine
+- any other string is evaluated by Alpine to ID or path
+
+```html
+<div x-remote-component="#component-a"></div>
+<div x-remote-component="/examples/components/component-a.html"></div>
+<div x-data="{ componentName: 'component-a' }">
+  <div
+    x-remote-component="`/examples/components/${componentName}.html`"
+  ></div>
+</div>
+```
 
 `x-rc` - is used to set component options:
 
@@ -23,14 +33,32 @@ Start using the plugin with two directives.
 - `x-rc:watch` - is used only for `reactive` trigger. The value is the property name that will be watched.
 - `x-rc:process-templates-first`
 
-You can also use `x-rc` without property to set all options from an object, similar to native `x-bind` directive.
+`x-rc` - directive without property can be used to set all options from an object, similar to native `x-bind` directive.
 
 ### Events
 
 The plugin dispatches three types of events to notify the page about current state of the component. These include:
-- `rc-init` - dispatched immedietely after triggering component
-- `rc-loaded` - dispatched after successful component fetch
-- `rc-inserted` - dispatched after component fragment has been inserted into the DOM
+- `rc-initialized` - dispatched after directive is loaded and configured. Event detail:
+    - `config` object
+    - `trigger` function
+- `rc-before-load` - dispatched before sending request. Event detail:
+    - `config` object
+- `rc-loaded` - dispatched after successful component fetch. Event detail:
+    - `config` object
+- `rc-inserted` - dispatched after component fragment has been inserted into the DOM. Event detail:
+    - `config` object
+- `rc-error` - dispatched after errors. Event detail:
+    - `config` object
+    - `error`
+
+### Component data
+
+Plugin adds following properties to the component element data.
+
+- `_rc` - object with config object and trigger function
+- `_rcIsLoading` - reactive property that is `true` for the request duration
+- `_rcIsLoadingWithDelay` - same as `_rcIsLoading` but also includes `swapDelay`
+- `_rcError` - reactive property that stores last error
 
 ### data-template elements
 
