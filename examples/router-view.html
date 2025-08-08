@@ -1,0 +1,85 @@
+<div
+  x-data="{
+    components: [
+      'component-a',
+      'component-b',
+      'component-c',
+    ],
+    current: 'component-a',
+  }"
+>
+  <div class="flex gap-x-4">
+    <button @click="current = 'component-a'">Component A</button>
+    <button @click="current = 'component-b'">Component B</button>
+    <button @click="current = 'component-c'">Component C</button>
+  </div>
+
+  <template x-for="c in components" :key="c">
+    <template x-if="c === current">
+      <div
+        x-remote-component="`/examples/components/${c}.html`"
+        x-rc:swap="inner"
+        x-rc:trigger="load 0 500"
+      >
+        
+      </div>
+    </template>
+  </template>
+</div>
+
+<div
+  x-data="{
+    components: [
+      'component-a',
+      'component-b',
+      'component-c',
+    ],
+    current: 'component-a',
+  }"
+>
+  <div class="flex gap-x-4">
+    <button @click="current = 'component-a'">Component A</button>
+    <button @click="current = 'component-b'">Component B</button>
+    <button @click="current = 'component-c'">Component C</button>
+  </div>
+
+  <template x-for="c in components" :key="c">
+    <div
+      x-remote-component="`/examples/components/${c}.html`"
+      x-rc:swap="inner"
+      x-rc:trigger="load 0 500"
+      x-show="c === current"
+    >
+      
+    </div>
+  </template>
+</div>
+
+<div
+  x-data="{
+    components: [
+      'component-a',
+      'component-b',
+      'component-c',
+    ],
+    current: 'component-a',
+  }"
+>
+  <div class="flex gap-x-4">
+    <button @click="current = 'component-a'">Component A</button>
+    <button @click="current = 'component-b'">Component B</button>
+    <button @click="current = 'component-c'">Component C</button>
+  </div>
+
+  <template x-for="c in components" :key="c">
+    <div
+      x-remote-component="`/examples/components/${c}.html`"
+      x-rc:swap="inner"
+      x-rc:trigger="reactive 0 500"
+      x-show="c === current"
+      x-effect="c === current && _rc.trigger()"
+    >
+      
+    </div>
+  </template>
+</div>

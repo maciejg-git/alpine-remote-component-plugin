@@ -1,0 +1,25 @@
+<div x-data="{ isVisible: true }">
+  <button @click="isVisible = !isVisible">Toggle component</button>
+  <template x-if="isVisible">
+    <div
+      x-remote-component="/examples/components/component-a.html"
+      x-rc:swap="inner"
+    >
+      
+    </div>
+  </template>
+</div>
+
+<div x-data="{ isVisible: true }">
+  <button @click="isVisible = !isVisible">Toggle component</button>
+  <template x-if="isVisible">
+    <div>
+      <div
+        x-remote-component="/examples/components/component-a.html"
+        x-rc:swap="outer"
+      >
+        
+      </div>
+    </div>
+  </template>
+</div>
