@@ -2,8 +2,6 @@
 
 An alpine plugin that enables defining reusable components by referencing external HTML via URL or template IDs.
 
-It combines ideas and features of HTMX, Web Components and Alpine JS Component project.
-
 ## Usage
 
 Start using the plugin with two directives.
@@ -11,6 +9,7 @@ Start using the plugin with two directives.
 ### Directives
 
 `x-remote-component` - the main directive that defines component source. The value can be:
+
 - element ID string that starts with `#`
 - path string that starts with `/`
 - any other string is evaluated by Alpine to ID or path
@@ -38,6 +37,7 @@ Start using the plugin with two directives.
 ### Events
 
 The plugin dispatches three types of events to notify the page about current state of the component. These include:
+
 - `rc-initialized` - dispatched after directive is loaded and configured. Event detail:
     - `config` object
     - `trigger` function
@@ -55,10 +55,12 @@ The plugin dispatches three types of events to notify the page about current sta
 
 Plugin adds following properties to the component element data.
 
-- `_rc` - object with config object and trigger function
-- `_rcIsLoading` - reactive property that is `true` for the request duration
+- `_rc` - object containing `config` object and `trigger` function
+- `_rcIsLoading` - reactive property that is `true` for the duration of the request
 - `_rcIsLoadingWithDelay` - same as `_rcIsLoading` but also includes `swapDelay`
 - `_rcError` - reactive property that stores last error
+
+These properties can be used inside component, for example, to display indicators during loading or showing error messages.
 
 ### data-template elements
 
