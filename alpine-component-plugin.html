@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title></title>
+    <link href="/output.css" rel="stylesheet" />
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/litewind-alpine@0.x.x/plugins/use-floating/dist/cdn.min.js"
+    ></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/litewind-alpine@0.x.x/components/dropdown/dist/cdn.min.js"
+    ></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/litewind-alpine@0.x.x/components/datepicker/dist/cdn.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/litewind-alpine@0.x.x/components/input/dist/cdn.min.js"></script>
+    <script type="module" src="/builds/cdn.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+  </head>
+  <body>
+    <div x-data="{isVisible: false, dynamicComponent: '/components/input.html', dynamicComponentSwap: '/components/input.html', components: ['component', 'component2', 'component3']}">
+      <button @click="isVisible = !isVisible">toggle component</button>
+      <div
+        x-data
+        x-remote-component="/components/input.html"
+        data-prop="input"
+        x-rc:swap="outer"
+        x-rc:name="input component"
+        x-rc:trigger="load"
+      >
+        <template data-template="menu">
+          <div x-remote-component="/components/input2.html" data-input="text"></div>
+        </template>
+        <template data-template="text">
+          <div x-remote-component="/components/text.html" data-input="text"></div>
+        </template>
+      </div>
+
+      <div class="my-10 border-t border-gray-200 font-semibold text-lg">store html</div>
+
+      <div x-data="{ text: '' }" @rc-inserted.once="text = $event.detail.elHtml">
+        <pre><code x-text="text"></code></pre>
+        <div
+          x-data
+          x-remote-component="/components/input.html"
+          data-prop="input"
+          x-rc:swap="inner"
+          x-rc:name="input component"
+          x-rc:trigger="load"
+        >
+          <template data-template="menu">
+            <div x-remote-component="/components/input2.html" data-input="text"></div>
+          </template>
+          <template data-template="text">
+            <div x-remote-component="/components/text.html" data-input="text"></div>
+          </template>
+        </div>
+      </div>
+
+      <div class="my-10 border-t border-gray-200 font-semibold text-lg">fetch error</div>
+
+      <div
+        x-data
+        x-remote-component="/components/input4.html"
+        data-prop="input"
+        x-rc:swap="outer"
+        x-rc:name="input component"
+        x-rc:trigger="load"
+      >
+      <span x-text="_rcIsLoading"></span>
+      <span x-text="_rcError"></span>
+        <template data-template="menu">
+          <div x-remote-component="/components/input2.html" data-input="text"></div>
+        </template>
+        <template data-template="text">
+          <div x-remote-component="/components/text.html" data-input="text"></div>
+        </template>
+      </div>
+
+      <div class="my-10 border-t border-gray-200 font-semibold text-lg">trigger from init event</div>
+
+      <div
+        x-data
+        x-remote-component="/components/input.html"
+        data-prop="input"
+        x-rc:swap="outer"
+        x-rc:name="input component"
+        x-rc:trigger="custom"
+        @rc-initialized="$event.detail.trigger()"
+      >
+        <template data-template="menu">
+          <div x-remote-component="/components/input2.html" data-input="text"></div>
+        </template>
+        <template data-template="text">
+          <div x-remote-component="/components/text.html" data-input="text"></div>
+        </template>
+      </div>
+
+      <div class="my-10 border-t border-gray-200 font-semibold text-lg">delay</div>
+
+      <div x-data="{isVisible: true}">
+        <button @click="isVisible = false">remove element</button>
+        <template x-if="isVisible">
+          <div>
+            <div
+              x-data
+              x-remote-component="/components/input.html"
+              data-prop="input"
+              x-rc:swap="outer"
+              x-rc:name="input component"
+              x-rc:trigger="load 5000 5000"
+            >
+              <template data-template="menu">
+                <div x-remote-component="/components/input2.html" data-input="text"></div>
+              </template>
+              <template data-template="text">
+                <div x-remote-component="/components/text.html" data-input="text"></div>
+              </template>
+            </div>
+          </div>
+        </template>
+      </div>
+
+      <div class="my-10 border-t border-gray-200 font-semibold text-lg">rc bind object</div>
+
+      <div x-data="{component: {swap: 'inner', trigger: 'event'}}">
+        <div
+          x-data
+          x-remote-component="/components/input.html"
+          data-prop="input"
+          x-rc="component"
+        >
+          <template data-template="menu">
+            <div x-remote-component="/components/input2.html" data-input="text"></div>
+          </template>
+          <template data-template="text">
+            <div x-remote-component="/components/text.html" data-input="text"></div>
+          </template>
+        </div>
+      </div>
+
+      <div class="my-10 border-t border-gray-200 font-semibold text-lg">svg</div>
+
+      <div
+        x-data
+        x-remote-component="/components/arrow-left-circle.svg"
+        data-prop="input"
+        x-rc:swap="outer"
+        x-rc:name="input component"
+        x-rc:trigger="load"
+      >
+      </div>
+
+      <div class="my-10 border-t border-gray-200 font-semibold text-lg">slot first init tree</div>
+
+      <button @click="$dispatch('load-component-init')">dispatch event</button>
+      <div
+        x-data
+        x-remote-component="/components/input.html"
+        data-prop="input"
+        x-rc:swap="outer"
+        x-rc:name="input component"
+        x-rc:trigger="event"
+        x-rc:process-templates-first
+        @load-component-init.window.stop="_rc.trigger"
+      >
+        <template data-template="menu">
+          <div x-remote-component="/components/input2.html" data-input="text"></div>
+        </template>
+        <template data-template="text">
+          <div x-remote-component="/components/text.html" data-input="text"></div>
+        </template>
+      </div>
+
+      <div class="my-10 border-t border-gray-200 font-semibold text-lg">text element</div>
+
+      <div
+        x-data
+        x-remote-component="/components/text.html"
+        data-prop="input"
+        x-rc:swap="outer"
+        x-rc:name="input component"
+        x-rc:trigger="load"
+      >
+      </div>
+
+      <div class="my-10 border-t border-gray-200 font-semibold text-lg">reactive x-show</div>
+
+      <div x-data="{isOpen: false}">
+        <button @click="isOpen = !isOpen">toggle reactive component</button>
+        <div
+          x-data
+          x-remote-component="/components/input.html"
+          data-prop="input"
+          x-rc:swap="outer"
+          x-rc:trigger="reactive"
+          x-rc:watch="isOpen"
+        >
+          <template data-template="menu">
+            <div x-remote-component="/components/input2.html" data-input="text"></div>
+          </template>
+          <template data-template="text">
+            <div x-remote-component="/components/text.html" data-input="text"></div>
+          </template>
+        </div>
+      </div>
+
+      <div class="my-10 border-t border-gray-200 font-semibold text-lg">dynamic</div>
+
+      <div
+        x-data
+        x-remote-component="dynamicComponent"
+        data-prop="input"
+        x-rc:swap="outer"
+        x-rc:trigger="load"
+      >
+        <template data-template="menu">
+          <div x-remote-component="/components/input2.html" data-input="text"></div>
+        </template>
+        <template data-template="text">
+          <div x-remote-component="/components/text.html" data-input="text"></div>
+        </template>
+      </div>
+
+      <div class="my-10 border-t border-gray-200 font-semibold text-lg">dynamic swap</div>
+
+      <div class="flex flex-col items-start">
+        <button @click="dynamicComponentSwap = '/components/input.html'">toggle dynamic component</button>
+        <button @click="dynamicComponentSwap = '/components/input2.html'">toggle dynamic component 2</button>
+      </div>
+      <div
+        x-data
+        x-remote-component="dynamicComponentSwap"
+        data-prop="input"
+        x-rc:swap="inner"
+        x-rc:trigger="dynamic"
+        x-rc:watch="dynamicComponentSwap"
+      >
+      </div>
+
+      <div class="my-10 border-t border-gray-200 font-semibold text-lg">init running</div>
+
+      <button @click="$dispatch('load-component')">dispatch event</button>
+      <div
+        x-remote-component="/components/input.html"
+        data-prop="input"
+        x-rc:swap="inner"
+        x-rc:name="running"
+        x-rc:trigger="event 1000 2000"
+        @load-component.window.stop="_rc.trigger"
+        _class="font-semibold p-4"
+      >
+        <template data-template="menu">
+          <div x-remote-component="/components/input2.html" data-input="text"></div>
+        </template>
+        <template data-template="text">
+          <div x-remote-component="/components/text.html" data-input="text"></div>
+        </template>
+      </div>
+
+      <div class="my-10 border-t border-gray-200 font-semibold text-lg">event trigger</div>
+
+      <button @click="$dispatch('load-component')">dispatch event</button>
+      <div
+        x-remote-component="/components/input.html"
+        data-prop="input"
+        x-rc:swap="outer"
+        x-rc:trigger="event"
+        @load-component.window.stop="_rc.trigger"
+        _class="font-semibold p-4"
+      >
+        <template data-template="menu">
+          <div x-remote-component="/components/input2.html" data-input="text"></div>
+        </template>
+        <template data-template="text">
+          <div x-remote-component="/components/text.html" data-input="text"></div>
+        </template>
+      </div>
+
+      <div class="my-10 border-t border-gray-200 font-semibold text-lg">classes</div>
+
+      <button @click="$dispatch('load-component')">dispatch event</button>
+      <div
+        x-remote-component="/components/input.html"
+        data-prop="input"
+        x-rc:swap="outer"
+        x-rc:trigger="event"
+        x-rc:class-loaded="opacity-0 transition"
+        x-rc:class-inserted="opacity-100 transition"
+        @load-component.window.stop="_rc.trigger"
+      >
+        <template data-template="menu">
+          <div x-remote-component="/components/input2.html" data-input="text"></div>
+        </template>
+        <template data-template="text">
+          <div x-remote-component="/components/text.html" data-input="text"></div>
+        </template>
+      </div>
+
+      <div class="my-10 border-t border-gray-200 font-semibold text-lg">event trigger templates first</div>
+
+      <button @click="$dispatch('load-component-inner')">dispatch event</button>
+      <div
+        x-data
+        x-remote-component="/components/input.html"
+        data-prop="input"
+        x-rc:swap="outer"
+        x-rc:trigger="event"
+        x-rc:process-templates-first
+        @load-component.window.stop="_rc.trigger"
+      >
+        <template data-template="menu">
+          <div
+            x-remote-component="/components/input2.html"
+            x-rc:trigger="event"
+            @load-component-inner.window.stop="_rc.trigger"
+            data-input="text"
+          ></div>
+        </template>
+        <template data-template="text">
+          <div x-remote-component="/components/text.html" data-input="text"></div>
+        </template>
+      </div>
+
+      <div class="my-10 border-t border-gray-200 font-semibold text-lg">inner</div>
+
+      <div
+        x-data
+        x-remote-component="/components/input.html"
+        data-prop="input"
+        x-rc:swap="inner"
+        x-rc:trigger="load"
+      >
+        <template data-template="menu">
+          <div x-remote-component="/components/input2.html" x-rc:swap="inner" data-input="text"></div>
+        </template>
+        <template data-template="text">
+          <div x-remote-component="/components/text.html" data-input="text"></div>
+        </template>
+      </div>
+
+      <div class="my-10 border-t border-gray-200 font-semibold text-lg">dropdown</div>
+
+      <div
+        x-data
+        x-remote-component="/components/dropdown.html"
+        data-prop="input"
+        x-rc:swap="outer"
+        x-rc:trigger="load"
+        _data-trigger-event="hover"
+      >
+        <template data-template="menu">
+          <div x-remote-component="/components/dropdown-menu.html" data-input="text"></div>
+        </template>
+      </div>
+
+      <div class="my-10 border-t border-gray-200 font-semibold text-lg">datepicker dropdown</div>
+
+      <div x-data="{date: ''}">
+        <div
+          x-data
+          x-remote-component="/components/datepicker-dropdown.html"
+          data-prop="input"
+          x-rc:swap="outer"
+          x-rc:trigger="load"
+        >
+          <template data-template="menu">
+            <div x-remote-component="/dropdown-menu.html" data-input="text"></div>
+          </template>
+        </div>
+      </div>
+
+      <div class="my-10 border-t border-gray-200 font-semibold text-lg">id component</div>
+
+      <div
+        x-data
+        x-remote-component="#inputid"
+        data-prop="input"
+        x-rc:swap="outer"
+        x-rc:trigger="load"
+      >
+        <template data-template="menu">
+          <div x-remote-component="#inputid2" data-input="text"></div>
+        </template>
+      </div>
+
+      <div class="my-10 border-t border-gray-200 font-semibold text-lg">x-for id component</div>
+
+      <div class="flex flex-col items-start">
+        <button @click="components.splice(2, 1)">remove component</button>
+        <button @click="components.push('component4')">add component</button>
+        <button @click="components.splice(1, 0, 'component5')">insert after 1 component</button>
+      </div>
+      <template x-for="item in components">
+        <div
+          x-data
+          x-remote-component="#inputid"
+          data-prop="input"
+          x-rc:swap="inner"
+          x-rc:trigger="load"
+        >
+          <template data-template="menu">
+            <div x-remote-component="#inputiditem" data-input="text"></div>
+          </template>
+        </div>
+      </template>
+
+      <div class="my-10 border-t border-gray-200 font-semibold text-lg">intersect</div>
+
+      <div
+        x-data
+        x-remote-component="/components/input.html"
+        data-prop="input"
+        x-rc:swap="outer"
+        x-rc:name="input component"
+        x-rc:trigger="intersect"
+        x-rc:process-templates-first
+        x-intersect="_rc.trigger"
+      >
+        <template data-template="menu">
+          <div x-remote-component="/components/input2.html" data-input="text"></div>
+        </template>
+        <template data-template="text">
+          <div x-remote-component="/components/text.html" data-input="text"></div>
+        </template>
+      </div>
+    </div>
+
+    <div class="my-10 border-t border-gray-200 font-semibold text-lg">recursive id component</div>
+
+    <div x-data="{ tree: [
+      {
+        name: 'Directory',
+        id: 17,
+        children: [
+          { name: 'Some item', id: 1 },
+          { name: 'Another item', id: 2 },
+          { name: 'Third', id: 3 },
+          { name: 'File' },
+          {
+            name: 'Sub directory',
+            id: 5,
+            children: [
+              {
+                name: 'Another sub directory',
+                id: 6,
+                children: [
+                  { name: 'Content', id: 7 },
+                  { name: 'Another item', id: 8 },
+                ],
+              },
+              { name: 'Fourth', id: 9 },
+              { name: 'Another file', id: 10 },
+              { name: 'Video file', id: 11 },
+              { name: 'Secret item', id: 12 },
+              {
+                name: 'More content here',
+                id: 13,
+                children: [
+                  { name: 'Another video file', id: 14 },
+                  { name: 'Fifth', id: 15 },
+                ],
+              },
+            ],
+          },
+          { name: 'Sixth item', id: 16 },
+        ],
+      },
+    ], 
+    handleItemClick() {
+      this.isOpen = !this.isOpen
+    }}">
+      <div class="flex flex-col items-start">
+        <button @click="tree[0].children.splice(3, 1)">remove file</button>
+        <button @click="tree[0].children[4].children.splice(2, 1)">remove fourth</button>
+        <button @click="tree[0].children.push({ name: 'added', id: 20 })">add at end</button>
+        <button 
+          @click="tree[0].children[4].children[1].children = [
+            { name: 'added2', id: 21 },
+            { name: 'added3', id: 22 }
+          ]"
+        >add children</button>
+      </div>
+      <ul>
+        <template x-for="c in tree" :key="c.id">
+          <li x-remote-component="#node" x-rc:swap="inner" x-data="{isOpen: true}">
+
+          </li>
+        </template>
+      </ul>
+    </div>
+
+    <div class="my-10 border-t border-gray-200 font-semibold text-lg">recursive id component</div>
+
+    <div x-data="{ tree: {
+        name: 'Directory',
+        id: 17,
+        children: [
+          { name: 'Some item', id: 1 },
+          { name: 'Another item', id: 2 },
+          { name: 'Third', id: 3 },
+          { name: 'File' },
+          {
+            name: 'Sub directory',
+            id: 5,
+            children: [
+              {
+                name: 'Another sub directory',
+                id: 6,
+                children: [
+                  { name: 'Content', id: 7 },
+                  { name: 'Another item', id: 8 },
+                ],
+              },
+              { name: 'Fourth', id: 9 },
+              { name: 'Another file', id: 10 },
+              { name: 'Video file', id: 11 },
+              { name: 'Secret item', id: 12 },
+              {
+                name: 'More content here',
+                id: 13,
+                children: [
+                  { name: 'Another video file', id: 14 },
+                  { name: 'Fifth', id: 15 },
+                ],
+              },
+            ],
+          },
+          { name: 'Sixth item', id: 16 },
+        ],
+      }, 
+    handleItemClick() {
+      this.isOpen = !this.isOpen
+    }}">
+      <div class="flex flex-col items-start">
+        <button @click="tree[0].children.splice(3, 1)">remove file</button>
+        <button @click="tree[0].children[4].children.splice(2, 1)">remove fourth</button>
+        <button @click="tree[0].children.push({ name: 'added', id: 20 })">add at end</button>
+        <button 
+          @click="tree[0].children[4].children[1].children = [
+            { name: 'added2', id: 21 },
+            { name: 'added3', id: 22 }
+          ]"
+        >add children</button>
+      </div>
+      <ul>
+        <li x-data="{c: tree, isOpen: true}" x-remote-component="#node" x-rc:swap="inner"></li>
+      </ul>
+    </div>
+
+    <div class="my-10 border-t border-gray-200 font-semibold text-lg">recursive id component</div>
+
+    <div x-data="{ 
+      tree: {
+        id: 1,
+        name: 'Directory',
+        children: [
+          {
+            id: 2,
+            name: 'Science Fiction',
+            children: [
+              {
+                id: 13,
+                name: 'Star Wars',
+              },
+              {
+                id: 14,
+                name: 'Dune',
+              },
+              {
+                id: 15,
+                name: 'Futurama',
+              },
+              {
+                id: 16,
+                name: 'Star Trek',
+              }
+            ]
+          },
+          {
+            id: 5,
+            name: 'Fantasy',
+            children: [
+              {
+                id: 17,
+                name: 'Lord of the Rings',
+              },
+              {
+                id: 18,
+                name: 'Witcher',
+              }
+            ]
+          },
+          {
+            id: 8,
+            name: 'Anime',
+            children: [
+              {
+                id: 9,
+                name: 'Attack on Titan',
+              },
+              {
+                id: 10,
+                name: 'Frieren',
+              },
+              {
+                id: 11,
+                name: 'Mononoke Hime',
+              },
+              {
+                id: 12,
+                name: 'Ghost in the Shell',
+              }
+            ]
+          }
+        ]
+      }, 
+    handleItemClick() {
+      this.isOpen = !this.isOpen
+    }}">
+      <div class="flex flex-col items-start">
+        <button @click="tree[0].children.splice(3, 1)">remove file</button>
+        <button @click="tree[0].children[4].children.splice(2, 1)">remove fourth</button>
+        <button @click="tree[0].children.push({ name: 'added', id: 20 })">add at end</button>
+        <button 
+          @click="tree[0].children[4].children[1].children = [
+            { name: 'added2', id: 21 },
+            { name: 'added3', id: 22 }
+          ]"
+        >add children</button>
+      </div>
+      <ul>
+        <li x-data="{c: tree, isOpen: true}" x-remote-component="#node" x-rc:swap="inner"></li>
+      </ul>
+    </div>
+
+    <div class="my-10 border-t border-gray-200 font-semibold text-lg">id partial components</div>
+
+    <template id="node">
+      <span x-text="c.name" @click="handleItemClick"></span>
+      <template x-if="c.children">
+        <ul x-show="isOpen">
+          <template x-for="c in c.children" :key="c.id">
+            <li x-remote-component="#node" x-rc:swap="inner" class="ml-6" x-data="{isOpen: true}"></li>
+          </template>
+        </ul>
+      </template>
+    </template>
+
+    <div x-data>
+      <div x-remote-component="/components/input.html" x-rc:trigger="event" @id-loaded.window="_rc.trigger()">
+        <template data-template="menu">
+          <div x-remote-component="#remoteid"></div>
+        </template>
+      </div>
+    </div>
+
+    <div x-data @rc-loaded="$dispatch('id-loaded')">
+      <template x-data x-remote-component="/components/idcomponents.html"></template>
+    </div>
+
+    <template id="inputid">
+      <div>
+        input id
+        <div data-template="menu"></div>
+      </div>
+    </template>
+    <template id="inputid2">
+      <div>input id 2</div>
+    </template>
+    <template id="inputiditem">
+      <div x-text="item"></div>
+    </template>
+  </body>
+</html>

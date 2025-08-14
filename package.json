@@ -1,0 +1,23 @@
+{
+  "name": "alpine-component-plugin",
+  "version": "1.0.0",
+  "description": "",
+  "main": "alpine-component-plugin.js",
+  "scripts": {
+    "tailwind": "npx @tailwindcss/cli -i ./input.css -o ./output.css --watch",
+    "dev": "npx @11ty/eleventy-dev-server",
+    "build": "node scripts/build.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@11ty/eleventy-dev-server": "^2.0.8",
+    "esbuild": "0.25.8",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "@tailwindcss/cli": "^4.1.11",
+    "tailwindcss": "^4.1.11"
+  }
+}
