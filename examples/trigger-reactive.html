@@ -1,0 +1,31 @@
+<div x-data="{ isLoaded: false }">
+  <button
+    @click="isLoaded = true"
+    class="flex items-center rounded-md border-violet-700 bg-violet-500 px-4 py-2 font-medium text-gray-100 hover:bg-violet-600 focus:ring-violet-200 dark:bg-violet-500 dark:hover:bg-violet-600"
+  >
+    Load component
+  </button>
+
+  <div
+    x-remote-component="/examples/components/component-a.html"
+    x-rc:trigger="reactive"
+    x-rc:watch="isLoaded"
+  >
+  </div>
+</div>
+
+<div x-data="{ isLoaded: false }">
+  <button
+    @click="isLoaded = true"
+    class="flex items-center rounded-md border-violet-700 bg-violet-500 px-4 py-2 font-medium text-gray-100 hover:bg-violet-600 focus:ring-violet-200 dark:bg-violet-500 dark:hover:bg-violet-600"
+  >
+    Load component
+  </button>
+
+  <div
+    x-remote-component="/examples/components/component-b.html"
+    x-rc:trigger="reactive"
+    x-init="$watch('isLoaded', () => $data._rc.trigger())"
+  >
+  </div>
+</div>

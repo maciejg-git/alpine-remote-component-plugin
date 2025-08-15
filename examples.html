@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title></title>
+    <link href="/output.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/styles/default.min.css">
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/highlight.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/languages/html.min.js"></script>
+    <script defer src="/dist/cdn.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+  </head>
+  <body>
+    <div x-data>
+      <div class="mx-auto flex max-w-4xl flex-col gap-y-12">
+        <div x-remote-component="#example">
+          <template data-template="title"> Basic ID component </template>
+          <template data-template="example">
+            <div
+              x-remote-component="/examples/basic-id-component.html"
+              x-rc:name="example"
+            ></div>
+          </template>
+        </div>
+
+        <div x-remote-component="#example">
+          <template data-template="title"> Basic URL component </template>
+          <template data-template="example">
+            <div
+              x-remote-component="/examples/basic-url-component.html"
+              x-rc:name="example"
+            ></div>
+          </template>
+        </div>
+
+        <div x-remote-component="#example">
+          <template data-template="title"> Basic dynamic component </template>
+          <template data-template="example">
+            <div
+              x-remote-component="/examples/basic-dynamic-component.html"
+              x-rc:name="example"
+            ></div>
+          </template>
+        </div>
+
+        <div x-remote-component="#example">
+          <template data-template="title"> Trigger - Load </template>
+          <template data-template="example">
+            <div
+              x-remote-component="/examples/trigger-load.html"
+              x-rc:name="example"
+            ></div>
+          </template>
+        </div>
+
+        <div x-remote-component="#example">
+          <template data-template="title"> Trigger - Event </template>
+          <template data-template="example">
+            <div
+              x-remote-component="/examples/trigger-event.html"
+              x-rc:name="example"
+            ></div>
+          </template>
+        </div>
+
+        <div x-remote-component="#example">
+          <template data-template="title"> Trigger - Reactive </template>
+          <template data-template="example">
+            <div
+              x-remote-component="/examples/trigger-reactive.html"
+              x-rc:name="example"
+            ></div>
+          </template>
+        </div>
+
+        <div x-remote-component="#example">
+          <template data-template="title"> Trigger - Intersect </template>
+          <template data-template="example">
+            <div
+              x-remote-component="/examples/trigger-intersect.html"
+              x-rc:name="example"
+            ></div>
+          </template>
+        </div>
+
+        <div x-remote-component="#example">
+          <template data-template="title"> Trigger - Custom </template>
+          <template data-template="example">
+            <div
+              x-remote-component="/examples/trigger-custom.html"
+              x-rc:name="example"
+            ></div>
+          </template>
+        </div>
+
+        <div x-remote-component="#example">
+          <template data-template="title"> Trigger delay </template>
+          <template data-template="example">
+            <div
+              x-remote-component="/examples/trigger-delay.html"
+              x-rc:name="example"
+            ></div>
+          </template>
+        </div>
+
+        <div x-remote-component="#example">
+          <template data-template="title"> Loading indicator </template>
+          <template data-template="example">
+            <div
+              x-remote-component="/examples/indicator.html"
+              x-rc:name="example"
+            ></div>
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <template id="example">
+      <div
+        x-data="{
+          html: '',
+          handleComponentInserted() {
+            if (this.$event.detail.name === 'example') {
+              this.html = this.$event.detail.responseHTML
+              this.$nextTick(() => {
+                hljs.highlightElement(this.$refs.code)
+              })
+            }
+          }
+        }"
+        @rc-inserted="handleComponentInserted"
+      >
+        <div class="flex flex-col gap-y-4">
+          <div class="text-xl font-semibold">
+            <div data-template="title"></div>
+          </div>
+
+          <pre class="rounded-lg overflow-hidden text-sm"><code x-text="html" x-ref="code">
+          </code></pre>
+
+          <div class="flex flex-col gap-y-4 items-center">
+            <div data-template="example"></div>
+          </div>
+        </div>
+      </div>
+    </template>
+  </body>
+</html>

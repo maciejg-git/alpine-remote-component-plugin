@@ -1,0 +1,13 @@
+<div
+  x-remote-component="/examples/components/component-a.html"
+  x-rc:triger="custom"
+  x-init="$nextTick(() => $data._rc.trigger())"
+>
+</div>
+
+<div
+  x-remote-component="/examples/components/component-b.html"
+  x-rc:triger="custom"
+  @rc-initialized="_rc.trigger"
+>
+</div>
