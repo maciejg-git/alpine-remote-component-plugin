@@ -1,0 +1,32 @@
+<div
+  x-data="{
+    events: [],
+  }"
+  @rc-initialized="events.push($event)"
+  @rc-before-load="events.push($event)"
+  @rc-loaded="events.push($event)"
+  @rc-inserted="events.push($event)"
+  class="flex flex-col gap-y-4 items-center"
+>
+  <button
+    @click="$dispatch('load-component-event')"
+    class="flex items-center rounded-md border-violet-700 bg-violet-500 px-4 py-2 font-medium text-gray-100 hover:bg-violet-600 focus:ring-violet-200 dark:bg-violet-500 dark:hover:bg-violet-600"
+  >
+    Load component
+  </button>
+
+  <div
+    x-remote-component="/examples/components/component-a.html"
+    x-rc:trigger="event 500 1000"
+    @load-component-event.window="_rc.trigger"
+  ></div>
+
+  <div class="rounded-lg bg-gray-50 p-4 w-full">
+    <span class="mb-2 font-semibold">Events:</span>
+    <ul>
+      <template x-for="ev in events">
+        <li x-text="ev.type"></li>
+      </template>
+    </ul>
+  </div>
+</div>

@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title></title>
     <link href="/output.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/styles/default.min.css">
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/styles/default.min.css"> -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/styles/atom-one-light.min.css">
     <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/highlight.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/languages/html.min.js"></script>
     <script defer src="/dist/cdn.js"></script>
@@ -117,6 +118,56 @@
             ></div>
           </template>
         </div>
+
+        <div x-remote-component="#example">
+          <template data-template="title"> Swap - Inner </template>
+          <template data-template="example">
+            <div
+              x-remote-component="/examples/swap-inner.html"
+              x-rc:name="example"
+            ></div>
+          </template>
+        </div>
+
+        <div x-remote-component="#example">
+          <template data-template="title"> Swap - Outer </template>
+          <template data-template="example">
+            <div
+              x-remote-component="/examples/swap-outer.html"
+              x-rc:name="example"
+            ></div>
+          </template>
+        </div>
+
+        <div x-remote-component="#example">
+          <template data-template="title"> Events </template>
+          <template data-template="example">
+            <div
+              x-remote-component="/examples/events.html"
+              x-rc:name="example"
+            ></div>
+          </template>
+        </div>
+
+        <div x-remote-component="#example">
+          <template data-template="title"> x-if </template>
+          <template data-template="example">
+            <div
+              x-remote-component="/examples/x-if.html"
+              x-rc:name="example"
+            ></div>
+          </template>
+        </div>
+
+        <div x-remote-component="#example">
+          <template data-template="title"> x-for </template>
+          <template data-template="example">
+            <div
+              x-remote-component="/examples/x-for.html"
+              x-rc:name="example"
+            ></div>
+          </template>
+        </div>
       </div>
     </div>
 
@@ -140,7 +191,7 @@
             <div data-template="title"></div>
           </div>
 
-          <pre class="rounded-lg overflow-hidden text-sm"><code x-text="html" x-ref="code">
+          <pre class="rounded-xl overflow-hidden text-sm"><code x-text="html" x-ref="code">
           </code></pre>
 
           <div class="flex flex-col gap-y-4 items-center">

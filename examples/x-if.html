@@ -1,0 +1,33 @@
+<div x-data="{ isVisible: true }" class="flex flex-col items-center gap-y-4">
+  <button
+    @click="isVisible = !isVisible"
+    class="flex items-center rounded-md border-violet-700 bg-violet-500 px-4 py-2 font-medium text-gray-100 hover:bg-violet-600 focus:ring-violet-200 dark:bg-violet-500 dark:hover:bg-violet-600"
+  >
+    Toggle component
+  </button>
+
+  <template x-if="isVisible">
+    <div
+      x-remote-component="/examples/components/component-a.html"
+      x-rc:swap="inner"
+    ></div>
+  </template>
+</div>
+
+<div x-data="{ isVisible: true }" class="flex flex-col items-center gap-y-4">
+  <button
+    @click="isVisible = !isVisible"
+    class="flex items-center rounded-md border-violet-700 bg-violet-500 px-4 py-2 font-medium text-gray-100 hover:bg-violet-600 focus:ring-violet-200 dark:bg-violet-500 dark:hover:bg-violet-600"
+  >
+    Toggle component
+  </button>
+
+  <template x-if="isVisible">
+    <div>
+      <div
+        x-remote-component="/examples/components/component-b.html"
+        x-rc:swap="outer"
+      ></div>
+    </div>
+  </template>
+</div>

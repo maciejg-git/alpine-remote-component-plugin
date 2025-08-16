@@ -1,0 +1,35 @@
+<div
+  x-data="{
+    components: [
+      'component-a',
+      'component-b',
+      'component-c',
+    ]
+  }"
+>
+  <template x-for="c in components">
+    <div
+      x-remote-component="`/examples/components/${c}.html`"
+      x-rc:swap="inner"
+    ></div>
+  </template>
+</div>
+
+<div
+  x-data="{
+    components: [
+      'component-a',
+      'component-b',
+      'component-c',
+    ]
+  }"
+>
+  <template x-for="c in components">
+    <div>
+      <div
+        x-remote-component="`/examples/components/${c}.html`"
+        x-rc:swap="outer"
+      ></div>
+    </div>
+  </template>
+</div>
