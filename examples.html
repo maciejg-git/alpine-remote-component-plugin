@@ -168,6 +168,46 @@
             ></div>
           </template>
         </div>
+
+        <div x-remote-component="#example">
+          <template data-template="title"> Basic data-template </template>
+          <template data-template="example">
+            <div
+              x-remote-component="/examples/basic-data-template.html"
+              x-rc:name="example"
+            ></div>
+          </template>
+        </div>
+
+        <div x-remote-component="#example">
+          <template data-template="title"> data-template components </template>
+          <template data-template="example">
+            <div
+              x-remote-component="/examples/data-template-components.html"
+              x-rc:name="example"
+            ></div>
+          </template>
+        </div>
+
+        <div x-remote-component="#example">
+          <template data-template="title"> data-template nested components </template>
+          <template data-template="example">
+            <div
+              x-remote-component="/examples/data-template-nested-components.html"
+              x-rc:name="example"
+            ></div>
+          </template>
+        </div>
+
+        <div x-remote-component="#example">
+          <template data-template="title"> Component attributes </template>
+          <template data-template="example">
+            <div
+              x-remote-component="/examples/copy-attributes.html"
+              x-rc:name="example"
+            ></div>
+          </template>
+        </div>
       </div>
     </div>
 
