@@ -1,0 +1,15 @@
+<div
+  x-data="{
+    component: 'component-a',
+    options: {
+      name: 'Component A',
+      trigger: 'load',
+      swap: 'inner',
+    }
+  }"
+>
+  <div
+    x-remote-component="`/examples/components/${component}.html`"
+    x-rc="options"
+  ></div>
+</div>

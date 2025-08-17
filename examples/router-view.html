@@ -1,0 +1,125 @@
+<div
+  x-data="{
+    components: [
+      'component-a',
+      'component-b',
+      'component-c',
+    ],
+    currentComponent: 'component-a',
+  }"
+  class="flex flex-col gap-y-4 items-center"
+>
+  <div class="flex gap-x-4">
+    <button
+      @click="currentComponent = 'component-a'"
+      class="flex items-center rounded-md border-violet-700 bg-violet-500 px-4 py-2 font-medium text-gray-100 hover:bg-violet-600 focus:ring-violet-200 dark:bg-violet-500 dark:hover:bg-violet-600"
+    >
+      Component A
+    </button>
+    <button
+      @click="currentComponent = 'component-b'"
+      class="flex items-center rounded-md border-violet-700 bg-violet-500 px-4 py-2 font-medium text-gray-100 hover:bg-violet-600 focus:ring-violet-200 dark:bg-violet-500 dark:hover:bg-violet-600"
+    >
+      Component B
+    </button>
+    <button
+      @click="currentComponent = 'component-c'"
+      class="flex items-center rounded-md border-violet-700 bg-violet-500 px-4 py-2 font-medium text-gray-100 hover:bg-violet-600 focus:ring-violet-200 dark:bg-violet-500 dark:hover:bg-violet-600"
+    >
+      Component C
+    </button>
+  </div>
+
+  <template x-for="c in components">
+    <template x-if="currentComponent === c">
+      <div
+        x-remote-component="`/examples/components/${c}.html`"
+        x-rc:swap="inner"
+      ></div>
+    </template>
+  </template>
+</div>
+
+<div
+  x-data="{
+    components: [
+      'component-a',
+      'component-b',
+      'component-c',
+    ],
+    currentComponent: 'component-a',
+  }"
+  class="flex flex-col gap-y-4 items-center"
+>
+  <div class="flex gap-x-4">
+    <button
+      @click="currentComponent = 'component-a'"
+      class="flex items-center rounded-md border-violet-700 bg-violet-500 px-4 py-2 font-medium text-gray-100 hover:bg-violet-600 focus:ring-violet-200 dark:bg-violet-500 dark:hover:bg-violet-600"
+    >
+      Component A
+    </button>
+    <button
+      @click="currentComponent = 'component-b'"
+      class="flex items-center rounded-md border-violet-700 bg-violet-500 px-4 py-2 font-medium text-gray-100 hover:bg-violet-600 focus:ring-violet-200 dark:bg-violet-500 dark:hover:bg-violet-600"
+    >
+      Component B
+    </button>
+    <button
+      @click="currentComponent = 'component-c'"
+      class="flex items-center rounded-md border-violet-700 bg-violet-500 px-4 py-2 font-medium text-gray-100 hover:bg-violet-600 focus:ring-violet-200 dark:bg-violet-500 dark:hover:bg-violet-600"
+    >
+      Component C
+    </button>
+  </div>
+
+  <template x-for="c in components">
+    <div
+      x-remote-component="`/examples/components/${c}.html`"
+      x-rc:swap="inner"
+      x-show="currentComponent === c"
+    ></div>
+  </template>
+</div>
+
+<div
+  x-data="{
+    components: [
+      'component-a',
+      'component-b',
+      'component-c',
+    ],
+    currentComponent: 'component-a',
+  }"
+  class="flex flex-col gap-y-4 items-center"
+>
+  <div class="flex gap-x-4">
+    <button
+      @click="currentComponent = 'component-a'"
+      class="flex items-center rounded-md border-violet-700 bg-violet-500 px-4 py-2 font-medium text-gray-100 hover:bg-violet-600 focus:ring-violet-200 dark:bg-violet-500 dark:hover:bg-violet-600"
+    >
+      Component A
+    </button>
+    <button
+      @click="currentComponent = 'component-b'"
+      class="flex items-center rounded-md border-violet-700 bg-violet-500 px-4 py-2 font-medium text-gray-100 hover:bg-violet-600 focus:ring-violet-200 dark:bg-violet-500 dark:hover:bg-violet-600"
+    >
+      Component B
+    </button>
+    <button
+      @click="currentComponent = 'component-c'"
+      class="flex items-center rounded-md border-violet-700 bg-violet-500 px-4 py-2 font-medium text-gray-100 hover:bg-violet-600 focus:ring-violet-200 dark:bg-violet-500 dark:hover:bg-violet-600"
+    >
+      Component C
+    </button>
+  </div>
+
+  <template x-for="c in components">
+    <div
+      x-remote-component="`/examples/components/${c}.html`"
+      x-rc:trigger="reactive"
+      x-rc:swap="inner"
+      x-show="currentComponent === c"
+      x-effect="currentComponent === c && _rc.trigger()"
+    ></div>
+  </template>
+</div>

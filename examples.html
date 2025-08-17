@@ -208,6 +208,26 @@
             ></div>
           </template>
         </div>
+
+        <div x-remote-component="#example">
+          <template data-template="title"> Router view </template>
+          <template data-template="example">
+            <div
+              x-remote-component="/examples/router-view.html"
+              x-rc:name="example"
+            ></div>
+          </template>
+        </div>
+
+        <div x-remote-component="#example">
+          <template data-template="title"> Dynamic component options </template>
+          <template data-template="example">
+            <div
+              x-remote-component="/examples/rc.html"
+              x-rc:name="example"
+            ></div>
+          </template>
+        </div>
       </div>
     </div>
 
