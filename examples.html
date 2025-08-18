@@ -228,6 +228,16 @@
             ></div>
           </template>
         </div>
+
+        <div x-remote-component="#example">
+          <template data-template="title"> Recursive components </template>
+          <template data-template="example">
+            <div
+              x-remote-component="/examples/recursive.html"
+              x-rc:name="example"
+            ></div>
+          </template>
+        </div>
       </div>
     </div>
 

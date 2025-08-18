@@ -1,0 +1,106 @@
+<div
+  x-data="{
+    tree: {
+      name: 'Directory',
+      id: 1,
+      children: [
+        {
+          name: 'Movies',
+          id: 2,
+          children: [
+            {
+              name: 'Science-fiction',
+              id: 4,
+              children: [
+                {
+                  name: 'Star Wars',
+                  id: 6,
+                },
+                {
+                  name: 'Dune',
+                  id: 7,
+                },
+                {
+                  name: 'Futurama',
+                  id: 8,
+                },
+              ]
+            },
+            {
+              name: 'Fantasy',
+              id: 5,
+              children: [
+                {
+                  name: 'Lord of the Rings',
+                  id: 9,
+                },
+                {
+                  name: 'Witcher',
+                  id: 10,
+                },
+              ]
+            },
+          ]
+        },
+        {
+          name: 'Anime',
+          id: 3,
+          children: [
+            {
+              name: 'Attack on Titan',
+              id: 11,
+            },
+            {
+              name: 'Frieren',
+              id: 12,
+            },
+            {
+              name: 'Mononoke Hime',
+              id: 13,
+            },
+            {
+              name: 'Ghost in the Shell',
+              id: 14,
+            },
+          ]
+        },
+      ]
+    },
+    open() {
+      this.isOpen = true
+    },
+    close() {
+      this.isOpen = false
+    },
+    toggle() {
+      this.isOpen = !this.isOpen
+    },
+    isDirectory() {
+      return this.c.children?.length
+    }
+  }"
+>
+  <ul x-data="{ c: tree, isOpen: true }">
+    <li x-remote-component="#node" x-rc:swap="inner"></li>
+  </ul>
+</div>
+
+<template id="node">
+  <span
+    x-text="c.name"
+    @click="toggle"
+    :class="{ 'font-semibold': isDirectory() }"
+  ></span>
+  <template x-if="isDirectory">
+    <ul x-show="isOpen" x-transition.opacity>
+      <template x-for="c in c.children">
+        <li
+          x-remote-component="#node"
+          x-rc:swap="inner"
+          x-data="{ isOpen: true }"
+          class="ml-6"
+        ></li>
+      </template>
+    </ul>
+  </template>
+</template>
