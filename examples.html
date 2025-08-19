@@ -21,6 +21,9 @@
       <div class="mx-auto flex max-w-4xl flex-col gap-y-12">
         <div x-remote-component="#example">
           <template data-template="title"> Basic ID component </template>
+          <template data-template="text">
+            <p>Use an ID starting with # to load the ID component.</p>
+          </template>
           <template data-template="example">
             <div
               x-remote-component="/examples/basic-id-component.html"
@@ -31,6 +34,9 @@
 
         <div x-remote-component="#example">
           <template data-template="title"> Basic URL component </template>
+          <template data-template="text">
+            <p>Use a path starting with / to load the URL component.</p>
+          </template>
           <template data-template="example">
             <div
               x-remote-component="/examples/basic-url-component.html"
@@ -41,6 +47,9 @@
 
         <div x-remote-component="#example">
           <template data-template="title"> Basic dynamic component </template>
+          <template data-template="text">
+            <p>Values that are not ID or path are evaluated by Alpine before loading the component. The result of the evaluation should be and ID or path.</p>
+          </template>
           <template data-template="example">
             <div
               x-remote-component="/examples/basic-dynamic-component.html"
@@ -51,6 +60,9 @@
 
         <div x-remote-component="#example">
           <template data-template="title"> Trigger - Load </template>
+          <template data-template="text">
+            <p>The load trigger loads the component immediately.</p>
+          </template>
           <template data-template="example">
             <div
               x-remote-component="/examples/trigger-load.html"
@@ -61,6 +73,9 @@
 
         <div x-remote-component="#example">
           <template data-template="title"> Trigger - Event </template>
+          <template data-template="text">
+            <p>The event trigger loads the component on a specified event. You should add the listener separately using the x-on directive.</p>
+          </template>
           <template data-template="example">
             <div
               x-remote-component="/examples/trigger-event.html"
@@ -71,6 +86,9 @@
 
         <div x-remote-component="#example">
           <template data-template="title"> Trigger - Reactive </template>
+          <template data-template="text">
+            <p>The reactive trigger loads the component based on a reactive property value. Use the x-rc:watch directive to define watched property. You can also set up your own watcher.</p>
+          </template>
           <template data-template="example">
             <div
               x-remote-component="/examples/trigger-reactive.html"
@@ -259,6 +277,10 @@
         <div class="flex flex-col gap-y-4">
           <div class="text-xl font-semibold">
             <div data-template="title"></div>
+          </div>
+
+          <div>
+            <div data-template="text"></div>
           </div>
 
           <pre class="rounded-xl overflow-hidden text-sm"><code x-text="html" x-ref="code">
