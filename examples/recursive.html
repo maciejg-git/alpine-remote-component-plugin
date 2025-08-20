@@ -93,7 +93,7 @@
   ></span>
   <template x-if="isDirectory">
     <ul x-show="isOpen" x-transition.opacity>
-      <template x-for="c in c.children">
+      <template x-for="c in c.children" :key="c.id">
         <li
           x-remote-component="#node"
           x-rc:swap="inner"
