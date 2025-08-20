@@ -4,6 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title></title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
     <link href="/output.css" rel="stylesheet" />
     <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/styles/default.min.css"> -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/styles/atom-one-light.min.css">
@@ -17,7 +20,13 @@
     ></script>
   </head>
   <body>
-    <div x-data>
+    <nav class="border-b border-gray-200 p-2 sticky top-0 bg-white">
+      <span class="font-semibold text-lg">
+        Alpine Remote Components
+      </span>
+    </nav>
+
+    <div x-data class="mt-10">
       <div class="mx-auto flex max-w-4xl flex-col gap-y-12">
         <div x-remote-component="#example">
           <template data-template="title"> Basic ID component </template>
@@ -99,6 +108,9 @@
 
         <div x-remote-component="#example">
           <template data-template="title"> Trigger - Intersect </template>
+          <template data-template="text">
+            <p>The intersect trigger loads component when it enters the viewport. This trigger uses Alpine intersect plugin.</p>
+          </template>
           <template data-template="example">
             <div
               x-remote-component="/examples/trigger-intersect.html"
@@ -109,6 +121,9 @@
 
         <div x-remote-component="#example">
           <template data-template="title"> Trigger - Custom </template>
+          <template data-template="text">
+            <p>The custom trigger relies on calling the _rc.trigger() function manually.</p>
+          </template>
           <template data-template="example">
             <div
               x-remote-component="/examples/trigger-custom.html"
@@ -119,6 +134,13 @@
 
         <div x-remote-component="#example">
           <template data-template="title"> Trigger delay </template>
+          <template data-template="text">
+            <p>The trigger allows two optional parameters:</p>
+            <ul class="list-disc list-inside">
+              <li>delay (ms) before sending the request.</li>
+              <li>delay (ms) before inserting the component into the DOM.</li>
+            </ul>
+          </template>
           <template data-template="example">
             <div
               x-remote-component="/examples/trigger-delay.html"
@@ -129,6 +151,9 @@
 
         <div x-remote-component="#example">
           <template data-template="title"> Loading indicator </template>
+          <template data-template="text">
+            <p>Use the _rcIsLoading or _rcIsLoadingWithDelay to display an indicator while the component is loading.</p>
+          </template>
           <template data-template="example">
             <div
               x-remote-component="/examples/indicator.html"
@@ -169,6 +194,9 @@
 
         <div x-remote-component="#example">
           <template data-template="title"> x-if </template>
+          <template data-template="text">
+            <p>The x-if directive requires a single root element so you need to use the inner swap option or wrap the component with an additional element.</p>
+          </template>
           <template data-template="example">
             <div
               x-remote-component="/examples/x-if.html"
@@ -179,6 +207,9 @@
 
         <div x-remote-component="#example">
           <template data-template="title"> x-for </template>
+          <template data-template="text">
+            <p>The x-for directive requires a single root element so you need to use the inner swap option or wrap the component with an additional element.</p>
+          </template>
           <template data-template="example">
             <div
               x-remote-component="/examples/x-for.html"
@@ -189,6 +220,9 @@
 
         <div x-remote-component="#example">
           <template data-template="title"> Basic data-template </template>
+          <template data-template="text">
+            <p>The contents of template elements marked with the data-template attribute are replaced with the corresponding elements in the component. This provides functionality similar to slots and enhances the reusability of components. The replaced content can be static or contain other components.</p>
+          </template>
           <template data-template="example">
             <div
               x-remote-component="/examples/basic-data-template.html"
@@ -219,6 +253,9 @@
 
         <div x-remote-component="#example">
           <template data-template="title"> Component attributes </template>
+          <template data-template="text">
+            <p>Attributes prefixed with _ or rc- are transferred to the component's root element. Classes are an exception and are merged with the existing classes.</p>
+          </template>
           <template data-template="example">
             <div
               x-remote-component="/examples/copy-attributes.html"
@@ -239,6 +276,9 @@
 
         <div x-remote-component="#example">
           <template data-template="title"> Dynamic component options </template>
+          <template data-template="text">
+            <p>For dynamic component options use x-rc directive without property.</p>
+          </template>
           <template data-template="example">
             <div
               x-remote-component="/examples/rc.html"
@@ -252,6 +292,16 @@
           <template data-template="example">
             <div
               x-remote-component="/examples/recursive.html"
+              x-rc:name="example"
+            ></div>
+          </template>
+        </div>
+
+        <div x-remote-component="#example">
+          <template data-template="title"> Handling errors </template>
+          <template data-template="example">
+            <div
+              x-remote-component="/examples/errors.html"
               x-rc:name="example"
             ></div>
           </template>
@@ -274,7 +324,7 @@
         }"
         @rc-inserted="handleComponentInserted"
       >
-        <div class="flex flex-col gap-y-4">
+        <div class="flex flex-col gap-y-6">
           <div class="text-xl font-semibold">
             <div data-template="title"></div>
           </div>
