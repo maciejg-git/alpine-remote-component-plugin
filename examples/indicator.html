@@ -34,7 +34,7 @@
   x-rc:trigger="event 0 2000"
   @load-component-indicator.window="_rc.trigger"
 >
-  <div x-remote-component="#indicator" x-show="_rcIsLoadingWithDelay"></div>
+  <div x-remote-component="#indicator" _x-show="_rcIsLoadingWithDelay"></div>
 </div>
 
 <template id="indicator">
@@ -42,7 +42,6 @@
     viewBox="25 25 50 50"
     fill="none"
     class="animate-spinner-rotate h-10 w-10"
-    x-show="_rcIsLoadingWithDelay"
   >
     <circle
       cx="50"

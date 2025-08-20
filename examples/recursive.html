@@ -80,8 +80,12 @@
     }
   }"
 >
-  <ul x-data="{ c: tree, isOpen: true }">
-    <li x-remote-component="#node" x-rc:swap="inner"></li>
+  <ul x-data="{ c: tree }">
+    <li
+      x-remote-component="#node"
+      x-rc:swap="inner"
+      x-data="{ isOpen: true }"
+    ></li>
   </ul>
 </div>
 

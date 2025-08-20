@@ -4,15 +4,21 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title></title>
+    <!-- font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
     <link href="/output.css" rel="stylesheet" />
     <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/styles/default.min.css"> -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/styles/atom-one-light.min.css">
+    <!-- highlight.js -->
     <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/highlight.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/languages/html.min.js"></script>
+    <!-- marked -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/lib/marked.umd.js"></script>
+    <!-- alpine remote component plugin -->
     <script defer src="/dist/cdn.js"></script>
+    <!-- alpine -->
     <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
     <script
       defer
@@ -22,16 +28,16 @@
   <body>
     <nav class="border-b border-gray-200 p-2 sticky top-0 bg-white">
       <span class="font-semibold text-lg">
-        Alpine Remote Components
+        Alpine Remote Component
       </span>
     </nav>
 
-    <div x-data class="mt-10">
-      <div class="mx-auto flex max-w-4xl flex-col gap-y-12">
+    <div x-data>
+      <div class="mx-auto flex max-w-4xl flex-col gap-y-12 mt-10 mb-20 text-gray-800">
         <div x-remote-component="#example">
           <template data-template="title"> Basic ID component </template>
           <template data-template="text">
-            <p>Use an ID starting with # to load the ID component.</p>
+            <p class="markdown">Use an ID starting with `#` to load the ID component.</p>
           </template>
           <template data-template="example">
             <div
@@ -44,7 +50,7 @@
         <div x-remote-component="#example">
           <template data-template="title"> Basic URL component </template>
           <template data-template="text">
-            <p>Use a path starting with / to load the URL component.</p>
+            <p class="markdown">Use a path starting with `/` to load the URL component.</p>
           </template>
           <template data-template="example">
             <div
@@ -57,7 +63,7 @@
         <div x-remote-component="#example">
           <template data-template="title"> Basic dynamic component </template>
           <template data-template="text">
-            <p>Values that are not ID or path are evaluated by Alpine before loading the component. The result of the evaluation should be and ID or path.</p>
+            <p class="markdown">Values that are not ID or path are evaluated by Alpine before loading the component. The result of the evaluation should be and ID or path.</p>
           </template>
           <template data-template="example">
             <div
@@ -70,7 +76,7 @@
         <div x-remote-component="#example">
           <template data-template="title"> Trigger - Load </template>
           <template data-template="text">
-            <p>The load trigger loads the component immediately.</p>
+            <p class="markdown">The load trigger loads the component immediately.</p>
           </template>
           <template data-template="example">
             <div
@@ -83,7 +89,7 @@
         <div x-remote-component="#example">
           <template data-template="title"> Trigger - Event </template>
           <template data-template="text">
-            <p>The event trigger loads the component on a specified event. You should add the listener separately using the x-on directive.</p>
+            <p class="markdown">The event trigger loads the component on a specified event. You should add the listener separately using the `x-on` directive.</p>
           </template>
           <template data-template="example">
             <div
@@ -96,7 +102,8 @@
         <div x-remote-component="#example">
           <template data-template="title"> Trigger - Reactive </template>
           <template data-template="text">
-            <p>The reactive trigger loads the component based on a reactive property value. Use the x-rc:watch directive to define watched property. You can also set up your own watcher.</p>
+            <p class="markdown">The reactive trigger loads the component based on a reactive property value. Use the `x-rc:watch` directive to define watched property. You can also set up your own watcher.</p>
+            <p class="markdown">Components can also be loaded and removed based on reactive property using the `x-if` directive.</p>
           </template>
           <template data-template="example">
             <div
@@ -109,7 +116,7 @@
         <div x-remote-component="#example">
           <template data-template="title"> Trigger - Intersect </template>
           <template data-template="text">
-            <p>The intersect trigger loads component when it enters the viewport. This trigger uses Alpine intersect plugin.</p>
+            <p class="markdown">The intersect trigger loads component when it enters the viewport. This trigger uses Alpine intersect plugin.</p>
           </template>
           <template data-template="example">
             <div
@@ -122,7 +129,7 @@
         <div x-remote-component="#example">
           <template data-template="title"> Trigger - Custom </template>
           <template data-template="text">
-            <p>The custom trigger relies on calling the _rc.trigger() function manually.</p>
+            <p class="markdown">Use the custom trigger to load the component by calling the `_rc.trigger()` function.</p>
           </template>
           <template data-template="example">
             <div
@@ -135,7 +142,7 @@
         <div x-remote-component="#example">
           <template data-template="title"> Trigger delay </template>
           <template data-template="text">
-            <p>The trigger allows two optional parameters:</p>
+            <p class="markdown">The trigger allows two optional parameters:</p>
             <ul class="list-disc list-inside">
               <li>delay (ms) before sending the request.</li>
               <li>delay (ms) before inserting the component into the DOM.</li>
@@ -152,7 +159,8 @@
         <div x-remote-component="#example">
           <template data-template="title"> Loading indicator </template>
           <template data-template="text">
-            <p>Use the _rcIsLoading or _rcIsLoadingWithDelay to display an indicator while the component is loading.</p>
+            <p class="markdown">The `x-remote-component` element can contain any content that will be visible until it is replaced with the component. You can use it for placeholders, indicators, progress bars etc. To display it conditionally while the component is loading use the `x-show` directive and the `_rcIsLoading` or `_rcIsLoadingWithDelay` properties.</p>
+            <p class="markdown">The second example uses indicator component for better reusability.</p>
           </template>
           <template data-template="example">
             <div
@@ -195,7 +203,7 @@
         <div x-remote-component="#example">
           <template data-template="title"> x-if </template>
           <template data-template="text">
-            <p>The x-if directive requires a single root element so you need to use the inner swap option or wrap the component with an additional element.</p>
+            <p class="markdown">The `x-if` directive requires a single root element so you need to use the inner swap option or wrap the component with an additional element.</p>
           </template>
           <template data-template="example">
             <div
@@ -208,7 +216,7 @@
         <div x-remote-component="#example">
           <template data-template="title"> x-for </template>
           <template data-template="text">
-            <p>The x-for directive requires a single root element so you need to use the inner swap option or wrap the component with an additional element.</p>
+            <p class="markdown">The `x-for` directive requires a single root element so you need to use the inner swap option or wrap the component with an additional element.</p>
           </template>
           <template data-template="example">
             <div
@@ -221,7 +229,7 @@
         <div x-remote-component="#example">
           <template data-template="title"> Basic data-template </template>
           <template data-template="text">
-            <p>The contents of template elements marked with the data-template attribute are replaced with the corresponding elements in the component. This provides functionality similar to slots and enhances the reusability of components. The replaced content can be static or contain other components.</p>
+            <p class="markdown">The contents of template elements marked with the `data-template` attribute are replaced with the corresponding elements in the component. This provides functionality similar to slots and enhances the reusability of components. The replaced content can be static or contain other components.</p>
           </template>
           <template data-template="example">
             <div
@@ -254,7 +262,7 @@
         <div x-remote-component="#example">
           <template data-template="title"> Component attributes </template>
           <template data-template="text">
-            <p>Attributes prefixed with _ or rc- are transferred to the component's root element. Classes are an exception and are merged with the existing classes.</p>
+            <p class="markdown">Attributes prefixed with `_` or `rc-` are transferred to the component's root element. Classes are an exception and are merged with the existing classes.</p>
           </template>
           <template data-template="example">
             <div
@@ -277,7 +285,7 @@
         <div x-remote-component="#example">
           <template data-template="title"> Dynamic component options </template>
           <template data-template="text">
-            <p>For dynamic component options use x-rc directive without property.</p>
+            <p class="markdown">For dynamic component options, use the `x-rc` directive without a property and provide an object as the value.</p>
           </template>
           <template data-template="example">
             <div
@@ -318,6 +326,10 @@
               this.html = this.$event.detail.responseHTML
               this.$nextTick(() => {
                 hljs.highlightElement(this.$refs.code)
+                let md = this.$el.querySelectorAll('.markdown')
+                md.forEach((el) => {
+                  el.innerHTML = marked.parse(el.textContent)
+                })
               })
             }
           }
@@ -329,7 +341,7 @@
             <div data-template="title"></div>
           </div>
 
-          <div>
+          <div class="flex flex-col gap-y-4">
             <div data-template="text"></div>
           </div>
 
