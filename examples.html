@@ -37,7 +37,7 @@
         <div x-remote-component="#example">
           <template data-template="title"> Basic ID component </template>
           <template data-template="text">
-            <p class="markdown">Use an ID starting with `#` to load the ID component.</p>
+            <p class="markdown">To load the ID component use an ID string starting with `#`.</p>
           </template>
           <template data-template="example">
             <div
@@ -50,7 +50,7 @@
         <div x-remote-component="#example">
           <template data-template="title"> Basic URL component </template>
           <template data-template="text">
-            <p class="markdown">Use a path starting with `/` to load the URL component.</p>
+            <p class="markdown">To load the URL component use a path starting with `/`.</p>
           </template>
           <template data-template="example">
             <div
@@ -63,7 +63,7 @@
         <div x-remote-component="#example">
           <template data-template="title"> Basic dynamic component </template>
           <template data-template="text">
-            <p class="markdown">Values that are not ID or path are evaluated by Alpine before loading the component. The result of the evaluation should be and ID or path.</p>
+            <p class="markdown">Values that are not ID or path are evaluated by Alpine before loading the component. The result of the evaluation should be an ID or path.</p>
           </template>
           <template data-template="example">
             <div
@@ -102,7 +102,7 @@
         <div x-remote-component="#example">
           <template data-template="title"> Trigger - Reactive </template>
           <template data-template="text">
-            <p class="markdown">The reactive trigger loads the component based on a reactive property value. Use the `x-rc:watch` directive to define watched property. You can also set up your own watcher.</p>
+            <p class="markdown">The reactive trigger loads the component when a reactive property changes. Use the `x-rc:watch` directive to define a watched property and automatically react to simple boolean changes. If you need to test for specific value, you can set up your own watcher using the `x-effect` directive or `$watch` magic.</p>
             <p class="markdown">Components can also be loaded and removed based on reactive property using the `x-if` directive.</p>
           </template>
           <template data-template="example">
@@ -142,7 +142,7 @@
         <div x-remote-component="#example">
           <template data-template="title"> Trigger delay </template>
           <template data-template="text">
-            <p class="markdown">The trigger allows two optional parameters:</p>
+            <p class="markdown">You can delay loading of the component by adding two parameters to the `x-rc:trigger` value:</p>
             <ul class="list-disc list-inside">
               <li>delay (ms) before sending the request.</li>
               <li>delay (ms) before inserting the component into the DOM.</li>
@@ -262,7 +262,7 @@
         <div x-remote-component="#example">
           <template data-template="title"> Component attributes </template>
           <template data-template="text">
-            <p class="markdown">Attributes prefixed with `_` or `rc-` are transferred to the component's root element. Classes are an exception and are merged with the existing classes.</p>
+            <p class="markdown">Attributes prefixed with `_` or `rc-` are transferred to the component's root element. If the attribute already exists, the value is updated. Classes are an exception and are merged with the existing classes.</p>
           </template>
           <template data-template="example">
             <div
