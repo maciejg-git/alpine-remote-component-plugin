@@ -131,6 +131,8 @@ export default function (Alpine) {
           await delay(config.swapDelay)
         }
 
+        dispatch(el, "rc-loaded-with-delay", config)
+
         data._rcIsLoadingWithDelay = false
 
         if (isPath(exp)) {
