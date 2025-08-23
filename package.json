@@ -1,5 +1,5 @@
 {
-  "name": "alpine-component-plugin",
+  "name": "alpine-remote-component",
   "version": "1.0.0",
   "description": "",
   "main": "alpine-component-plugin.js",
