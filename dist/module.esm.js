@@ -107,6 +107,7 @@ function alpine_component_plugin_default(Alpine) {
         if (config.swapDelay) {
           await delay(config.swapDelay);
         }
+        dispatch(el, "rc-loaded-with-delay", config);
         data._rcIsLoadingWithDelay = false;
         if (isPath(exp)) {
           fragment = parsed.querySelector("template")?.content;
