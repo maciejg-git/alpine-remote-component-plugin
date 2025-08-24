@@ -50,7 +50,7 @@ Start using the plugin with two directives.
 
 ### Events
 
-The plugin dispatches three types of events to notify the page about current state of the component. These include:
+The plugin dispatches following events to notify the page about current state of the component:
 
 - `rc-initialized` - dispatched after directive is loaded and configured. Event detail:
     - `config` object
@@ -58,6 +58,8 @@ The plugin dispatches three types of events to notify the page about current sta
 - `rc-before-load` - dispatched before sending request. Event detail:
     - `config` object
 - `rc-loaded` - dispatched after successful component fetch. Event detail:
+    - `config` object
+- `rc-loaded-with-delay` - dispatched after successful component fetch including delay before insert. Event detail:
     - `config` object
 - `rc-inserted` - dispatched after component fragment has been inserted into the DOM. Event detail:
     - `config` object
