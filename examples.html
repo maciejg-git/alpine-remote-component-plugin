@@ -93,7 +93,7 @@
         <div x-remote-component="#example">
           <template data-template="title"> Trigger - Load </template>
           <template data-template="text">
-            <p class="markdown">The load trigger loads the component immediately.</p>
+            <p class="markdown">The load trigger loads the component immediately. This is default trigger.</p>
           </template>
           <template data-template="example">
             <div
@@ -292,7 +292,7 @@
         <div x-remote-component="#example">
           <template data-template="title"> Basic data-template </template>
           <template data-template="text">
-            <p class="markdown">The contents of template elements marked with the `data-template` attribute are replaced with the corresponding elements in the component. This provides functionality similar to slots and enhances the reusability of components. The replaced content can be static or contain other components.</p>
+            <p class="markdown">The contents of template elements marked with the `data-template` attribute are swapped with the corresponding elements in the component. This provides functionality similar to slots and enhances the reusability of components. The replaced content can be static or contain other components.</p>
           </template>
           <template data-template="example">
             <div
@@ -403,6 +403,7 @@
           <template data-template="title"> Handling errors </template>
           <template data-template="text">
             <p class="markdown">The `_rcError` reactive property stores the latest error. You can use it to show fallback content within the component.</p>
+            <p class="markdown">You can also handle errors outside the component by setting a listener for the `rc-error` event.</p>
           </template>
           <template data-template="example">
             <div
