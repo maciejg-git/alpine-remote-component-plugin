@@ -38,13 +38,13 @@
     </nav>
 
     <div x-data>
-      <div class="mx-auto flex max-w-4xl flex-col gap-y-12 mt-10 mb-20 text-gray-800">
+      <div class="mx-auto flex max-w-4xl flex-col gap-y-10 mt-10 mb-20 text-gray-800">
         <div x-remote-component="#example">
-          <template data-template="title"> Basic ID component </template>
-          <template data-template="text">
+          <template data-for-slot="title"> Basic ID component </template>
+          <template data-for-slot="text">
             <p class="markdown">To load the ID component use an ID string starting with `#`.</p>
           </template>
-          <template data-template="example">
+          <template data-for-slot="example">
             <div
               x-remote-component="/examples/basic-id-component.html"
               x-rc:name="example"
@@ -56,12 +56,14 @@
           </template>
         </div>
 
+        <hr class="border-gray-200">
+
         <div x-remote-component="#example">
-          <template data-template="title"> Basic URL component </template>
-          <template data-template="text">
+          <template data-for-slot="title"> Basic URL component </template>
+          <template data-for-slot="text">
             <p class="markdown">To load the URL component use a path starting with `/`.</p>
           </template>
-          <template data-template="example">
+          <template data-for-slot="example">
             <div
               x-remote-component="/examples/basic-url-component.html"
               x-rc:name="example"
@@ -73,12 +75,14 @@
           </template>
         </div>
 
+        <hr class="border-gray-200">
+
         <div x-remote-component="#example">
-          <template data-template="title"> Basic dynamic component </template>
-          <template data-template="text">
+          <template data-for-slot="title"> Basic dynamic component </template>
+          <template data-for-slot="text">
             <p class="markdown">Values that are not ID or path are evaluated by Alpine before loading the component. The result of the evaluation should be an ID or path.</p>
           </template>
-          <template data-template="example">
+          <template data-for-slot="example">
             <div
               x-remote-component="/examples/basic-dynamic-component.html"
               x-rc:name="example"
@@ -90,12 +94,14 @@
           </template>
         </div>
 
+        <hr class="border-gray-200">
+
         <div x-remote-component="#example">
-          <template data-template="title"> Trigger - Load </template>
-          <template data-template="text">
+          <template data-for-slot="title"> Trigger - Load </template>
+          <template data-for-slot="text">
             <p class="markdown">The load trigger loads the component immediately. This is default trigger.</p>
           </template>
-          <template data-template="example">
+          <template data-for-slot="example">
             <div
               x-remote-component="/examples/trigger-load.html"
               x-rc:name="example"
@@ -107,12 +113,14 @@
           </template>
         </div>
 
+        <hr class="border-gray-200">
+
         <div x-remote-component="#example">
-          <template data-template="title"> Trigger - Event </template>
-          <template data-template="text">
+          <template data-for-slot="title"> Trigger - Event </template>
+          <template data-for-slot="text">
             <p class="markdown">The event trigger loads the component on a specified event. You should add the listener separately using the `x-on` directive.</p>
           </template>
-          <template data-template="example">
+          <template data-for-slot="example">
             <div
               x-remote-component="/examples/trigger-event.html"
               x-rc:name="example"
@@ -124,13 +132,15 @@
           </template>
         </div>
 
+        <hr class="border-gray-200">
+
         <div x-remote-component="#example">
-          <template data-template="title"> Trigger - Reactive </template>
-          <template data-template="text">
+          <template data-for-slot="title"> Trigger - Reactive </template>
+          <template data-for-slot="text">
             <p class="markdown">The reactive trigger loads the component when a reactive property changes. Use the `x-rc:watch` directive to define a watched property and automatically react to simple boolean changes. If you need to test for specific value, you can set up your own watcher using the `x-effect` directive or `$watch` magic.</p>
             <p class="markdown">Components can also be loaded and removed based on reactive property using the `x-if` directive.</p>
           </template>
-          <template data-template="example">
+          <template data-for-slot="example">
             <div
               x-remote-component="/examples/trigger-reactive.html"
               x-rc:name="example"
@@ -142,12 +152,14 @@
           </template>
         </div>
 
+        <hr class="border-gray-200">
+
         <div x-remote-component="#example">
-          <template data-template="title"> Trigger - Intersect </template>
-          <template data-template="text">
+          <template data-for-slot="title"> Trigger - Intersect </template>
+          <template data-for-slot="text">
             <p class="markdown">The intersect trigger loads component when it enters the viewport. This trigger uses Alpine intersect plugin.</p>
           </template>
-          <template data-template="example">
+          <template data-for-slot="example">
             <div
               x-remote-component="/examples/trigger-intersect.html"
               x-rc:name="example"
@@ -159,12 +171,14 @@
           </template>
         </div>
 
+        <hr class="border-gray-200">
+
         <div x-remote-component="#example">
-          <template data-template="title"> Trigger - Custom </template>
-          <template data-template="text">
+          <template data-for-slot="title"> Trigger - Custom </template>
+          <template data-for-slot="text">
             <p class="markdown">Use the custom trigger to load the component by calling the `_rc.trigger()` function.</p>
           </template>
-          <template data-template="example">
+          <template data-for-slot="example">
             <div
               x-remote-component="/examples/trigger-custom.html"
               x-rc:name="example"
@@ -176,16 +190,18 @@
           </template>
         </div>
 
+        <hr class="border-gray-200">
+
         <div x-remote-component="#example">
-          <template data-template="title"> Trigger delay </template>
-          <template data-template="text">
+          <template data-for-slot="title"> Trigger delay </template>
+          <template data-for-slot="text">
             <p class="markdown">You can delay loading of the component by adding two parameters to the `x-rc:trigger` value:</p>
             <ul class="list-disc list-inside">
               <li>delay (ms) before sending the request.</li>
               <li>delay (ms) before inserting the component into the DOM.</li>
             </ul>
           </template>
-          <template data-template="example">
+          <template data-for-slot="example">
             <div
               x-remote-component="/examples/trigger-delay.html"
               x-rc:name="example"
@@ -197,13 +213,15 @@
           </template>
         </div>
 
+        <hr class="border-gray-200">
+
         <div x-remote-component="#example">
-          <template data-template="title"> Loading indicator </template>
-          <template data-template="text">
+          <template data-for-slot="title"> Loading indicator </template>
+          <template data-for-slot="text">
             <p class="markdown">The `x-remote-component` element can contain any content that will be visible until it is replaced with the component. You can use it for placeholders, indicators, progress bars etc. To display it conditionally while the component is loading use the `x-show` directive and the `_rcIsLoading` or `_rcIsLoadingWithDelay` properties.</p>
             <p class="markdown">The second example uses indicator component for better reusability.</p>
           </template>
-          <template data-template="example">
+          <template data-for-slot="example">
             <div
               x-remote-component="/examples/indicator.html"
               x-rc:name="example"
@@ -215,9 +233,11 @@
           </template>
         </div>
 
+        <hr class="border-gray-200">
+
         <div x-remote-component="#example">
-          <template data-template="title"> Swap - Inner </template>
-          <template data-template="example">
+          <template data-for-slot="title"> Swap - Inner </template>
+          <template data-for-slot="example">
             <div
               x-remote-component="/examples/swap-inner.html"
               x-rc:name="example"
@@ -229,9 +249,11 @@
           </template>
         </div>
 
+        <hr class="border-gray-200">
+
         <div x-remote-component="#example">
-          <template data-template="title"> Swap - Outer </template>
-          <template data-template="example">
+          <template data-for-slot="title"> Swap - Outer </template>
+          <template data-for-slot="example">
             <div
               x-remote-component="/examples/swap-outer.html"
               x-rc:name="example"
@@ -241,9 +263,11 @@
           </template>
         </div>
 
+        <hr class="border-gray-200">
+
         <div x-remote-component="#example">
-          <template data-template="title"> Events </template>
-          <template data-template="example">
+          <template data-for-slot="title"> Events </template>
+          <template data-for-slot="example">
             <div
               x-remote-component="/examples/events.html"
               x-rc:name="example"
@@ -255,12 +279,14 @@
           </template>
         </div>
 
+        <hr class="border-gray-200">
+
         <div x-remote-component="#example">
-          <template data-template="title"> x-if </template>
-          <template data-template="text">
+          <template data-for-slot="title"> x-if </template>
+          <template data-for-slot="text">
             <p class="markdown">The `x-if` directive requires a single root element so you need to use the inner swap option or wrap the component with an additional element.</p>
           </template>
-          <template data-template="example">
+          <template data-for-slot="example">
             <div
               x-remote-component="/examples/x-if.html"
               x-rc:name="example"
@@ -272,12 +298,14 @@
           </template>
         </div>
 
+        <hr class="border-gray-200">
+
         <div x-remote-component="#example">
-          <template data-template="title"> x-for </template>
-          <template data-template="text">
+          <template data-for-slot="title"> x-for </template>
+          <template data-for-slot="text">
             <p class="markdown">The `x-for` directive requires a single root element so you need to use the inner swap option or wrap the component with an additional element.</p>
           </template>
-          <template data-template="example">
+          <template data-for-slot="example">
             <div
               x-remote-component="/examples/x-for.html"
               x-rc:name="example"
@@ -289,12 +317,14 @@
           </template>
         </div>
 
+        <hr class="border-gray-200">
+
         <div x-remote-component="#example">
-          <template data-template="title"> Basic data-template </template>
-          <template data-template="text">
-            <p class="markdown">The contents of template elements marked with the `data-template` attribute are swapped with the corresponding elements in the component. This provides functionality similar to slots and enhances the reusability of components. The replaced content can be static or contain other components.</p>
+          <template data-for-slot="title"> Basic data-slot </template>
+          <template data-for-slot="text">
+            <p class="markdown">The contents of template elements marked with the `data-for-slot` attribute are swapped with the corresponding elements with `data-slot` attribute in the component. This provides functionality similar to slots and enhances the reusability of components. The replaced content can be static or contain other components.</p>
           </template>
-          <template data-template="example">
+          <template data-for-slot="example">
             <div
               x-remote-component="/examples/basic-data-template.html"
               x-rc:name="example"
@@ -306,9 +336,11 @@
           </template>
         </div>
 
+        <hr class="border-gray-200">
+
         <div x-remote-component="#example">
-          <template data-template="title"> data-template components </template>
-          <template data-template="example">
+          <template data-for-slot="title"> data-slot components </template>
+          <template data-for-slot="example">
             <div
               x-remote-component="/examples/data-template-components.html"
               x-rc:name="example"
@@ -320,9 +352,11 @@
           </template>
         </div>
 
+        <hr class="border-gray-200">
+
         <div x-remote-component="#example">
-          <template data-template="title"> data-template nested components </template>
-          <template data-template="example">
+          <template data-for-slot="title"> data-slot nested components </template>
+          <template data-for-slot="example">
             <div
               x-remote-component="/examples/data-template-nested-components.html"
               x-rc:name="example"
@@ -334,12 +368,14 @@
           </template>
         </div>
 
+        <hr class="border-gray-200">
+
         <div x-remote-component="#example">
-          <template data-template="title"> Component attributes </template>
-          <template data-template="text">
+          <template data-for-slot="title"> Component attributes </template>
+          <template data-for-slot="text">
             <p class="markdown">Attributes prefixed with `_` or `rc-` are transferred to the component's root element. If the attribute already exists, the value is updated. Classes are an exception and are merged with the existing classes.</p>
           </template>
-          <template data-template="example">
+          <template data-for-slot="example">
             <div
               x-remote-component="/examples/copy-attributes.html"
               x-rc:name="example"
@@ -351,9 +387,11 @@
           </template>
         </div>
 
+        <hr class="border-gray-200">
+
         <div x-remote-component="#example">
-          <template data-template="title"> Router view </template>
-          <template data-template="example">
+          <template data-for-slot="title"> Router view </template>
+          <template data-for-slot="example">
             <div
               x-remote-component="/examples/router-view.html"
               x-rc:name="example"
@@ -365,12 +403,14 @@
           </template>
         </div>
 
+        <hr class="border-gray-200">
+
         <div x-remote-component="#example">
-          <template data-template="title"> Dynamic component options </template>
-          <template data-template="text">
+          <template data-for-slot="title"> Dynamic component options </template>
+          <template data-for-slot="text">
             <p class="markdown">For dynamic component options, use the `x-rc` directive without a property and provide an object as the value.</p>
           </template>
-          <template data-template="example">
+          <template data-for-slot="example">
             <div
               x-remote-component="/examples/rc.html"
               x-rc:name="example"
@@ -382,12 +422,14 @@
           </template>
         </div>
 
+        <hr class="border-gray-200">
+
         <div x-remote-component="#example">
-          <template data-template="title"> Recursive components </template>
-          <template data-template="text">
+          <template data-for-slot="title"> Recursive components </template>
+          <template data-for-slot="text">
             <p class="markdown">Components can reference themselves in the template. This can be useful for creating recursive structures.</p>
           </template>
-          <template data-template="example">
+          <template data-for-slot="example">
             <div
               x-remote-component="/examples/recursive.html"
               x-rc:name="example"
@@ -399,13 +441,15 @@
           </template>
         </div>
 
+        <hr class="border-gray-200">
+
         <div x-remote-component="#example">
-          <template data-template="title"> Handling errors </template>
-          <template data-template="text">
+          <template data-for-slot="title"> Handling errors </template>
+          <template data-for-slot="text">
             <p class="markdown">The `_rcError` reactive property stores the latest error. You can use it to show fallback content within the component.</p>
             <p class="markdown">You can also handle errors outside the component by setting a listener for the `rc-error` event.</p>
           </template>
-          <template data-template="example">
+          <template data-for-slot="example">
             <div
               x-remote-component="/examples/errors.html"
               x-rc:name="example"
@@ -440,18 +484,18 @@
       >
         <div class="flex flex-col gap-y-6">
           <div class="text-xl font-semibold">
-            <div data-template="title"></div>
+            <div data-slot="title"></div>
           </div>
 
           <div class="flex flex-col gap-y-4">
-            <div data-template="text"></div>
+            <div data-slot="text"></div>
           </div>
 
           <pre class="rounded-xl overflow-hidden text-sm"><code x-text="html" x-ref="code">
           </code></pre>
 
           <div class="flex flex-col gap-y-4 items-center">
-            <div data-template="example"></div>
+            <div data-slot="example"></div>
           </div>
         </div>
       </div>
