@@ -8,7 +8,7 @@ Start using the plugin with two directives.
 
 ### Directives
 
-`x-remote-component` - the main directive that defines component source. The value can be:
+`x-remote-component` - the main directive that defines the component source. The directive allows following values:
 
 - element ID string that starts with `#`
 - path string that starts with `/`
@@ -84,6 +84,6 @@ The `x-remote-component` element can contain any content that will be visible un
 
 ### Component content: data-template
 
-Beside normal content, the `x-remote-component` element can also include special template elements marked with `data-template` attributes. The content of these elements is placed inside corresponding elements in the component. This enables kind of `<slot>` functionality and enhances reusuability of the component. See the examples below.
+Beside normal content, the `x-remote-component` element can also include special template elements marked with `data-for-slot` attribute. The content of these elements is placed inside corresponding elements with `data-slot` attribute in the component. This enables kind of `<slot>` functionality and enhances reusuability of the component.
 
 ## Examples
