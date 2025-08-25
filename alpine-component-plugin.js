@@ -36,10 +36,10 @@ export default function (Alpine) {
   };
 
   let swapInnerTemplates = (el, fragment) => {
-    let toTemplates = fragment.querySelectorAll("[data-template]");
+    let toTemplates = fragment.querySelectorAll("[data-slot]");
     toTemplates.forEach((t) => {
       let fromTemplate = el.querySelector(
-        `template[data-template='${t.dataset.template}']`
+        `template[data-for-slot='${t.dataset.slot}']`
       );
 
       if (!fromTemplate) return;
@@ -179,7 +179,7 @@ export default function (Alpine) {
 
       Alpine.nextTick(() => {
         if (config["process-templates-first"]) {
-          let templates = el.querySelectorAll('[data-template]')
+          let templates = el.querySelectorAll('[data-for-slot]')
           templates.forEach((element) => {
             Alpine.initTree(element.content.firstElementChild)
           })
