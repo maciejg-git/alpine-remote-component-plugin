@@ -20,6 +20,13 @@
     let mergeClasses = (...classes) => {
       return [...new Set(classes.flatMap((c) => c.split(/\s+/)))].join(" ");
     };
+    let queryAllWithDataSlot = (el) => {
+      let res = Array.from(el.querySelectorAll("[data-slot]"));
+      el.querySelectorAll("template").forEach((t) => {
+        res.push(...queryAllWithDataSlot(t.content));
+      });
+      return res;
+    };
     let copyAttributes = (fromEl, toEl) => {
       for (let attr of fromEl.attributes) {
         if (attr.name === "_class" || attr.name === "rc-class") {
@@ -33,14 +40,14 @@
         }
       }
     };
-    let swapInnerTemplates = (el, fragment) => {
-      let toTemplates = fragment.querySelectorAll("[data-slot]");
-      toTemplates.forEach((t) => {
-        let fromTemplate = el.querySelector(
+    let swapSlotsWithTemplates = (el, fragment) => {
+      let slots = queryAllWithDataSlot(fragment);
+      slots.forEach((t) => {
+        let forSlot = el.querySelector(
           `template[data-for-slot='${t.dataset.slot}']`
         );
-        if (!fromTemplate) return;
-        t.replaceWith(fromTemplate.content.cloneNode(true));
+        if (!forSlot) return;
+        t.replaceWith(forSlot.content.cloneNode(true));
       });
     };
     let dispatch = (el, name, detail = {}) => {
@@ -116,7 +123,7 @@
             fragment = document.querySelector(exp)?.content.cloneNode(true);
           }
           if (fragment) {
-            swapInnerTemplates(el, fragment);
+            swapSlotsWithTemplates(el, fragment);
             copyAttributes(el, fragment.firstElementChild);
             if (config.swap === "inner") {
               el.replaceChildren(fragment);
@@ -144,7 +151,7 @@
         let config = Alpine2.$data(el)._rc.config;
         Alpine2.nextTick(() => {
           if (config["process-templates-first"]) {
-            let templates = el.querySelectorAll("[data-template]");
+            let templates = el.querySelectorAll("[data-for-slot]");
             templates.forEach((element) => {
               Alpine2.initTree(element.content.firstElementChild);
             });
