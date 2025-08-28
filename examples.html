@@ -322,7 +322,7 @@
         <div x-remote-component="#example">
           <template data-for-slot="title"> Basic data-slot </template>
           <template data-for-slot="text">
-            <p class="markdown">The contents of template elements marked with the `data-for-slot` attribute are swapped with the corresponding elements with `data-slot` attribute in the component. This provides functionality similar to slots and enhances the reusability of components. The replaced content can be static or contain other components.</p>
+            <p class="markdown">The contents of template elements marked with `data-for-slot` attribute replace the corresponding `data-slot` elements in the component. This provides functionality similar to slots and enhances the reusability of components. The new content can be static or include other components.</p>
           </template>
           <template data-for-slot="example">
             <div
@@ -359,6 +359,25 @@
           <template data-for-slot="example">
             <div
               x-remote-component="/examples/data-template-nested-components.html"
+              x-rc:name="example"
+              x-rc:trigger="load 0 500"
+              class="w-full"
+            >
+              <div x-remote-component="#placeholder"></div>
+            </div>
+          </template>
+        </div>
+
+        <hr class="border-gray-200">
+
+        <div x-remote-component="#example">
+          <template data-for-slot="title"> Process slots first </template>
+          <template data-for-slot="text">
+            <p class="markdown"></p>
+          </template>
+          <template data-for-slot="example">
+            <div
+              x-remote-component="/examples/process-slots-first.html"
               x-rc:name="example"
               x-rc:trigger="load 0 500"
               class="w-full"
