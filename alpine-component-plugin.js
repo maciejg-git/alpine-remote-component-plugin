@@ -85,7 +85,7 @@ export default function (Alpine) {
     responseHTML: null,
     requestDelay: 0,
     swapDelay: 0,
-    "process-templates-first": false,
+    "process-slots-first": false,
   }
 
   Alpine.directive(
@@ -189,7 +189,7 @@ export default function (Alpine) {
       let config = Alpine.$data(el)._rc.config
 
       Alpine.nextTick(() => {
-        if (config["process-templates-first"]) {
+        if (config["process-slots-first"]) {
           let templates = el.querySelectorAll('[data-for-slot]')
           templates.forEach((element) => {
             Alpine.initTree(element.content.firstElementChild)
@@ -243,7 +243,7 @@ export default function (Alpine) {
         config = Object.assign(config, defaultConfig, newConfig)
         return
       }
-      if (value === "process-templates-first") {
+      if (value === "process-slots-first") {
         exp = true
       }
       if (value === "trigger") {
