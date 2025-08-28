@@ -73,7 +73,7 @@
       responseHTML: null,
       requestDelay: 0,
       swapDelay: 0,
-      "process-templates-first": false
+      "process-slots-first": false
     };
     Alpine2.directive(
       "remote-component",
@@ -150,7 +150,7 @@
         }));
         let config = Alpine2.$data(el)._rc.config;
         Alpine2.nextTick(() => {
-          if (config["process-templates-first"]) {
+          if (config["process-slots-first"]) {
             let templates = el.querySelectorAll("[data-for-slot]");
             templates.forEach((element) => {
               Alpine2.initTree(element.content.firstElementChild);
@@ -197,7 +197,7 @@
           config = Object.assign(config, defaultConfig, newConfig);
           return;
         }
-        if (value === "process-templates-first") {
+        if (value === "process-slots-first") {
           exp = true;
         }
         if (value === "trigger") {
