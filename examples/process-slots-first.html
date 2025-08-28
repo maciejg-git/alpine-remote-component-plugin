@@ -1,0 +1,17 @@
+<button
+  @click="$dispatch('load-component-slots')"
+  class="flex items-center rounded-md border-violet-700 bg-violet-500 px-4 py-2 font-medium text-gray-100 hover:bg-violet-600 focus:ring-violet-200 dark:bg-violet-500 dark:hover:bg-violet-600"
+>
+  Load component
+</button>
+
+<div
+  x-remote-component="/examples/components/component-a.html"
+  x-rc:trigger="event"
+  x-rc:process-slots-first
+  @load-component-slots.window="_rc.trigger"
+>
+  <template data-for-slot="content">
+    <div x-remote-component="/examples/components/component-b.html"></div>
+  </template>
+</div>

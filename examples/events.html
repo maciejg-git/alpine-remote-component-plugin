@@ -10,7 +10,7 @@
   class="flex flex-col gap-y-4 items-center"
 >
   <button
-    @click="$dispatch('load-component-event')"
+    @click="$dispatch('load-component-events')"
     class="flex items-center rounded-md border-violet-700 bg-violet-500 px-4 py-2 font-medium text-gray-100 hover:bg-violet-600 focus:ring-violet-200 dark:bg-violet-500 dark:hover:bg-violet-600"
   >
     Load component
@@ -19,7 +19,7 @@
   <div
     x-remote-component="/examples/components/component-a.html"
     x-rc:trigger="event 500 1000"
-    @load-component-event.window="_rc.trigger"
+    @load-component-events.window="_rc.trigger"
   ></div>
 
   <div class="rounded-lg bg-gray-50 p-4 w-full">
