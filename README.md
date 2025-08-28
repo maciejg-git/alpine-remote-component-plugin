@@ -2,9 +2,19 @@
 
 An alpine plugin that enables defining reusable components by referencing external HTML via URL or template IDs.
 
+## Examples
+
+## Installation
+
+CDN:
+
+```html
+<script defer src="https://cdn.jsdelivr.net/npm/alpine-remote-component@0.x.x/dist/cdn.min.js"></script>
+```
+
 ## Usage
 
-Start using the plugin with two directives.
+The plugin defines two new directives.
 
 ### Directives
 
@@ -29,7 +39,7 @@ Start using the plugin with two directives.
 </div>
 ```
 
-`x-rc` - is used to set component options:
+`x-rc` - the directive used to set component options:
 
 - `x-rc:name` - sets component name. This is optional but can be useful in event listeners to identify component. Default: `''`.
 - `x-rc:swap` - specifies where to insert component. Valid values are: `inner` and `outer`. Default: `outer`.
@@ -85,5 +95,3 @@ The `x-remote-component` element can contain any content that will be visible un
 ### Component content: data-template
 
 Beside normal content, the `x-remote-component` element can also include special template elements marked with `data-for-slot` attribute. The content of these elements is placed inside corresponding elements with `data-slot` attribute in the component. This enables kind of `<slot>` functionality and enhances reusuability of the component.
-
-## Examples
