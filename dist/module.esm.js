@@ -1,5 +1,5 @@
-// alpine-component-plugin.js
-function alpine_component_plugin_default(Alpine) {
+// alpine-remote-component.js
+function alpine_remote_component_default(Alpine) {
   let sendRequest = async (url) => {
     try {
       let res = await fetch(url);
@@ -214,7 +214,7 @@ function alpine_component_plugin_default(Alpine) {
 }
 
 // builds/module.js
-var module_default = alpine_component_plugin_default;
+var module_default = alpine_remote_component_default;
 export {
   module_default as default
 };

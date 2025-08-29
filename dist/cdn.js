@@ -1,6 +1,6 @@
 (() => {
-  // alpine-component-plugin.js
-  function alpine_component_plugin_default(Alpine2) {
+  // alpine-remote-component.js
+  function alpine_remote_component_default(Alpine2) {
     let sendRequest = async (url) => {
       try {
         let res = await fetch(url);
@@ -216,6 +216,6 @@
 
   // builds/cdn.js
   document.addEventListener("alpine:init", () => {
-    Alpine.plugin(alpine_component_plugin_default);
+    Alpine.plugin(alpine_remote_component_default);
   });
 })();
