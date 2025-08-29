@@ -1,4 +1,4 @@
-import remoteComponent from "../alpine-component-plugin.js"
+import remoteComponent from "../alpine-remote-component.js"
 
 document.addEventListener("alpine:init", () => {
   Alpine.plugin(remoteComponent)
