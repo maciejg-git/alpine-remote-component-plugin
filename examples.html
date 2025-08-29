@@ -489,9 +489,12 @@
           handleComponentInserted() {
             if (this.$event.detail.name === 'example') {
               this.html = this.$event.detail.responseHTML
+
               this.$nextTick(() => {
                 hljs.highlightElement(this.$refs.code)
+
                 let md = this.$el.querySelectorAll('.markdown')
+
                 md.forEach((el) => {
                   el.innerHTML = marked.parse(el.textContent)
                 })
