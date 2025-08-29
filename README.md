@@ -1,8 +1,10 @@
-# alpine-remote-component-plugin
+# Alpine Remote Component
 
-An alpine plugin that enables defining reusable components by referencing external HTML via URL or template IDs.
+An Alpine plugin that enables reusable components by referencing external HTML via URL or template IDs.
 
 ## Examples
+
+[https://alpine-remote-component.netlify.app](https://alpine-remote-component.netlify.app)
 
 ## Installation
 
@@ -14,7 +16,7 @@ CDN:
 
 ## Usage
 
-The plugin defines two new directives.
+The plugin defines two directives.
 
 ### Directives
 
@@ -22,7 +24,7 @@ The plugin defines two new directives.
 
 - element ID string that starts with `#`
 - path string that starts with `/`
-- any other string is evaluated by Alpine to ID or path
+- any other string is evaluated by Alpine. The result of the evaluation should be an ID or path.
 
 ```html
 <!-- ID component -->
@@ -45,7 +47,7 @@ The plugin defines two new directives.
 - `x-rc:swap` - specifies where to insert component. Valid values are: `inner` and `outer`. Default: `outer`.
 - `x-rc:trigger` - defines condition that triggers component. Valid triggers are: `load`, `event`, `reactive`, `intersect` and `custom`. Default: `load`.
 - `x-rc:watch` - is used only for `reactive` trigger. The value is the property name that will be watched.
-- `x-rc:process-templates-first`
+- `x-rc:process-slots-first` - enable this option to initialize Alpine within `data-for-slot` template elements before the main component is loaded. Default: `false`.
 
 ```html
 <div 
@@ -79,7 +81,7 @@ The plugin dispatches following events to notify the page about current state of
 
 ### Component data
 
-Plugin adds following properties to the component element data.
+Plugin adds following properties to the component element data:
 
 - `_rc` - object containing `config` object and `trigger` function
 - `_rcIsLoading` - reactive property that is `true` for the duration of the request
@@ -92,6 +94,6 @@ These properties can be used inside component, for example, to display indicator
 
 The `x-remote-component` element can contain any content that will be visible until it is replaced with the component. You can use it for placeholders, indicators, progress bars, buttons that trigger component from within etc.
 
-### Component content: data-template
+### Component content: data-slot
 
-Beside normal content, the `x-remote-component` element can also include special template elements marked with `data-for-slot` attribute. The content of these elements is placed inside corresponding elements with `data-slot` attribute in the component. This enables kind of `<slot>` functionality and enhances reusuability of the component.
+Beside normal content, the `x-remote-component` element can also include special template elements marked with `data-for-slot` attribute. The content of these elements replace the corresponding `data-slot` elements in the component. This provides functionality similar to slots and enhances the reusability of components. The new content can be static or include other components.
