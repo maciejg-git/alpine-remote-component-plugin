@@ -191,8 +191,10 @@ export default function (Alpine) {
       Alpine.nextTick(() => {
         if (config["process-slots-first"]) {
           let templates = el.querySelectorAll('[data-for-slot]')
-          templates.forEach((element) => {
-            Alpine.initTree(element.content.firstElementChild)
+          templates.forEach((t) => {
+            Array.from(t.content.children).forEach((element) => {
+              Alpine.initTree(element)
+            })
           })
         }
 
