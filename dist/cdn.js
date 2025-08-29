@@ -79,7 +79,7 @@
       "remote-component",
       (el, { value, modifiers, expression }, { evaluate, cleanup }) => {
         let initRemoteComponent = async () => {
-          if (config.initialized) return;
+          if (config.initialized || config.isRunning) return;
           config.isRunning = true;
           dispatch(el, "rc-before-load", config);
           let fragment = null;
@@ -137,17 +137,19 @@
           config.initialized = true;
           config.isRunning = false;
         };
-        Alpine2.addScopeToNode(el, {
-          _rc: {
-            config: { ...defaultConfig },
-            trigger: initRemoteComponent
-          }
-        });
-        Alpine2.addScopeToNode(el, Alpine2.reactive({
-          _rcIsLoading: false,
-          _rcIsLoadingWithDelay: false,
-          _rcError: null
-        }));
+        let scopeCleanup = [
+          Alpine2.addScopeToNode(el, {
+            _rc: {
+              config: { ...defaultConfig },
+              trigger: initRemoteComponent
+            }
+          }),
+          Alpine2.addScopeToNode(el, Alpine2.reactive({
+            _rcIsLoading: false,
+            _rcIsLoadingWithDelay: false,
+            _rcError: null
+          }))
+        ];
         let config = Alpine2.$data(el)._rc.config;
         Alpine2.nextTick(() => {
           if (config["process-slots-first"]) {
@@ -176,6 +178,7 @@
           }
         });
         cleanup(() => {
+          scopeCleanup.forEach((c) => c());
         });
       }
     ).before("on");
