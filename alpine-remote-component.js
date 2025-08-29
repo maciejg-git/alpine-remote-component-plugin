@@ -92,7 +92,7 @@ export default function (Alpine) {
     "remote-component",
     (el, { value, modifiers, expression }, { evaluate, cleanup }) => {
       let initRemoteComponent = async () => {
-        if (config.initialized) return
+        if (config.initialized || config.isRunning) return
         config.isRunning = true
 
         dispatch(el, "rc-before-load", config)
@@ -174,17 +174,19 @@ export default function (Alpine) {
         config.isRunning = false
       };
 
-      Alpine.addScopeToNode(el, {
-        _rc: {
-          config: { ...defaultConfig },
-          trigger: initRemoteComponent,
-        }
-      })
-      Alpine.addScopeToNode(el, Alpine.reactive({
-        _rcIsLoading: false,
-        _rcIsLoadingWithDelay: false,
-        _rcError: null,
-      }))
+      let scopeCleanup = [
+        Alpine.addScopeToNode(el, {
+          _rc: {
+            config: { ...defaultConfig },
+            trigger: initRemoteComponent,
+          }
+        }),
+        Alpine.addScopeToNode(el, Alpine.reactive({
+          _rcIsLoading: false,
+          _rcIsLoadingWithDelay: false,
+          _rcError: null,
+        }))
+      ]
 
       let config = Alpine.$data(el)._rc.config
 
@@ -219,7 +221,7 @@ export default function (Alpine) {
       })
 
       cleanup(() => {
-
+        scopeCleanup.forEach((c) => c())
       })
     }
   ).before("on");
