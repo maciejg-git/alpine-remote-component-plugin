@@ -1,9 +1,9 @@
 {
   "name": "alpine-remote-component",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "",
   "exports": {
-    "./alpine-remote-plugin.js": "/dist/module.esm.js"
+    "./alpine-remote-component.js": "/dist/module.esm.js"
   },
   "scripts": {
     "tailwind": "npx @tailwindcss/cli -i ./input.css -o ./output.css --watch",
