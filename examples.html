@@ -218,7 +218,7 @@
         <div x-remote-component="#example">
           <template data-for-slot="title"> Loading indicator </template>
           <template data-for-slot="text">
-            <p class="markdown">The `x-remote-component` element can contain any content that will be visible until it is replaced with the component. You can use it for placeholders, indicators, progress bars etc. To display it conditionally while the component is loading use the `x-show` directive and the `_rcIsLoading` or `_rcIsLoadingWithDelay` properties.</p>
+            <p class="markdown">The `x-remote-component` element can contain any content that will be visible until it is replaced by the component. You can use it for placeholders, indicators, progress bars, etc. To display it conditionally while the component is loading, use the `x-show` directive together with the `_rcIsLoading` or `_rcIsLoadingWithDelay` properties.</p>
             <p class="markdown">The second example uses indicator component for better reusability.</p>
           </template>
           <template data-for-slot="example">
@@ -284,7 +284,7 @@
         <div x-remote-component="#example">
           <template data-for-slot="title"> x-if </template>
           <template data-for-slot="text">
-            <p class="markdown">The `x-if` directive requires a single root element so you need to use the inner swap option or wrap the component with an additional element.</p>
+            <p class="markdown">The `x-if` directive requires a single root element, so you need to use the inner swap option or wrap the component in an additional element.</p>
           </template>
           <template data-for-slot="example">
             <div
@@ -303,7 +303,7 @@
         <div x-remote-component="#example">
           <template data-for-slot="title"> x-for </template>
           <template data-for-slot="text">
-            <p class="markdown">The `x-for` directive requires a single root element so you need to use the inner swap option or wrap the component with an additional element.</p>
+            <p class="markdown">The `x-for` directive requires a single root element, so you need to use the inner swap option or wrap the component in an additional element.</p>
           </template>
           <template data-for-slot="example">
             <div
@@ -373,7 +373,7 @@
         <div x-remote-component="#example">
           <template data-for-slot="title"> Process slots first </template>
           <template data-for-slot="text">
-            <p class="markdown"></p>
+            <p class="markdown">The `process-slots-first` option initializes Alpine within `data-for-slot` template elements before the main component is loaded. This can be useful when templates contain other components or dynamic content that should be set up in advance.</p>
           </template>
           <template data-for-slot="example">
             <div
@@ -510,7 +510,7 @@
             <div data-slot="text"></div>
           </div>
 
-          <pre class="rounded-xl overflow-hidden text-sm"><code x-text="html" x-ref="code">
+          <pre class="rounded-xl overflow-hidden text-sm"><code class="language-html" x-text="html" x-ref="code">
           </code></pre>
 
           <div class="flex flex-col gap-y-4 items-center">

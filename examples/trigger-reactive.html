@@ -1,3 +1,5 @@
+<!-- load component using reactive trigger and x-rc:watch directive -->
+
 <div x-data="{ isLoaded: false }" class="flex flex-col items-center gap-y-4">
   <button
     @click="isLoaded = true"
@@ -12,6 +14,8 @@
     x-rc:watch="isLoaded"
   ></div>
 </div>
+
+<!-- load component using reactive trigger and x-effect directive -->
 
 <div x-data="{ isLoaded: false }" class="flex flex-col items-center gap-y-4">
   <button

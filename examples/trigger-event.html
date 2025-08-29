@@ -1,3 +1,5 @@
+<!-- load component using trigger event -->
+
 <button
   @click="$dispatch('load-component-event')"
   class="flex items-center rounded-md border-violet-700 bg-violet-500 px-4 py-2 font-medium text-gray-100 hover:bg-violet-600 focus:ring-violet-200 dark:bg-violet-500 dark:hover:bg-violet-600"
@@ -10,6 +12,8 @@
   x-rc:trigger="event"
   @load-component-event.window="_rc.trigger"
 ></div>
+
+<!-- load component based on event detail -->
 
 <button
   @click="$dispatch('load-component-event-detail', 'component-a')"
