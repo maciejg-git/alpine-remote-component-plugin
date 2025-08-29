@@ -152,8 +152,10 @@
         Alpine2.nextTick(() => {
           if (config["process-slots-first"]) {
             let templates = el.querySelectorAll("[data-for-slot]");
-            templates.forEach((element) => {
-              Alpine2.initTree(element.content.firstElementChild);
+            templates.forEach((t) => {
+              Array.from(t.content.children).forEach((element) => {
+                Alpine2.initTree(element);
+              });
             });
           }
           dispatch(el, "rc-initialized", Alpine2.$data(el)._rc);
