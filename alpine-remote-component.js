@@ -88,6 +88,10 @@ export default function (Alpine) {
     "process-slots-first": false,
   }
 
+  Alpine.$rc = {
+    config: { ...defaultConfig },
+  }
+
   Alpine.directive(
     "remote-component",
     (el, { value, modifiers, expression }, { evaluate, cleanup }) => {
