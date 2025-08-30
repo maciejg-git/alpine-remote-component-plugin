@@ -1,6 +1,6 @@
 {
   "name": "alpine-remote-component",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "",
   "exports": {
     "./alpine-remote-component.js": "/dist/module.esm.js"
