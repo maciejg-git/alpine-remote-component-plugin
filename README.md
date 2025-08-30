@@ -20,11 +20,11 @@ The plugin defines two directives.
 
 ### Directives
 
-`x-remote-component` - the main directive that defines the component source. The directive allows following values:
+`x-remote-component` - the main directive that defines the component source. Valid values are:
 
-- element ID string that starts with `#`
-- path string that starts with `/`
-- any other string is evaluated by Alpine. The result of the evaluation should be an ID or path.
+- an element ID string that starts with `#`
+- a path string that starts with `/`
+- any other string is evaluated by Alpine. The result of the evaluation should be an ID or a path.
 
 ```html
 <!-- ID component -->
@@ -41,13 +41,13 @@ The plugin defines two directives.
 </div>
 ```
 
-`x-rc` - the directive used to set component options:
+`x-rc` - a directive used to set component options:
 
-- `x-rc:name` - sets component name. This is optional but can be useful in event listeners to identify component. Default: `''`.
-- `x-rc:swap` - specifies where to insert component. Valid values are: `inner` and `outer`. Default: `outer`.
-- `x-rc:trigger` - defines condition that triggers component. Valid triggers are: `load`, `event`, `reactive`, `intersect` and `custom`. Default: `load`.
-- `x-rc:watch` - is used only for `reactive` trigger. The value is the property name that will be watched.
-- `x-rc:process-slots-first` - enable this option to initialize Alpine within `data-for-slot` template elements before the main component is loaded. Default: `false`.
+- `x-rc:name` - sets the component name. Optional, but can be useful in event listeners for identification. Default: `''`.
+- `x-rc:swap` - specifies how the component is inserted. Valid values: `inner` and `outer`. Default: `outer`.
+- `x-rc:trigger` - defines when the component should load. Valid triggers: `load`, `event`, `reactive`, `intersect` and `custom`. Default: `load`.
+- `x-rc:watch` - used only with the `reactive` trigger. The value is the property name to watch.
+- `x-rc:process-slots-first` - if enabled, Alpine is initialized inside `data-for-slot` template elements before the main component is loaded. Default: `false`.
 
 ```html
 <div 
@@ -58,42 +58,46 @@ The plugin defines two directives.
 </div>
 ```
 
-`x-rc` - directive without property can be used to set all options from an object, similar to native `x-bind` directive.
+You can also use `x-rc` without a property to set all options from an object, similar to the native `x-bind` directive.
 
 ### Events
 
-The plugin dispatches following events to notify the page about current state of the component:
+The plugin dispatches the following events to notify the page about component state:
 
-- `rc-initialized` - dispatched after directive is loaded and configured. Event detail:
+- `rc-initialized` - after the directive is loaded and configured. Detail:
     - `config` object
     - `trigger` function
-- `rc-before-load` - dispatched before sending request. Event detail:
+- `rc-before-load` - before sending the request. Detail:
     - `config` object
-- `rc-loaded` - dispatched after successful component fetch. Event detail:
+- `rc-loaded` - after a successful fetch. Detail:
     - `config` object
-- `rc-loaded-with-delay` - dispatched after successful component fetch including delay before insert. Event detail:
+- `rc-loaded-with-delay` - after a successful fetch including the delay. Detail:
     - `config` object
-- `rc-inserted` - dispatched after component fragment has been inserted into the DOM. Event detail:
+- `rc-inserted` - after the component fragment has been inserted into the DOM. Detail:
     - `config` object
-- `rc-error` - dispatched after errors. Event detail:
+- `rc-error` - after an error. Detail:
     - `config` object
     - `error`
 
 ### Component data
 
-Plugin adds following properties to the component element data:
+The plugin adds the following properties to the component element's Alpine data:
 
-- `_rc` - object containing `config` object and `trigger` function
-- `_rcIsLoading` - reactive property that is `true` for the duration of the request
-- `_rcIsLoadingWithDelay` - same as `_rcIsLoading` but also includes `swapDelay`
-- `_rcError` - reactive property that stores last error
+- `_rc` - contains the `config` object and the `trigger` function
+- `_rcIsLoading` - reactive property, `true` during the request
+- `_rcIsLoadingWithDelay` - same as `_rcIsLoading`, but also includes `swapDelay`
+- `_rcError` - reactive property storing the last error
 
-These properties can be used inside component, for example, to display indicators during loading or showing error messages.
+These can be used inside the component, for example to show loading indicators or error messages.
 
 ### Component content
 
-The `x-remote-component` element can contain any content that will be visible until it is replaced with the component. You can use it for placeholders, indicators, progress bars, buttons that trigger component from within etc.
+The `x-remote-component` element can contain any content that will be visible until it is replaced by the component. This content can be used for placeholders, loading indicators, progress bars, or buttons that trigger the component, etc.
 
 ### Component content: data-slot
 
-Beside normal content, the `x-remote-component` element can also include special template elements marked with `data-for-slot` attribute. The content of these elements replace the corresponding `data-slot` elements in the component. This provides functionality similar to slots and enhances the reusability of components. The new content can be static or include other components.
+In addition to normal content, the `x-remote-component` element can include special template elements marked with the `data-for-slot` attribute. 
+
+The contents of these elements replace the corresponding `data-slot` elements in the component. This provides functionality similar to slots and improves component reusability. 
+
+The new content can be static or include other components.
