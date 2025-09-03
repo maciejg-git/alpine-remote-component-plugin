@@ -181,7 +181,7 @@ export default function (Alpine) {
       let scopeCleanup = [
         Alpine.addScopeToNode(el, {
           _rc: {
-            config: { ...defaultConfig },
+            config: { ...Alpine.$rc.config },
             trigger: initRemoteComponent,
           }
         }),
