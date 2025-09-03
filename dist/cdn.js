@@ -75,6 +75,9 @@
       swapDelay: 0,
       "process-slots-first": false
     };
+    Alpine2.$rc = {
+      config: { ...defaultConfig }
+    };
     Alpine2.directive(
       "remote-component",
       (el, { value, modifiers, expression }, { evaluate, cleanup }) => {
@@ -140,7 +143,7 @@
         let scopeCleanup = [
           Alpine2.addScopeToNode(el, {
             _rc: {
-              config: { ...defaultConfig },
+              config: { ...Alpine2.$rc.config },
               trigger: initRemoteComponent
             }
           }),
