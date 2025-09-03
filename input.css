@@ -152,4 +152,7 @@
   .markdown code {
     @apply rounded-md py-0.5 px-1 bg-gray-100 font-semibold text-sm
   }
+  .markdown a {
+    @apply text-blue-400 underline
+  }
 }
