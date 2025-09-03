@@ -3,7 +3,7 @@
   "version": "0.1.2",
   "description": "",
   "exports": {
-    "./alpine-remote-component.js": "/dist/module.esm.js"
+    ".": "/dist/module.esm.js"
   },
   "scripts": {
     "tailwind": "npx @tailwindcss/cli -i ./input.css -o ./output.css --watch",
