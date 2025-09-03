@@ -17,7 +17,7 @@
     <!-- marked -->
     <script src="https://cdn.jsdelivr.net/npm/marked/lib/marked.umd.js"></script>
     <!-- alpine remote component plugin -->
-    <script defer src="/dist/cdn.js"></script>
+    <script type="module" defer src="/builds/cdn.js"></script>
     <!-- alpine -->
     <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
     <script
@@ -99,7 +99,7 @@
         <div x-remote-component="#example" _id="trigger-load">
           <template data-for-slot="title"> Trigger - Load </template>
           <template data-for-slot="text">
-            <p class="markdown">The load trigger loads the component immediately. This is default trigger.</p>
+            <p class="markdown">The `load` trigger loads the component immediately. This is default trigger.</p>
           </template>
           <template data-for-slot="example">
             <div
@@ -118,7 +118,7 @@
         <div x-remote-component="#example" _id="trigger-event">
           <template data-for-slot="title"> Trigger - Event </template>
           <template data-for-slot="text">
-            <p class="markdown">The event trigger loads the component on a specified event. You should add the listener separately using the `x-on` directive.</p>
+            <p class="markdown">The `event` trigger loads the component on a specified event. You should add the listener separately using the `x-on` directive.</p>
           </template>
           <template data-for-slot="example">
             <div
@@ -137,8 +137,8 @@
         <div x-remote-component="#example" _id="trigger-reactive">
           <template data-for-slot="title"> Trigger - Reactive </template>
           <template data-for-slot="text">
-            <p class="markdown">The reactive trigger loads the component when a reactive property changes. Use the `x-rc:watch` directive to define a watched property and automatically react to simple boolean changes. If you need to test for specific value, you can set up your own watcher using the `x-effect` directive or `$watch` magic.</p>
-            <p class="markdown">You can also load and remove a component based on a reactive property by combining the load trigger with the `x-if` directive.</p>
+            <p class="markdown">The `reactive` trigger loads the component when a reactive property changes. Use the `x-rc:watch` directive to define a watched property and automatically react to simple boolean changes. If you need to test for specific value, you can set up your own watcher using the `x-effect` directive or `$watch` magic.</p>
+            <p class="markdown">You can also load and remove a component based on a reactive property by combining the `load` trigger with the `x-if` directive. See the [x-if](#x-if) or [Basic navigation](#router-view) examples.</p>
           </template>
           <template data-for-slot="example">
             <div
@@ -157,7 +157,7 @@
         <div x-remote-component="#example" _id="trigger-intersect">
           <template data-for-slot="title"> Trigger - Intersect </template>
           <template data-for-slot="text">
-            <p class="markdown">The intersect trigger loads component when it enters the viewport. This trigger uses Alpine intersect plugin.</p>
+            <p class="markdown">The `intersect` trigger loads component when it enters the viewport. This trigger uses Alpine intersect plugin.</p>
           </template>
           <template data-for-slot="example">
             <div
@@ -176,7 +176,7 @@
         <div x-remote-component="#example" _id="trigger-custom">
           <template data-for-slot="title"> Trigger - Custom </template>
           <template data-for-slot="text">
-            <p class="markdown">Use the custom trigger to load the component by calling the `_rc.trigger()` function.</p>
+            <p class="markdown">The `custom` trigger does not specify when or how to load the component, instead it relies on calling the `trigger` function manually.</p>
           </template>
           <template data-for-slot="example">
             <div
@@ -237,6 +237,9 @@
 
         <div x-remote-component="#example" _id="swap-inner">
           <template data-for-slot="title"> Swap - Inner </template>
+          <template data-for-slot="text">
+            <p class="markdown">Use the `inner` swap option to insert the component inside the `x-remote-component` element.</p>
+          </template>
           <template data-for-slot="example">
             <div
               x-remote-component="/examples/swap-inner.html"
@@ -253,6 +256,9 @@
 
         <div x-remote-component="#example" _id="swap-outer">
           <template data-for-slot="title"> Swap - Outer </template>
+          <template data-for-slot="text">
+            <p class="markdown">Use the `outer` swap option to replace the `x-remote-component` element with the component.</p>
+          </template>
           <template data-for-slot="example">
             <div
               x-remote-component="/examples/swap-outer.html"
@@ -504,6 +510,7 @@
           }
         }"
         @rc-inserted="handleComponentInserted"
+        class="scroll-mt-16"
       >
         <div class="flex flex-col gap-y-6">
           <div class="text-xl font-semibold">
