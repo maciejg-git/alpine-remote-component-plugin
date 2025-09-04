@@ -41,7 +41,8 @@
       x-data
       x-init="document.documentElement.style.setProperty('color-scheme', 'light')"
     >
-      <div class="mx-auto flex max-w-4xl flex-col gap-y-10 mt-10 mb-20 text-gray-800">
+      <div class="mx-auto flex max-w-4xl flex-col gap-y-10 mt-20 mb-20 text-gray-800">
+
         <div x-remote-component="#example" _id="basic-id-component">
           <template data-for-slot="title"> Basic ID component </template>
           <template data-for-slot="text">
@@ -331,7 +332,9 @@
         <div x-remote-component="#example" _id="basic-data-template">
           <template data-for-slot="title"> Basic data-slot </template>
           <template data-for-slot="text">
-            <p class="markdown">The contents of template elements marked with `data-for-slot` attribute replace the corresponding `data-slot` elements in the component. This provides functionality similar to slots and enhances the reusability of components. The new content can be static or include other components.</p>
+            <p class="markdown">The contents of template elements marked with `data-for-slot` attribute replace the corresponding `data-slot` elements in the component. This provides functionality similar to slots and enhances the reusability of components.</p>
+            <p class="markdown">The new content can be static or include other components.</p>
+            <p class="markdown">You can use any element type for `data-slot`. If there is no corresponding `data-for-slot`, it is not removed, so you can use it as default slot content.</p>
           </template>
           <template data-for-slot="example">
             <div
