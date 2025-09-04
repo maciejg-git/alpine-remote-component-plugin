@@ -1,3 +1,5 @@
+<!-- x-if based navigation reloads the component every time the currentComponent changes -->
+
 <div
   x-data="{
     components: [
@@ -40,6 +42,8 @@
   </template>
 </div>
 
+<!-- x-show based navigation with the load trigger loads all components regardless of the currentComponent -->
+
 <div
   x-data="{
     components: [
@@ -80,6 +84,8 @@
     ></div>
   </template>
 </div>
+
+<!-- x-show based navigation with the reactive trigger loads the component on the first view and keeps it loaded when the currentComponent changes -->
 
 <div
   x-data="{
