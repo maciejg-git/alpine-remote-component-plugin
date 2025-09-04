@@ -37,7 +37,10 @@
       </a>
     </nav>
 
-    <div x-data>
+    <div
+      x-data
+      x-init="document.documentElement.style.setProperty('color-scheme', 'light')"
+    >
       <div class="mx-auto flex max-w-4xl flex-col gap-y-10 mt-10 mb-20 text-gray-800">
         <div x-remote-component="#example" _id="basic-id-component">
           <template data-for-slot="title"> Basic ID component </template>
