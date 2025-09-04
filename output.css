@@ -295,8 +295,14 @@
   .my-10 {
     margin-block: calc(var(--spacing) * 10);
   }
+  .my-20 {
+    margin-block: calc(var(--spacing) * 20);
+  }
   .mt-10 {
     margin-top: calc(var(--spacing) * 10);
+  }
+  .mt-20 {
+    margin-top: calc(var(--spacing) * 20);
   }
   .mr-3 {
     margin-right: calc(var(--spacing) * 3);
@@ -430,12 +436,6 @@
   }
   .resize {
     resize: both;
-  }
-  .scroll-mt-10 {
-    scroll-margin-top: calc(var(--spacing) * 10);
-  }
-  .scroll-mt-14 {
-    scroll-margin-top: calc(var(--spacing) * 14);
   }
   .scroll-mt-16 {
     scroll-margin-top: calc(var(--spacing) * 16);
