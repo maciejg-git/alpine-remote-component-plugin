@@ -55,12 +55,24 @@ it("loads dynamic URL component", async () => {
 it("load trigger", async () => {
   document.body.innerHTML = `
     <div
-      x-remote-component="#component"
+      x-remote-component="/component-a.html"
       x-rc:trigger="load"
     ></div>
-    <template id="component">
-      <div>component-a</div>
-    </template>
+  `
+
+  Alpine.initTree(document.body)
+
+  await screen.findByText("component-a")
+})
+
+it("event trigger", async () => {
+  document.body.innerHTML = `
+    <div
+      x-remote-component="/component-a.html"
+      x-rc:trigger="event"
+      @load-component.window="_rc.trigger"
+    ></div>
+    <div x-init="$dispatch('load-component')"></div>
   `
 
   Alpine.initTree(document.body)
