@@ -9,13 +9,14 @@
     "tailwind": "npx @tailwindcss/cli -i ./input.css -o ./output.css --watch",
     "dev": "npx @11ty/eleventy-dev-server",
     "build": "node scripts/build.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vitest"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@11ty/eleventy-dev-server": "^2.0.8",
     "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.8.0",
     "@testing-library/user-event": "^14.6.1",
     "esbuild": "0.25.8",
     "jsdom": "^26.1.0",
