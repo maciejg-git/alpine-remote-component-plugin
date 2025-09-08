@@ -2,10 +2,10 @@ export default function (Alpine) {
   let sendRequest = async (url) => {
     try {
       let res = await fetch(url);
-      if(!res.ok) throw res.status
+      if (!res.ok) throw res.status;
       return await res.text();
-    } catch(error) {
-      throw error
+    } catch (error) {
+      throw error;
     }
   };
 
@@ -18,24 +18,24 @@ export default function (Alpine) {
   };
 
   let mergeClasses = (...classes) => {
-    return [ ...new Set(classes.flatMap((c) => c.split(/\s+/)))].join(" ")
-  }
+    return [...new Set(classes.flatMap((c) => c.split(/\s+/)))].join(" ");
+  };
 
   let queryAllWithDataSlot = (el) => {
-    let res = Array.from(el.querySelectorAll('[data-slot]'))
+    let res = Array.from(el.querySelectorAll("[data-slot]"));
 
-    el.querySelectorAll('template').forEach((t) => {
-      res.push(...queryAllWithDataSlot(t.content))
-    })
+    el.querySelectorAll("template").forEach((t) => {
+      res.push(...queryAllWithDataSlot(t.content));
+    });
 
-    return res
-  }
+    return res;
+  };
 
   let copyAttributes = (fromEl, toEl) => {
     for (let attr of fromEl.attributes) {
       if (attr.name === "_class" || attr.name === "rc-class") {
-        toEl.className = mergeClasses(attr.value, toEl.className)
-        continue
+        toEl.className = mergeClasses(attr.value, toEl.className);
+        continue;
       }
       if (attr.name.startsWith("rc-")) {
         toEl.setAttribute(attr.name.substring(3), attr.value);
@@ -46,21 +46,22 @@ export default function (Alpine) {
   };
 
   let swapSlotsWithTemplates = (el, fragment) => {
-    let slots = queryAllWithDataSlot(fragment)
+    let slots = queryAllWithDataSlot(fragment);
 
     slots.forEach((t) => {
-      let forSlot = el.querySelector(
+      let element = el.content ?? el
+      let forSlot = element.querySelector(
         `template[data-for-slot='${t.dataset.slot}']`
       );
 
       if (!forSlot) {
-        t.replaceWith(...t.childNodes)
-        return
+        t.replaceWith(...t.childNodes);
+        return;
       }
 
       t.replaceWith(forSlot.content.cloneNode(true));
     });
-  }
+  };
 
   let dispatch = (el, name, detail = {}) => {
     el.dispatchEvent(
@@ -70,13 +71,13 @@ export default function (Alpine) {
         composed: true,
         cancelable: true,
       })
-    )
-  }
+    );
+  };
 
-  let delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+  let delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-  let isPath = (s) => s[0] === '/'
-  let isId = (s) => s[0] === '#'
+  let isPath = (s) => s[0] === "/";
+  let isId = (s) => s[0] === "#";
 
   const defaultConfig = {
     swap: "outer",
@@ -90,147 +91,150 @@ export default function (Alpine) {
     swapDelay: 0,
     "process-slots-first": false,
     urlPrefix: "",
-  }
+  };
 
   Alpine.$rc = {
-    config: { ...defaultConfig }
-  }
+    defaultConfig: { ...defaultConfig },
+  };
 
   Alpine.directive(
     "remote-component",
     (el, { value, modifiers, expression }, { evaluate, cleanup }) => {
       let initRemoteComponent = async () => {
-        if (config.initialized || config.isRunning) return
-        config.isRunning = true
+        if (config.initialized || config.isRunning) return;
+        config.isRunning = true;
 
-        dispatch(el, "rc-before-load", config)
+        dispatch(el, "rc-before-load", config);
 
-        let fragment = null
-        let exp = expression
-        let data = Alpine.$data(el)
+        let fragment = null;
+        let exp = expression;
+        let data = Alpine.$data(el);
 
         if (!isPath(expression) && !isId(expression)) {
-          exp = evaluate(expression)
+          exp = evaluate(expression);
         }
 
         if (config.requestDelay) {
-          await delay(config.requestDelay)
+          await delay(config.requestDelay);
         }
 
-        data._rcIsLoading = true
-        data._rcIsLoadingWithDelay = true
+        data._rcIsLoading = true;
+        data._rcIsLoadingWithDelay = true;
 
-        let parsed
+        let parsed;
 
         if (isPath(exp)) {
-          let html
+          let html;
 
           try {
             html = await sendRequest(config.urlPrefix + exp);
-          } catch(error) {
-            data._rcError = error
-            data._rcIsLoading = false
-            data._rcIsLoadingWithDelay = false
-            config.isRunning = false
-            dispatch(el, "rc-error", {error, config})
-            return
+          } catch (error) {
+            data._rcError = error;
+            data._rcIsLoading = false;
+            data._rcIsLoadingWithDelay = false;
+            config.isRunning = false;
+            dispatch(el, "rc-error", { error, config });
+            return;
           }
 
-          data._rcError = null
-          data._rcIsLoading = false
+          data._rcError = null;
+          data._rcIsLoading = false;
 
-          config.responseHTML = html
+          config.responseHTML = html;
 
-          dispatch(el, "rc-loaded", config)
+          dispatch(el, "rc-loaded", config);
 
           parsed = parseResponse(html);
         }
 
         if (config.swapDelay) {
-          await delay(config.swapDelay)
+          await delay(config.swapDelay);
         }
 
-        dispatch(el, "rc-loaded-with-delay", config)
+        dispatch(el, "rc-loaded-with-delay", config);
 
-        data._rcIsLoadingWithDelay = false
+        data._rcIsLoadingWithDelay = false;
 
         if (isPath(exp)) {
           fragment = parsed.querySelector("template")?.content;
         } else if (isId(exp)) {
-          fragment = document.querySelector(exp)?.content.cloneNode(true)
+          fragment = document.querySelector(exp)?.content.cloneNode(true);
         }
 
         if (fragment) {
-          swapSlotsWithTemplates(el, fragment)
+          swapSlotsWithTemplates(el, fragment);
 
           copyAttributes(el, fragment.firstElementChild);
 
           if (config.swap === "inner") {
-            el.replaceChildren(fragment)
+            el.replaceChildren(fragment);
 
-            dispatch(el, "rc-inserted", config)
-          } else if (config.swap === "outer" ) {
-            let fragmentFirstChild = fragment.firstChild
+            dispatch(el, "rc-inserted", config);
+          } else if (config.swap === "outer") {
+            let fragmentFirstChild = fragment.firstChild;
 
             el.replaceWith(fragment);
 
-            dispatch(fragmentFirstChild, "rc-inserted", config)
+            dispatch(fragmentFirstChild, "rc-inserted", config);
           }
         }
 
-        config.initialized = true
-        config.isRunning = false
+        config.initialized = true;
+        config.isRunning = false;
       };
 
       let scopeCleanup = [
         Alpine.addScopeToNode(el, {
           _rc: {
-            config: { ...Alpine.$rc.config },
+            config: { ...Alpine.$rc.defaultConfig },
             trigger: initRemoteComponent,
-          }
+          },
         }),
-        Alpine.addScopeToNode(el, Alpine.reactive({
-          _rcIsLoading: false,
-          _rcIsLoadingWithDelay: false,
-          _rcError: null,
-        }))
-      ]
+        Alpine.addScopeToNode(
+          el,
+          Alpine.reactive({
+            _rcIsLoading: false,
+            _rcIsLoadingWithDelay: false,
+            _rcError: null,
+          })
+        ),
+      ];
 
-      let config = Alpine.$data(el)._rc.config
+      let config = Alpine.$data(el)._rc.config;
 
       Alpine.nextTick(() => {
         if (config["process-slots-first"]) {
-          let templates = el.querySelectorAll('[data-for-slot]')
+          let templates = el.querySelectorAll("[data-for-slot]");
           templates.forEach((t) => {
             Array.from(t.content.children).forEach((element) => {
-              Alpine.initTree(element)
-            })
-          })
+              Alpine.initTree(element);
+            });
+          });
         }
 
-        dispatch(el, "rc-initialized", Alpine.$data(el)._rc)
+        dispatch(el, "rc-initialized", Alpine.$data(el)._rc);
 
         if (config.trigger === "reactive" && config.watch) {
-          let watched = evaluate(config.watch)
+          let watched = evaluate(config.watch);
           if (watched) {
-            initRemoteComponent()
+            initRemoteComponent();
           } else {
             Alpine.$data(el).$watch(config.watch, (value) => {
               if (value) {
-                initRemoteComponent()
+                initRemoteComponent();
               }
-            })
+            });
           }
         }
 
         if (config.trigger === "load") {
           initRemoteComponent();
         }
-      })
+      });
 
       cleanup(() => {
-        scopeCleanup.forEach((c) => c())
-      })
+        scopeCleanup.forEach((c) => c());
+      });
     }
   ).before("on");
 
@@ -238,34 +242,34 @@ export default function (Alpine) {
     "rc",
     (el, { value, modifiers, expression }, { evaluate }) => {
       let parseTriggerValue = (s) => {
-        let [trigger, requestDelay = 0, swapDelay = 0] = s.split(" ")
+        let [trigger, requestDelay = 0, swapDelay = 0] = s.split(" ");
         return {
           trigger,
           requestDelay: parseInt(requestDelay),
           swapDelay: parseInt(swapDelay),
-        }
-      }
+        };
+      };
 
-      let exp = expression
-      let config = Alpine.$data(el)._rc.config
+      let exp = expression;
+      let config = Alpine.$data(el)._rc.config;
       if (value === null) {
-        let newConfig = { ...evaluate(exp) }
+        let newConfig = { ...evaluate(exp) };
         if (newConfig.trigger) {
-          let parsed = parseTriggerValue(newConfig.trigger)
-          newConfig = Object.assign(newConfig, parsed)
+          let parsed = parseTriggerValue(newConfig.trigger);
+          newConfig = Object.assign(newConfig, parsed);
         }
-        config = Object.assign(config, defaultConfig, newConfig)
-        return
+        config = Object.assign(config, defaultConfig, newConfig);
+        return;
       }
       if (value === "process-slots-first") {
-        exp = true
+        exp = true;
       }
       if (value === "trigger") {
-        let parsed = parseTriggerValue(exp)
-        config = Object.assign(config, parsed)
-        return
+        let parsed = parseTriggerValue(exp);
+        config = Object.assign(config, parsed);
+        return;
       }
-      config[value] = exp
+      config[value] = exp;
     }
-  )
+  );
 }
