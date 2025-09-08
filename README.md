@@ -60,6 +60,24 @@ The plugin defines two directives.
 
 You can also use `x-rc` without a property to set all options from an object, similar to the native `x-bind` directive.
 
+```html
+<div
+  x-data="{
+    component: 'component-a',
+    options: {
+      name: 'Component A',
+      trigger: 'load',
+      swap: 'inner',
+    }
+  }"
+>
+  <div
+    x-remote-component="`/examples/components/${component}.html`"
+    x-rc="options"
+  ></div>
+</div>
+```
+
 ### Default config
 
 The default options for all components can be configured in the `Alpine.$rc.defaultConfig` object. Additionally, this config allows setting the `urlPrefix` option, which defines the prefix used for all URL components.
@@ -94,7 +112,7 @@ The plugin adds the following properties to the component element's Alpine data:
 
 These can be used inside the component, for example to show loading indicators or error messages.
 
-### Component content
+## Component content
 
 The `x-remote-component` element can contain any content that will be visible until it is replaced by the component. This content can be used for placeholders, loading indicators, progress bars, or buttons that trigger the component, etc.
 
