@@ -53,7 +53,10 @@ export default function (Alpine) {
         `template[data-for-slot='${t.dataset.slot}']`
       );
 
-      if (!forSlot) return;
+      if (!forSlot) {
+        t.replaceWith(...t.childNodes)
+        return
+      }
 
       t.replaceWith(forSlot.content.cloneNode(true));
     });
@@ -86,10 +89,11 @@ export default function (Alpine) {
     requestDelay: 0,
     swapDelay: 0,
     "process-slots-first": false,
+    urlPrefix: "",
   }
 
   Alpine.$rc = {
-    config: { ...defaultConfig },
+    config: { ...defaultConfig }
   }
 
   Alpine.directive(
@@ -122,7 +126,7 @@ export default function (Alpine) {
           let html
 
           try {
-            html = await sendRequest(exp);
+            html = await sendRequest(config.urlPrefix + exp);
           } catch(error) {
             data._rcError = error
             data._rcIsLoading = false
@@ -235,7 +239,11 @@ export default function (Alpine) {
     (el, { value, modifiers, expression }, { evaluate }) => {
       let parseTriggerValue = (s) => {
         let [trigger, requestDelay = 0, swapDelay = 0] = s.split(" ")
-        return [trigger, parseInt(requestDelay), parseInt(swapDelay)]
+        return {
+          trigger,
+          requestDelay: parseInt(requestDelay),
+          swapDelay: parseInt(swapDelay),
+        }
       }
 
       let exp = expression
@@ -244,9 +252,7 @@ export default function (Alpine) {
         let newConfig = { ...evaluate(exp) }
         if (newConfig.trigger) {
           let parsed = parseTriggerValue(newConfig.trigger)
-          newConfig.trigger = parsed[0]
-          newConfig.requestDelay = parsed[1]
-          newConfig.swapDelay = parsed[2]
+          newConfig = Object.assign(newConfig, parsed)
         }
         config = Object.assign(config, defaultConfig, newConfig)
         return
@@ -256,9 +262,7 @@ export default function (Alpine) {
       }
       if (value === "trigger") {
         let parsed = parseTriggerValue(exp)
-        config.trigger = parsed[0]
-        config.requestDelay = parsed[1]
-        config.swapDelay = parsed[2]
+        config = Object.assign(config, parsed)
         return
       }
       config[value] = exp
