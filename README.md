@@ -60,6 +60,10 @@ The plugin defines two directives.
 
 You can also use `x-rc` without a property to set all options from an object, similar to the native `x-bind` directive.
 
+### Default config
+
+The default options for all components can be configured in the `Alpine.$rc.defaultConfig` object. Additionally, this config allows setting the `urlPrefix` option, which defines the prefix used for all URL components.
+
 ### Events
 
 The plugin dispatches the following events to notify the page about component state:
