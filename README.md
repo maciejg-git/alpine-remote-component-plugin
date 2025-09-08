@@ -98,10 +98,14 @@ These can be used inside the component, for example to show loading indicators o
 
 The `x-remote-component` element can contain any content that will be visible until it is replaced by the component. This content can be used for placeholders, loading indicators, progress bars, or buttons that trigger the component, etc.
 
+To display it conditionally while the component is loading, use the `x-show` directive together with the `_rcIsLoading` or `_rcIsLoadingWithDelay` properties.
+
 ### Component content: data-slot
 
 In addition to normal content, the `x-remote-component` element can include special template elements marked with the `data-for-slot` attribute. 
 
 The contents of these elements replace the corresponding `data-slot` elements in the component. This provides functionality similar to slots and improves component reusability. 
+
+You can use any element type for `data-slot`. The `data-slot` element's content is used as default slot content if there is no corresponding `data-for-slot`. You can nest `data-slot` elements, however, when an outer `data-slot` is replaced, its inner `data-slot` elements are also replaced and therefore unavailable for further replacement.
 
 The new content can be static or include other components.
