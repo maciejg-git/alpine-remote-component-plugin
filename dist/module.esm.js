@@ -42,10 +42,14 @@ function alpine_remote_component_default(Alpine) {
   let swapSlotsWithTemplates = (el, fragment) => {
     let slots = queryAllWithDataSlot(fragment);
     slots.forEach((t) => {
-      let forSlot = el.querySelector(
+      let element = el.content ?? el;
+      let forSlot = element.querySelector(
         `template[data-for-slot='${t.dataset.slot}']`
       );
-      if (!forSlot) return;
+      if (!forSlot) {
+        t.replaceWith(...t.childNodes);
+        return;
+      }
       t.replaceWith(forSlot.content.cloneNode(true));
     });
   };
@@ -72,10 +76,11 @@ function alpine_remote_component_default(Alpine) {
     responseHTML: null,
     requestDelay: 0,
     swapDelay: 0,
-    "process-slots-first": false
+    "process-slots-first": false,
+    urlPrefix: ""
   };
   Alpine.$rc = {
-    config: { ...defaultConfig }
+    defaultConfig: { ...defaultConfig }
   };
   Alpine.directive(
     "remote-component",
@@ -99,7 +104,7 @@ function alpine_remote_component_default(Alpine) {
         if (isPath(exp)) {
           let html;
           try {
-            html = await sendRequest(exp);
+            html = await sendRequest(config.urlPrefix + exp);
           } catch (error) {
             data._rcError = error;
             data._rcIsLoading = false;
@@ -142,15 +147,18 @@ function alpine_remote_component_default(Alpine) {
       let scopeCleanup = [
         Alpine.addScopeToNode(el, {
           _rc: {
-            config: { ...Alpine.$rc.config },
+            config: { ...Alpine.$rc.defaultConfig },
             trigger: initRemoteComponent
           }
         }),
-        Alpine.addScopeToNode(el, Alpine.reactive({
-          _rcIsLoading: false,
-          _rcIsLoadingWithDelay: false,
-          _rcError: null
-        }))
+        Alpine.addScopeToNode(
+          el,
+          Alpine.reactive({
+            _rcIsLoading: false,
+            _rcIsLoadingWithDelay: false,
+            _rcError: null
+          })
+        )
       ];
       let config = Alpine.$data(el)._rc.config;
       Alpine.nextTick(() => {
@@ -189,7 +197,11 @@ function alpine_remote_component_default(Alpine) {
     (el, { value, modifiers, expression }, { evaluate }) => {
       let parseTriggerValue = (s) => {
         let [trigger, requestDelay = 0, swapDelay = 0] = s.split(" ");
-        return [trigger, parseInt(requestDelay), parseInt(swapDelay)];
+        return {
+          trigger,
+          requestDelay: parseInt(requestDelay),
+          swapDelay: parseInt(swapDelay)
+        };
       };
       let exp = expression;
       let config = Alpine.$data(el)._rc.config;
@@ -197,9 +209,7 @@ function alpine_remote_component_default(Alpine) {
         let newConfig = { ...evaluate(exp) };
         if (newConfig.trigger) {
           let parsed = parseTriggerValue(newConfig.trigger);
-          newConfig.trigger = parsed[0];
-          newConfig.requestDelay = parsed[1];
-          newConfig.swapDelay = parsed[2];
+          newConfig = Object.assign(newConfig, parsed);
         }
         config = Object.assign(config, defaultConfig, newConfig);
         return;
@@ -209,9 +219,7 @@ function alpine_remote_component_default(Alpine) {
       }
       if (value === "trigger") {
         let parsed = parseTriggerValue(exp);
-        config.trigger = parsed[0];
-        config.requestDelay = parsed[1];
-        config.swapDelay = parsed[2];
+        config = Object.assign(config, parsed);
         return;
       }
       config[value] = exp;

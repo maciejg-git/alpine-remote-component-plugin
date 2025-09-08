@@ -43,10 +43,14 @@
     let swapSlotsWithTemplates = (el, fragment) => {
       let slots = queryAllWithDataSlot(fragment);
       slots.forEach((t) => {
-        let forSlot = el.querySelector(
+        let element = el.content ?? el;
+        let forSlot = element.querySelector(
           `template[data-for-slot='${t.dataset.slot}']`
         );
-        if (!forSlot) return;
+        if (!forSlot) {
+          t.replaceWith(...t.childNodes);
+          return;
+        }
         t.replaceWith(forSlot.content.cloneNode(true));
       });
     };
@@ -73,10 +77,11 @@
       responseHTML: null,
       requestDelay: 0,
       swapDelay: 0,
-      "process-slots-first": false
+      "process-slots-first": false,
+      urlPrefix: ""
     };
     Alpine2.$rc = {
-      config: { ...defaultConfig }
+      defaultConfig: { ...defaultConfig }
     };
     Alpine2.directive(
       "remote-component",
@@ -100,7 +105,7 @@
           if (isPath(exp)) {
             let html;
             try {
-              html = await sendRequest(exp);
+              html = await sendRequest(config.urlPrefix + exp);
             } catch (error) {
               data._rcError = error;
               data._rcIsLoading = false;
@@ -143,15 +148,18 @@
         let scopeCleanup = [
           Alpine2.addScopeToNode(el, {
             _rc: {
-              config: { ...Alpine2.$rc.config },
+              config: { ...Alpine2.$rc.defaultConfig },
               trigger: initRemoteComponent
             }
           }),
-          Alpine2.addScopeToNode(el, Alpine2.reactive({
-            _rcIsLoading: false,
-            _rcIsLoadingWithDelay: false,
-            _rcError: null
-          }))
+          Alpine2.addScopeToNode(
+            el,
+            Alpine2.reactive({
+              _rcIsLoading: false,
+              _rcIsLoadingWithDelay: false,
+              _rcError: null
+            })
+          )
         ];
         let config = Alpine2.$data(el)._rc.config;
         Alpine2.nextTick(() => {
@@ -190,7 +198,11 @@
       (el, { value, modifiers, expression }, { evaluate }) => {
         let parseTriggerValue = (s) => {
           let [trigger, requestDelay = 0, swapDelay = 0] = s.split(" ");
-          return [trigger, parseInt(requestDelay), parseInt(swapDelay)];
+          return {
+            trigger,
+            requestDelay: parseInt(requestDelay),
+            swapDelay: parseInt(swapDelay)
+          };
         };
         let exp = expression;
         let config = Alpine2.$data(el)._rc.config;
@@ -198,9 +210,7 @@
           let newConfig = { ...evaluate(exp) };
           if (newConfig.trigger) {
             let parsed = parseTriggerValue(newConfig.trigger);
-            newConfig.trigger = parsed[0];
-            newConfig.requestDelay = parsed[1];
-            newConfig.swapDelay = parsed[2];
+            newConfig = Object.assign(newConfig, parsed);
           }
           config = Object.assign(config, defaultConfig, newConfig);
           return;
@@ -210,9 +220,7 @@
         }
         if (value === "trigger") {
           let parsed = parseTriggerValue(exp);
-          config.trigger = parsed[0];
-          config.requestDelay = parsed[1];
-          config.swapDelay = parsed[2];
+          config = Object.assign(config, parsed);
           return;
         }
         config[value] = exp;
