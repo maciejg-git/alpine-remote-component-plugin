@@ -334,7 +334,7 @@
           <template data-for-slot="text">
             <p class="markdown">The contents of template elements marked with `data-for-slot` attribute replace the corresponding `data-slot` elements in the component. This provides functionality similar to slots and enhances the reusability of components.</p>
             <p class="markdown">The new content can be static or include other components.</p>
-            <p class="markdown">You can use any element type for `data-slot`. The `data-slot` element's content is used as default slot content if there is no corresponding `data-for-slot`.</p>
+            <p class="markdown">You can use any element type for `data-slot`. The `data-slot` element's content is used as default slot content if there is no corresponding `data-for-slot`. You can nest `data-slot` elements, however, when an outer `data-slot` is replaced, its inner `data-slot` elements are also replaced and therefore unavailable for further replacement.</p>
           </template>
           <template data-for-slot="example">
             <div
