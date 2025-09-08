@@ -1,12 +1,40 @@
 import Alpine from 'alpinejs'
 import alpineRemoteComponent from "../builds/module.js"
 
+let componentA = `
+  <div>
+    component-a
+    <div>
+      <div data-slot="content">
+        default slot content
+      </div>
+    </div>
+  </div>
+`
+
+let componentB = `
+  <div>
+    component-b
+    <div>
+      <div data-slot="content">
+        default slot content
+      </div>
+    </div>
+  </div>
+`
+
 beforeAll(() => {
   global.fetch = vi.fn(async (url) => {
     if (url.endsWith('/component-a.html')) {
       return {
         ok: true,
-        text: async () => '<div>component-a</div>',
+        text: async () => componentA,
+      }
+    }
+    if (url.endsWith('/component-b.html')) {
+      return {
+        ok: true,
+        text: async () => componentB,
       }
     }
     return {
