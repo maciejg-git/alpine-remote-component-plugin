@@ -2,7 +2,7 @@ import Alpine from 'alpinejs'
 import alpineRemoteComponent from "../builds/module.js"
 
 let componentA = `
-  <div>
+  <div class="class2 class3 class4">
     component-a
     <div>
       <div data-slot="content">
@@ -13,7 +13,7 @@ let componentA = `
 `
 
 let componentB = `
-  <div>
+  <div class="class2 class3 class4">
     component-b
     <div>
       <div data-slot="content">
