@@ -477,8 +477,12 @@
         <div x-remote-component="#example" _id="errors">
           <template data-for-slot="title"> Handling errors </template>
           <template data-for-slot="text">
-            <p class="markdown">The `_rcError` reactive property stores the latest error. You can use it to show fallback content within the component.</p>
-            <p class="markdown">You can also handle errors outside the component by setting a listener for the `rc-error` event.</p>
+            <p class="markdown">The `_rcError` reactive property stores the latest error. You can use it to display fallback content within the component.</p>
+            <p class="markdown">An error can be:</p>
+            <ul class="list-disc list-inside">
+              <li>a request status code for URL components</li>
+              <li class="markdown">an `ID not found` message for ID components when the template cannot be found</li>
+            </ul>
           </template>
           <template data-for-slot="example">
             <div
@@ -511,7 +515,7 @@
             let md = this.$el.querySelectorAll('.markdown')
 
             md.forEach((el) => {
-              el.innerHTML = marked.parse(el.textContent)
+              el.innerHTML = marked.parseInline(el.textContent)
             })
           }
         }"
