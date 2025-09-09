@@ -91,6 +91,7 @@ export default function (Alpine) {
     swapDelay: 0,
     "process-slots-first": false,
     urlPrefix: "",
+    componentSource: null,
   };
 
   Alpine.$rc = {
@@ -113,6 +114,8 @@ export default function (Alpine) {
         if (!isPath(expression) && !isId(expression)) {
           exp = evaluate(expression);
         }
+
+        config.componentSource = exp
 
         if (config.requestDelay) {
           await delay(config.requestDelay);
@@ -159,6 +162,12 @@ export default function (Alpine) {
           fragment = parsed.querySelector("template")?.content;
         } else if (isId(exp)) {
           fragment = document.querySelector(exp)?.content.cloneNode(true);
+          if (!fragment) {
+            data.isRunning = false
+            data._rcError = "ID not found"
+            dispatch(el, "rc-error", { error: "ID not found", config })
+            return
+          }
         }
 
         if (fragment) {
