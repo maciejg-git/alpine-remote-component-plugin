@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import userEvent from "@testing-library/user-event";
 import { screen } from "@testing-library/dom";
 import "@testing-library/jest-dom/vitest";
@@ -294,4 +294,36 @@ it("dispatches events in the correct order", async () => {
       "rc-initialized,rc-before-load,rc-loaded,rc-loaded-with-delay,rc-inserted"
     )
   ).toBeInTheDocument();
+});
+
+it("request delay", async () => {
+  document.body.innerHTML = `
+    <div
+      x-remote-component="/component-a.html"
+      x-rc:trigger="load 500 0"
+    ></div>
+  `;
+
+  Alpine.initTree(document.body);
+
+  vi.useFakeTimers()
+  vi.advanceTimersByTimeAsync(600)
+
+  expect(await screen.findByText("component-a")).toBeInTheDocument();
+});
+
+it("swap delay", async () => {
+  document.body.innerHTML = `
+    <div
+      x-remote-component="/component-a.html"
+      x-rc:trigger="load 0 500"
+    ></div>
+  `;
+
+  Alpine.initTree(document.body);
+
+  vi.useFakeTimers()
+  vi.advanceTimersByTimeAsync(600)
+
+  expect(await screen.findByText("component-a")).toBeInTheDocument();
 });
