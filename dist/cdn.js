@@ -78,7 +78,8 @@
       requestDelay: 0,
       swapDelay: 0,
       "process-slots-first": false,
-      urlPrefix: ""
+      urlPrefix: "",
+      componentSource: null
     };
     Alpine2.$rc = {
       defaultConfig: { ...defaultConfig }
@@ -96,6 +97,7 @@
           if (!isPath(expression) && !isId(expression)) {
             exp = evaluate(expression);
           }
+          config.componentSource = exp;
           if (config.requestDelay) {
             await delay(config.requestDelay);
           }
@@ -129,6 +131,12 @@
             fragment = parsed.querySelector("template")?.content;
           } else if (isId(exp)) {
             fragment = document.querySelector(exp)?.content.cloneNode(true);
+            if (!fragment) {
+              data.isRunning = false;
+              data._rcError = "ID not found";
+              dispatch(el, "rc-error", { error: "ID not found", config });
+              return;
+            }
           }
           if (fragment) {
             swapSlotsWithTemplates(el, fragment);
@@ -162,6 +170,9 @@
           )
         ];
         let config = Alpine2.$data(el)._rc.config;
+        if (value) {
+          config.name = value;
+        }
         Alpine2.nextTick(() => {
           if (config["process-slots-first"]) {
             let templates = el.querySelectorAll("[data-for-slot]");

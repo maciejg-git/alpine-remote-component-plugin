@@ -77,7 +77,8 @@ function alpine_remote_component_default(Alpine) {
     requestDelay: 0,
     swapDelay: 0,
     "process-slots-first": false,
-    urlPrefix: ""
+    urlPrefix: "",
+    componentSource: null
   };
   Alpine.$rc = {
     defaultConfig: { ...defaultConfig }
@@ -95,6 +96,7 @@ function alpine_remote_component_default(Alpine) {
         if (!isPath(expression) && !isId(expression)) {
           exp = evaluate(expression);
         }
+        config.componentSource = exp;
         if (config.requestDelay) {
           await delay(config.requestDelay);
         }
@@ -128,6 +130,12 @@ function alpine_remote_component_default(Alpine) {
           fragment = parsed.querySelector("template")?.content;
         } else if (isId(exp)) {
           fragment = document.querySelector(exp)?.content.cloneNode(true);
+          if (!fragment) {
+            data.isRunning = false;
+            data._rcError = "ID not found";
+            dispatch(el, "rc-error", { error: "ID not found", config });
+            return;
+          }
         }
         if (fragment) {
           swapSlotsWithTemplates(el, fragment);
@@ -161,6 +169,9 @@ function alpine_remote_component_default(Alpine) {
         )
       ];
       let config = Alpine.$data(el)._rc.config;
+      if (value) {
+        config.name = value;
+      }
       Alpine.nextTick(() => {
         if (config["process-slots-first"]) {
           let templates = el.querySelectorAll("[data-for-slot]");
