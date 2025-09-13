@@ -26,7 +26,7 @@ The plugin defines two directives.
 - a path string that starts with `/`
 - any other string is evaluated by Alpine. The result of the evaluation should be an ID or a path.
 
-Optionally, the component name can be set using the directive argument.
+This directive does not use argument or modifiers.
 
 ```html
 <!-- ID component -->
@@ -45,11 +45,13 @@ Optionally, the component name can be set using the directive argument.
 
 `x-rc` - a directive used to set component options:
 
-- `x-rc:name` - sets the component name. Optional, but can be useful in event listeners for identification. Name can also be set using the `x-remote-component` directive argument. Default: `''`.
+- `x-rc:name` - sets the component name. Optional, but can be useful in event listeners for identification. Default: `''`.
 - `x-rc:swap` - specifies how the component is inserted. Valid values: `inner` and `outer`. Default: `outer`.
 - `x-rc:trigger` - defines when the component should load. Valid triggers: `load`, `event`, `reactive`, `intersect` and `custom`. Default: `load`.
 - `x-rc:watch` - used only with the `reactive` trigger. The value is the property name to watch.
 - `x-rc:process-slots-first` - if enabled, Alpine is initialized inside `data-for-slot` template elements before the main component is loaded. Default: `false`.
+
+This directive does not use modifiers.
 
 ```html
 <div 
