@@ -211,10 +211,6 @@ export default function (Alpine) {
 
       let config = Alpine.$data(el)._rc.config;
 
-      if (value) {
-        config.name = value
-      }
-
       Alpine.nextTick(() => {
         if (config["process-slots-first"]) {
           let templates = el.querySelectorAll("[data-for-slot]");
