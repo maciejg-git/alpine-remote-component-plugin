@@ -1,4 +1,20 @@
 export default function (Alpine) {
+  const defaultConfig = {
+    swap: "outer",
+    trigger: "load",
+    watch: null,
+    name: "",
+    isRunning: false,
+    initialized: false,
+    responseHTML: null,
+    requestDelay: 0,
+    swapDelay: 0,
+    "process-slots-first": false,
+    source: null,
+  };
+
+  let validOptions = ['trigger', 'swap', 'watch', 'name', 'process-slots-first']
+
   let sendRequest = async (url) => {
     try {
       let res = await fetch(url);
@@ -63,6 +79,43 @@ export default function (Alpine) {
     });
   };
 
+  let renameAttribute = (el, name, newName) => {
+    if (el.hasAttribute(name)) {
+      let value = el.getAttribute(name)
+      el.removeAttribute(name)
+      el.setAttribute(newName, value)
+    }
+  }
+
+  let makeGenericComponent = () => {
+    class GenericComponent extends HTMLElement {
+      connectedCallback() {
+        renameAttribute(this, 'source', 'x-remote-component')
+        validOptions.forEach((option) => {
+          renameAttribute(this, option, 'x-rc:' + option)
+        })
+      }
+    }
+    customElements.define('x-component', GenericComponent)
+  }
+
+  let makeCustomElementComponents = (components) => {
+    components.forEach((c) => {
+      class Component extends HTMLElement {
+        connectedCallback() {
+          this.setAttribute('x-remote-component', c.source)
+          validOptions.forEach((option) => {
+            if (c.option !== undefined) {
+              this.setAttribute('x-rc:' + option, c.option)
+            }
+            renameAttribute(this, option, 'x-rc:' + option)
+          })
+        }
+      }
+      customElements.define('x-' + c.tag, Component)
+    })
+  }
+
   let dispatch = (el, name, detail = {}) => {
     el.dispatchEvent(
       new CustomEvent(name, {
@@ -79,24 +132,12 @@ export default function (Alpine) {
   let isPath = (s) => s[0] === "/";
   let isId = (s) => s[0] === "#";
 
-  const defaultConfig = {
-    swap: "outer",
-    trigger: "load",
-    watch: null,
-    name: "",
-    isRunning: false,
-    initialized: false,
-    responseHTML: null,
-    requestDelay: 0,
-    swapDelay: 0,
-    "process-slots-first": false,
-    urlPrefix: "",
-    componentSource: null,
-  };
-
   Alpine.$rc = {
     defaultConfig: { ...defaultConfig },
+    makeCustomElementComponents,
   };
+
+  makeGenericComponent()
 
   Alpine.directive(
     "remote-component",
@@ -115,7 +156,7 @@ export default function (Alpine) {
           exp = evaluate(expression);
         }
 
-        config.componentSource = exp
+        config.source = exp
 
         if (config.requestDelay) {
           await delay(config.requestDelay);
@@ -130,7 +171,7 @@ export default function (Alpine) {
           let html;
 
           try {
-            html = await sendRequest(config.urlPrefix + exp);
+            html = await sendRequest(exp);
           } catch (error) {
             data._rcError = error;
             data._rcIsLoading = false;
