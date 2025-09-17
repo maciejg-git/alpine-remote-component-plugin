@@ -229,6 +229,8 @@ export default function (Alpine) {
           }
         }
 
+        data._rcIsLoaded = true
+
         config.initialized = true;
         config.isRunning = false;
       };
@@ -245,6 +247,7 @@ export default function (Alpine) {
           Alpine.reactive({
             _rcIsLoading: false,
             _rcIsLoadingWithDelay: false,
+            _rcIsLoaded: false,
             _rcError: null,
           })
         ),
