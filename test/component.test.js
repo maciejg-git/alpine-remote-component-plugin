@@ -73,10 +73,11 @@ it("event trigger", async () => {
       x-rc:trigger="event"
       @load-component.window="_rc.trigger"
     ></div>
-    <div x-init="$dispatch('load-component')"></div>
   `;
 
   Alpine.initTree(document.body);
+
+  window.dispatchEvent(new CustomEvent('load-component'))
 
   expect(await screen.findByText("component-a")).toBeInTheDocument();
 });
@@ -324,6 +325,45 @@ it("swap delay", async () => {
 
   vi.useFakeTimers()
   vi.advanceTimersByTimeAsync(600)
+
+  expect(await screen.findByText("component-a")).toBeInTheDocument();
+});
+
+it("x-component", async () => {
+  document.body.innerHTML = `
+    <x-component source="/examples/components/component-a.html"></x-component>
+  `;
+
+  Alpine.initTree(document.body);
+
+  expect(await screen.findByText("component-a")).toBeInTheDocument();
+});
+
+it("x-component short options", async () => {
+  document.body.innerHTML = `
+    <x-component
+      source="/examples/components/component-a.html"
+      swap="inner"
+      trigger="event"
+      @load-component.window="_rc.trigger"
+    ></x-component>
+  `;
+
+  Alpine.initTree(document.body);
+
+  window.dispatchEvent(new CustomEvent('load-component'))
+
+  expect(await screen.findByText("component-a")).toBeInTheDocument();
+
+  expect(document.querySelector("x-component")).toBeInTheDocument()
+});
+
+it("custom element component", async () => {
+  document.body.innerHTML = `
+    <x-component-a></x-component-a>
+  `;
+
+  Alpine.initTree(document.body);
 
   expect(await screen.findByText("component-a")).toBeInTheDocument();
 });

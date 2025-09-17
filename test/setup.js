@@ -45,6 +45,13 @@ beforeAll(() => {
   })
   global.Alpine = Alpine
   Alpine.plugin(alpineRemoteComponent)
+  let components = [
+    {
+      tag: 'component-a',
+      source: '/examples/components/component-a.html',
+    }
+  ]
+  Alpine.$rc.makeCustomElementComponents(components)
   Alpine.start()
 })
 
