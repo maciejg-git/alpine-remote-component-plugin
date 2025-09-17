@@ -286,7 +286,7 @@ export default function (Alpine) {
         scopeCleanup.forEach((c) => c());
       });
     }
-  ).before("on");
+  ).before("show");
 
   Alpine.directive(
     "rc",
