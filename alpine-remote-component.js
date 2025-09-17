@@ -100,13 +100,19 @@ export default function (Alpine) {
   }
 
   let makeCustomElementComponents = (components) => {
+    if (!Array.isArray(components)) {
+      return
+    }
     components.forEach((c) => {
+      if (!c.tag || !c.source) {
+        return
+      }
       class Component extends HTMLElement {
         connectedCallback() {
           this.setAttribute('x-remote-component', c.source)
           validOptions.forEach((option) => {
-            if (c.option !== undefined) {
-              this.setAttribute('x-rc:' + option, c.option)
+            if (c[option] !== undefined) {
+              this.setAttribute('x-rc:' + option, c[option])
             }
             renameAttribute(this, option, 'x-rc:' + option)
           })
@@ -141,7 +147,7 @@ export default function (Alpine) {
 
   Alpine.directive(
     "remote-component",
-    (el, { value, modifiers, expression }, { evaluate, cleanup }) => {
+    (el, { expression }, { evaluate, cleanup }) => {
       let initRemoteComponent = async () => {
         if (config.initialized || config.isRunning) return;
         config.isRunning = true;
@@ -293,7 +299,7 @@ export default function (Alpine) {
 
   Alpine.directive(
     "rc",
-    (el, { value, modifiers, expression }, { evaluate }) => {
+    (el, { value, expression }, { evaluate }) => {
       let parseTriggerValue = (s) => {
         let [trigger, requestDelay = 0, swapDelay = 0] = s.split(" ");
         return {
