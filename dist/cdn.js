@@ -1,6 +1,20 @@
 (() => {
   // alpine-remote-component.js
   function alpine_remote_component_default(Alpine2) {
+    const defaultConfig = {
+      swap: "outer",
+      trigger: "load",
+      watch: null,
+      name: "",
+      isRunning: false,
+      initialized: false,
+      responseHTML: null,
+      requestDelay: 0,
+      swapDelay: 0,
+      "process-slots-first": false,
+      source: null
+    };
+    let validOptions = ["trigger", "swap", "watch", "name", "process-slots-first"];
     let sendRequest = async (url) => {
       try {
         let res = await fetch(url);
@@ -54,6 +68,46 @@
         t.replaceWith(forSlot.content.cloneNode(true));
       });
     };
+    let renameAttribute = (el, name, newName) => {
+      if (el.hasAttribute(name)) {
+        let value = el.getAttribute(name);
+        el.removeAttribute(name);
+        el.setAttribute(newName, value);
+      }
+    };
+    let makeGenericComponent = () => {
+      class GenericComponent extends HTMLElement {
+        connectedCallback() {
+          renameAttribute(this, "source", "x-remote-component");
+          validOptions.forEach((option) => {
+            renameAttribute(this, option, "x-rc:" + option);
+          });
+        }
+      }
+      customElements.define("x-component", GenericComponent);
+    };
+    let makeCustomElementComponents = (components) => {
+      if (!Array.isArray(components)) {
+        return;
+      }
+      components.forEach((c) => {
+        if (!c.tag || !c.source) {
+          return;
+        }
+        class Component extends HTMLElement {
+          connectedCallback() {
+            this.setAttribute("x-remote-component", c.source);
+            validOptions.forEach((option) => {
+              if (c[option] !== void 0) {
+                this.setAttribute("x-rc:" + option, c[option]);
+              }
+              renameAttribute(this, option, "x-rc:" + option);
+            });
+          }
+        }
+        customElements.define("x-" + c.tag, Component);
+      });
+    };
     let dispatch = (el, name, detail = {}) => {
       el.dispatchEvent(
         new CustomEvent(name, {
@@ -67,26 +121,14 @@
     let delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
     let isPath = (s) => s[0] === "/";
     let isId = (s) => s[0] === "#";
-    const defaultConfig = {
-      swap: "outer",
-      trigger: "load",
-      watch: null,
-      name: "",
-      isRunning: false,
-      initialized: false,
-      responseHTML: null,
-      requestDelay: 0,
-      swapDelay: 0,
-      "process-slots-first": false,
-      urlPrefix: "",
-      componentSource: null
-    };
     Alpine2.$rc = {
-      defaultConfig: { ...defaultConfig }
+      defaultConfig: { ...defaultConfig },
+      makeCustomElementComponents
     };
+    makeGenericComponent();
     Alpine2.directive(
       "remote-component",
-      (el, { value, modifiers, expression }, { evaluate, cleanup }) => {
+      (el, { expression }, { evaluate, cleanup }) => {
         let initRemoteComponent = async () => {
           if (config.initialized || config.isRunning) return;
           config.isRunning = true;
@@ -97,7 +139,7 @@
           if (!isPath(expression) && !isId(expression)) {
             exp = evaluate(expression);
           }
-          config.componentSource = exp;
+          config.source = exp;
           if (config.requestDelay) {
             await delay(config.requestDelay);
           }
@@ -107,7 +149,7 @@
           if (isPath(exp)) {
             let html;
             try {
-              html = await sendRequest(config.urlPrefix + exp);
+              html = await sendRequest(exp);
             } catch (error) {
               data._rcError = error;
               data._rcIsLoading = false;
@@ -150,6 +192,7 @@
               dispatch(fragmentFirstChild, "rc-inserted", config);
             }
           }
+          data._rcIsLoaded = true;
           config.initialized = true;
           config.isRunning = false;
         };
@@ -165,14 +208,12 @@
             Alpine2.reactive({
               _rcIsLoading: false,
               _rcIsLoadingWithDelay: false,
+              _rcIsLoaded: false,
               _rcError: null
             })
           )
         ];
         let config = Alpine2.$data(el)._rc.config;
-        if (value) {
-          config.name = value;
-        }
         Alpine2.nextTick(() => {
           if (config["process-slots-first"]) {
             let templates = el.querySelectorAll("[data-for-slot]");
@@ -188,8 +229,8 @@
             if (watched) {
               initRemoteComponent();
             } else {
-              Alpine2.$data(el).$watch(config.watch, (value2) => {
-                if (value2) {
+              Alpine2.$data(el).$watch(config.watch, (value) => {
+                if (value) {
                   initRemoteComponent();
                 }
               });
@@ -203,10 +244,10 @@
           scopeCleanup.forEach((c) => c());
         });
       }
-    ).before("on");
+    ).before("show");
     Alpine2.directive(
       "rc",
-      (el, { value, modifiers, expression }, { evaluate }) => {
+      (el, { value, expression }, { evaluate }) => {
         let parseTriggerValue = (s) => {
           let [trigger, requestDelay = 0, swapDelay = 0] = s.split(" ");
           return {
