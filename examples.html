@@ -18,6 +18,7 @@
     <script src="https://cdn.jsdelivr.net/npm/marked/lib/marked.umd.js"></script>
     <!-- alpine remote component plugin -->
     <script type="module" defer src="/builds/cdn.js"></script>
+    <script defer src="/custom-elements.js"></script>
     <!-- alpine -->
     <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
     <script
@@ -501,11 +502,30 @@
         <div x-remote-component="#example" _id="x-component">
           <template data-for-slot="title"> x-component </template>
           <template data-for-slot="text">
-            <p class="markdown">The plugin adds new custom `x-component` element.</p>
+            <p class="markdown">The plugin adds a custom `x-component` element. It is optional, and internally works the same as the `x-remote-component` element, but is dedicated to components and allows simpler attributes.</p>
           </template>
           <template data-for-slot="example">
             <div
               x-remote-component="/examples/x-component.html"
+              x-rc:name="example"
+              x-rc:trigger="load 0 500"
+              class="w-full"
+            >
+              <div x-remote-component="#placeholder"></div>
+            </div>
+          </template>
+        </div>
+
+        <hr class="border-gray-200">
+
+        <div x-remote-component="#example" _id="custom-elements">
+          <template data-for-slot="title"> Custom element components </template>
+          <template data-for-slot="text">
+            <p class="markdown">You can also create dedicated custom elements for specific components. This allows the simplest usage with just a component tag, but it requires an additional step of registering the available components.</p>
+          </template>
+          <template data-for-slot="example">
+            <div
+              x-remote-component="/examples/custom-elements.html"
               x-rc:name="example"
               x-rc:trigger="load 0 500"
               class="w-full"

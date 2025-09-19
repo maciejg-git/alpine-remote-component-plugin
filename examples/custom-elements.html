@@ -1,0 +1,13 @@
+<x-component-a></x-component-a>
+
+<button
+  @click="$dispatch('load-custom-element-component')"
+  class="flex items-center rounded-md border-violet-700 bg-violet-500 px-4 py-2 font-medium text-gray-100 hover:bg-violet-600 focus:ring-violet-200 dark:bg-violet-500 dark:hover:bg-violet-600"
+>
+  Load component
+</button>
+
+<x-component-b
+  trigger="event"
+  @load-custom-element-component.window="_rc.trigger"
+></x-component-b>
