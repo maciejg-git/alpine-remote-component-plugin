@@ -14,7 +14,13 @@
       "process-slots-first": false,
       source: null
     };
-    let validOptions = ["trigger", "swap", "watch", "name", "process-slots-first"];
+    let validOptions = [
+      "trigger",
+      "swap",
+      "watch",
+      "name",
+      "process-slots-first"
+    ];
     let sendRequest = async (url) => {
       try {
         let res = await fetch(url);
@@ -245,39 +251,36 @@
         });
       }
     ).before("show");
-    Alpine2.directive(
-      "rc",
-      (el, { value, expression }, { evaluate }) => {
-        let parseTriggerValue = (s) => {
-          let [trigger, requestDelay = 0, swapDelay = 0] = s.split(" ");
-          return {
-            trigger,
-            requestDelay: parseInt(requestDelay),
-            swapDelay: parseInt(swapDelay)
-          };
+    Alpine2.directive("rc", (el, { value, expression }, { evaluate }) => {
+      let parseTriggerValue = (s) => {
+        let [trigger, requestDelay = 0, swapDelay = 0] = s.split(" ");
+        return {
+          trigger,
+          requestDelay: parseInt(requestDelay),
+          swapDelay: parseInt(swapDelay)
         };
-        let exp = expression;
-        let config = Alpine2.$data(el)._rc.config;
-        if (value === null) {
-          let newConfig = { ...evaluate(exp) };
-          if (newConfig.trigger) {
-            let parsed = parseTriggerValue(newConfig.trigger);
-            newConfig = Object.assign(newConfig, parsed);
-          }
-          config = Object.assign(config, defaultConfig, newConfig);
-          return;
+      };
+      let exp = expression;
+      let config = Alpine2.$data(el)._rc.config;
+      if (value === null) {
+        let newConfig = { ...evaluate(exp) };
+        if (newConfig.trigger) {
+          let parsed = parseTriggerValue(newConfig.trigger);
+          newConfig = Object.assign(newConfig, parsed);
         }
-        if (value === "process-slots-first") {
-          exp = true;
-        }
-        if (value === "trigger") {
-          let parsed = parseTriggerValue(exp);
-          config = Object.assign(config, parsed);
-          return;
-        }
-        config[value] = exp;
+        config = Object.assign(config, defaultConfig, newConfig);
+        return;
       }
-    );
+      if (value === "process-slots-first") {
+        exp = true;
+      }
+      if (value === "trigger") {
+        let parsed = parseTriggerValue(exp);
+        config = Object.assign(config, parsed);
+        return;
+      }
+      config[value] = exp;
+    });
   }
 
   // builds/cdn.js
