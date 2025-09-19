@@ -13,7 +13,13 @@ export default function (Alpine) {
     source: null,
   };
 
-  let validOptions = ['trigger', 'swap', 'watch', 'name', 'process-slots-first']
+  let validOptions = [
+    "trigger",
+    "swap",
+    "watch",
+    "name",
+    "process-slots-first",
+  ];
 
   let sendRequest = async (url) => {
     try {
@@ -65,7 +71,7 @@ export default function (Alpine) {
     let slots = queryAllWithDataSlot(fragment);
 
     slots.forEach((t) => {
-      let element = el.content ?? el
+      let element = el.content ?? el;
       let forSlot = element.querySelector(
         `template[data-for-slot='${t.dataset.slot}']`
       );
@@ -81,46 +87,46 @@ export default function (Alpine) {
 
   let renameAttribute = (el, name, newName) => {
     if (el.hasAttribute(name)) {
-      let value = el.getAttribute(name)
-      el.removeAttribute(name)
-      el.setAttribute(newName, value)
+      let value = el.getAttribute(name);
+      el.removeAttribute(name);
+      el.setAttribute(newName, value);
     }
-  }
+  };
 
   let makeGenericComponent = () => {
     class GenericComponent extends HTMLElement {
       connectedCallback() {
-        renameAttribute(this, 'source', 'x-remote-component')
+        renameAttribute(this, "source", "x-remote-component");
         validOptions.forEach((option) => {
-          renameAttribute(this, option, 'x-rc:' + option)
-        })
+          renameAttribute(this, option, "x-rc:" + option);
+        });
       }
     }
-    customElements.define('x-component', GenericComponent)
-  }
+    customElements.define("x-component", GenericComponent);
+  };
 
   let makeCustomElementComponents = (components) => {
     if (!Array.isArray(components)) {
-      return
+      return;
     }
     components.forEach((c) => {
       if (!c.tag || !c.source) {
-        return
+        return;
       }
       class Component extends HTMLElement {
         connectedCallback() {
-          this.setAttribute('x-remote-component', c.source)
+          this.setAttribute("x-remote-component", c.source);
           validOptions.forEach((option) => {
             if (c[option] !== undefined) {
-              this.setAttribute('x-rc:' + option, c[option])
+              this.setAttribute("x-rc:" + option, c[option]);
             }
-            renameAttribute(this, option, 'x-rc:' + option)
-          })
+            renameAttribute(this, option, "x-rc:" + option);
+          });
         }
       }
-      customElements.define('x-' + c.tag, Component)
-    })
-  }
+      customElements.define("x-" + c.tag, Component);
+    });
+  };
 
   let dispatch = (el, name, detail = {}) => {
     el.dispatchEvent(
@@ -143,7 +149,7 @@ export default function (Alpine) {
     makeCustomElementComponents,
   };
 
-  makeGenericComponent()
+  makeGenericComponent();
 
   Alpine.directive(
     "remote-component",
@@ -162,7 +168,7 @@ export default function (Alpine) {
           exp = evaluate(expression);
         }
 
-        config.source = exp
+        config.source = exp;
 
         if (config.requestDelay) {
           await delay(config.requestDelay);
@@ -210,10 +216,10 @@ export default function (Alpine) {
         } else if (isId(exp)) {
           fragment = document.querySelector(exp)?.content.cloneNode(true);
           if (!fragment) {
-            data.isRunning = false
-            data._rcError = "ID not found"
-            dispatch(el, "rc-error", { error: "ID not found", config })
-            return
+            data.isRunning = false;
+            data._rcError = "ID not found";
+            dispatch(el, "rc-error", { error: "ID not found", config });
+            return;
           }
         }
 
@@ -235,7 +241,7 @@ export default function (Alpine) {
           }
         }
 
-        data._rcIsLoaded = true
+        data._rcIsLoaded = true;
 
         config.initialized = true;
         config.isRunning = false;
@@ -297,38 +303,35 @@ export default function (Alpine) {
     }
   ).before("show");
 
-  Alpine.directive(
-    "rc",
-    (el, { value, expression }, { evaluate }) => {
-      let parseTriggerValue = (s) => {
-        let [trigger, requestDelay = 0, swapDelay = 0] = s.split(" ");
-        return {
-          trigger,
-          requestDelay: parseInt(requestDelay),
-          swapDelay: parseInt(swapDelay),
-        };
+  Alpine.directive("rc", (el, { value, expression }, { evaluate }) => {
+    let parseTriggerValue = (s) => {
+      let [trigger, requestDelay = 0, swapDelay = 0] = s.split(" ");
+      return {
+        trigger,
+        requestDelay: parseInt(requestDelay),
+        swapDelay: parseInt(swapDelay),
       };
+    };
 
-      let exp = expression;
-      let config = Alpine.$data(el)._rc.config;
-      if (value === null) {
-        let newConfig = { ...evaluate(exp) };
-        if (newConfig.trigger) {
-          let parsed = parseTriggerValue(newConfig.trigger);
-          newConfig = Object.assign(newConfig, parsed);
-        }
-        config = Object.assign(config, defaultConfig, newConfig);
-        return;
+    let exp = expression;
+    let config = Alpine.$data(el)._rc.config;
+    if (value === null) {
+      let newConfig = { ...evaluate(exp) };
+      if (newConfig.trigger) {
+        let parsed = parseTriggerValue(newConfig.trigger);
+        newConfig = Object.assign(newConfig, parsed);
       }
-      if (value === "process-slots-first") {
-        exp = true;
-      }
-      if (value === "trigger") {
-        let parsed = parseTriggerValue(exp);
-        config = Object.assign(config, parsed);
-        return;
-      }
-      config[value] = exp;
+      config = Object.assign(config, defaultConfig, newConfig);
+      return;
     }
-  );
+    if (value === "process-slots-first") {
+      exp = true;
+    }
+    if (value === "trigger") {
+      let parsed = parseTriggerValue(exp);
+      config = Object.assign(config, parsed);
+      return;
+    }
+    config[value] = exp;
+  });
 }
