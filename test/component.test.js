@@ -123,6 +123,38 @@ it("reactive trigger, x-rc:watch false", async () => {
   expect(await screen.findByText("component-a")).toBeInTheDocument();
 });
 
+it("swap outer", async () => {
+  document.body.innerHTML = `
+    <div
+      x-remote-component="/component-a.html"
+      x-rc:trigger="load"
+      x-rc:swap="outer"
+    ></div>
+  `;
+
+  Alpine.initTree(document.body);
+
+  expect(await screen.findByText("component-a")).toBeInTheDocument();
+
+  expect(document.querySelector("[x-remote-component]")).not.toBeInTheDocument()
+});
+
+it("swap inner", async () => {
+  document.body.innerHTML = `
+    <div
+      x-remote-component="/component-a.html"
+      x-rc:trigger="load"
+      x-rc:swap="inner"
+    ></div>
+  `;
+
+  Alpine.initTree(document.body);
+
+  expect(await screen.findByText("component-a")).toBeInTheDocument();
+
+  expect(document.querySelector("[x-remote-component]")).toBeInTheDocument()
+});
+
 it("shows content when _rcIsLoading changes", async () => {
   document.body.innerHTML = `
     <div x-remote-component="/component-a.html">
@@ -366,4 +398,23 @@ it("custom element component", async () => {
   Alpine.initTree(document.body);
 
   expect(await screen.findByText("component-a")).toBeInTheDocument();
+});
+
+it("custom element component short options", async () => {
+  document.body.innerHTML = `
+    <x-component-a
+      swap="inner"
+      trigger="event"
+      @load-component.window="_rc.trigger"
+    >
+    </x-component-a>
+  `;
+
+  Alpine.initTree(document.body);
+
+  window.dispatchEvent(new CustomEvent('load-component'))
+
+  expect(await screen.findByText("component-a")).toBeInTheDocument();
+
+  expect(document.querySelector("x-component-a")).toBeInTheDocument()
 });
