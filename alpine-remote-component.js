@@ -13,6 +13,11 @@ export default function (Alpine) {
     source: null,
   };
 
+  const globalConfig = {
+    urlPrefix: "",
+    componentPrefix: "x",
+  }
+
   let validOptions = [
     "trigger",
     "swap",
@@ -102,7 +107,7 @@ export default function (Alpine) {
         });
       }
     }
-    customElements.define("x-component", GenericComponent);
+    customElements.define(globalConfig.componentPrefix + "-component", GenericComponent);
   };
 
   let makeCustomElementComponents = (components) => {
@@ -124,7 +129,7 @@ export default function (Alpine) {
           });
         }
       }
-      customElements.define("x-" + c.tag, Component);
+      customElements.define(globalConfig.componentPrefix + "-" + c.tag, Component);
     });
   };
 
@@ -145,7 +150,8 @@ export default function (Alpine) {
   let isId = (s) => s[0] === "#";
 
   Alpine.$rc = {
-    defaultConfig: { ...defaultConfig },
+    defaultConfig,
+    globalConfig,
     makeCustomElementComponents,
   };
 
@@ -183,7 +189,7 @@ export default function (Alpine) {
           let html;
 
           try {
-            html = await sendRequest(exp);
+            html = await sendRequest(globalConfig.urlPrefix + exp);
           } catch (error) {
             data._rcError = error;
             data._rcIsLoading = false;
