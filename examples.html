@@ -42,23 +42,22 @@
 
     <div
       x-data="{
-        examples: [],
-        currentExample: '',
+        examples: {},
       }"
       x-init="document.documentElement.style.setProperty('color-scheme', 'light')"
       class="flex"
     >
-      <div class="px-10 border-r border-gray-200">
+      <div class="px-12 border-r border-gray-200 hidden lg:block">
         <ul class="flex flex-col text-sm gap-y-1 sticky top-20">
           <template x-for="example in examples">
-            <li :class="{ 'font-semibold': currentExample === example.id }">
+            <li :class="{ 'font-semibold': example.isVisible }">
               <a :href="'#' + example.id" x-text="example.title"></a>
             </li>
           </template>
         </ul>
       </div>
-      <div class="mx-auto flex max-w-4xl flex-col gap-y-10 mt-20 mb-20 text-gray-800">
 
+      <div class="mx-auto flex max-w-4xl flex-col gap-y-10 mt-20 mb-20 text-gray-800 px-6">
         <div x-remote-component="#example" _id="basic-id-component">
           <template data-for-slot="title"> Basic ID component </template>
           <template data-for-slot="text">
@@ -291,6 +290,25 @@
 
         <hr class="border-gray-200">
 
+        <div x-remote-component="#example" _id="rc">
+          <template data-for-slot="title"> Dynamic component options </template>
+          <template data-for-slot="text">
+            <p class="markdown">For dynamic component options, use the `x-rc` directive without a property and provide an object as the value.</p>
+          </template>
+          <template data-for-slot="example">
+            <div
+              x-remote-component="/examples/rc.html"
+              x-rc:name="example"
+              x-rc:trigger="load 0 500"
+              class="w-full"
+            >
+              <div x-remote-component="#placeholder"></div>
+            </div>
+          </template>
+        </div>
+
+        <hr class="border-gray-200">
+
         <div x-remote-component="#example" _id="events">
           <template data-for-slot="title"> Events </template>
           <template data-for-slot="example">
@@ -418,7 +436,7 @@
         <hr class="border-gray-200">
 
         <div x-remote-component="#example" _id="copy-attributes">
-          <template data-for-slot="title"> Component attributes </template>
+          <template data-for-slot="title"> Copy component attributes </template>
           <template data-for-slot="text">
             <p class="markdown">Attributes prefixed with `_` or `rc-` are transferred to the component's root element. If the attribute already exists, the value is updated. Classes are an exception and are merged with the existing classes.</p>
           </template>
@@ -441,25 +459,6 @@
           <template data-for-slot="example">
             <div
               x-remote-component="/examples/router-view.html"
-              x-rc:name="example"
-              x-rc:trigger="load 0 500"
-              class="w-full"
-            >
-              <div x-remote-component="#placeholder"></div>
-            </div>
-          </template>
-        </div>
-
-        <hr class="border-gray-200">
-
-        <div x-remote-component="#example" _id="rc">
-          <template data-for-slot="title"> Dynamic component options </template>
-          <template data-for-slot="text">
-            <p class="markdown">For dynamic component options, use the `x-rc` directive without a property and provide an object as the value.</p>
-          </template>
-          <template data-for-slot="example">
-            <div
-              x-remote-component="/examples/rc.html"
               x-rc:name="example"
               x-rc:trigger="load 0 500"
               class="w-full"
@@ -591,14 +590,16 @@
             md.forEach((el) => {
               el.innerHTML = marked.parseInline(el.textContent)
             })
-            examples.push({
+            examples[this.$el.id] = {
               title: this.$el.querySelector('h2').textContent,
               id: this.$el.id,
-            })
+              isVisible: false,
+            }
           }
         }"
         @rc-inserted="handleComponentInserted"
-        x-intersect="currentExample = $el.id"
+        x-intersect:enter="examples[$el.id].isVisible = true"
+        x-intersect:leave="examples[$el.id].isVisible = false"
         class="scroll-mt-16"
       >
         <div class="flex flex-col gap-y-6">
