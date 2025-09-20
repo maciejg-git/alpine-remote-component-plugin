@@ -131,3 +131,15 @@ The contents of these elements replace the corresponding `data-slot` elements in
 You can use any element type for `data-slot`. The `data-slot` element's content is used as default slot content if there is no corresponding `data-for-slot`. You can nest `data-slot` elements, however, when an outer `data-slot` is replaced, its inner `data-slot` elements are also replaced and therefore unavailable for further replacement.
 
 The new content can be static or include other components.
+
+## Custom elements
+
+### x-component
+
+The plugin adds a custom `x-component` element. It is optional, and internally works the same as the `x-remote-component` element, but is dedicated to components and allows simpler attributes.
+
+### Custom element components
+
+You can also create dedicated custom elements for specific components. This allows the simplest usage with just a component tag, but it requires an additional step of registering the available components.
+
+Just like the generic `x-component` element, custom element components are optional. You can register them using the `Alpine.$rc.makeCustomElementComponents` function. Each component must define at least the `tag` and `source` properties, while other options such as `trigger` or `swap` are optional.
