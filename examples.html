@@ -14,12 +14,14 @@
     <!-- highlight.js -->
     <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/highlight.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/languages/html.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/languages/javascript.min.js"></script>
     <!-- marked -->
     <script src="https://cdn.jsdelivr.net/npm/marked/lib/marked.umd.js"></script>
     <!-- alpine remote component plugin -->
     <script type="module" defer src="/builds/cdn.js"></script>
     <script defer src="/custom-elements.js"></script>
     <!-- alpine -->
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
     <script
       defer
@@ -39,9 +41,22 @@
     </nav>
 
     <div
-      x-data
+      x-data="{
+        examples: [],
+        currentExample: '',
+      }"
       x-init="document.documentElement.style.setProperty('color-scheme', 'light')"
+      class="flex"
     >
+      <div class="px-10 border-r border-gray-200">
+        <ul class="flex flex-col text-sm gap-y-1 sticky top-20">
+          <template x-for="example in examples">
+            <li :class="{ 'font-semibold': currentExample === example.id }">
+              <a :href="'#' + example.id" x-text="example.title"></a>
+            </li>
+          </template>
+        </ul>
+      </div>
       <div class="mx-auto flex max-w-4xl flex-col gap-y-10 mt-20 mb-20 text-gray-800">
 
         <div x-remote-component="#example" _id="basic-id-component">
@@ -522,6 +537,22 @@
           <template data-for-slot="title"> Custom element components </template>
           <template data-for-slot="text">
             <p class="markdown">You can also create dedicated custom elements for specific components. This allows the simplest usage with just a component tag, but it requires an additional step of registering the available components.</p>
+            <p class="markdown">Just like the generic `x-component` element, custom element components are optional. You can register them using the `Alpine.$rc.makeCustomElementComponents` function. Each component must define at least the `tag` and `source` properties, while other options such as `trigger` or `swap` are optional.</p>
+            <pre class="rounded-xl overflow-hidden text-sm"><code class="language-javascript">document.addEventListener("alpine:init", () =&gt; {
+  let components = [
+    {
+      tag: 'component-a',
+      source: '/examples/components/component-a.html',
+      trigger: 'load',
+    },
+    {
+      tag: 'component-b',
+      source: '/examples/components/component-b.html',
+      trigger: 'load',
+    },
+  ]
+  Alpine.$rc.makeCustomElementComponents(components)
+})</code></pre>
           </template>
           <template data-for-slot="example">
             <div
@@ -547,6 +578,10 @@
 
               this.$nextTick(() => {
                 hljs.highlightElement(this.$refs.code)
+                let code = this.$el.querySelector('.language-javascript')
+                if (code) {
+                  hljs.highlightElement(code)
+                }
               })
             }
           },
@@ -556,15 +591,20 @@
             md.forEach((el) => {
               el.innerHTML = marked.parseInline(el.textContent)
             })
+            examples.push({
+              title: this.$el.querySelector('h2').textContent,
+              id: this.$el.id,
+            })
           }
         }"
         @rc-inserted="handleComponentInserted"
+        x-intersect="currentExample = $el.id"
         class="scroll-mt-16"
       >
         <div class="flex flex-col gap-y-6">
-          <div class="text-xl font-semibold">
+          <h2 class="text-xl font-semibold">
             <div data-slot="title"></div>
-          </div>
+          </h2>
 
           <div class="flex flex-col gap-y-4">
             <div data-slot="text"></div>
