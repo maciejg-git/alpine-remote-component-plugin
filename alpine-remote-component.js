@@ -102,6 +102,7 @@ export default function (Alpine) {
     class GenericComponent extends HTMLElement {
       connectedCallback() {
         renameAttribute(this, "source", "x-remote-component");
+        renameAttribute(this, "rc", "x-rc")
         validOptions.forEach((option) => {
           renameAttribute(this, option, "x-rc:" + option);
         });
