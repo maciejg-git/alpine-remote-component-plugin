@@ -14,6 +14,10 @@
       "process-slots-first": false,
       source: null
     };
+    const globalConfig = {
+      urlPrefix: "",
+      componentPrefix: "x"
+    };
     let validOptions = [
       "trigger",
       "swap",
@@ -90,7 +94,7 @@
           });
         }
       }
-      customElements.define("x-component", GenericComponent);
+      customElements.define(globalConfig.componentPrefix + "-component", GenericComponent);
     };
     let makeCustomElementComponents = (components) => {
       if (!Array.isArray(components)) {
@@ -111,7 +115,7 @@
             });
           }
         }
-        customElements.define("x-" + c.tag, Component);
+        customElements.define(globalConfig.componentPrefix + "-" + c.tag, Component);
       });
     };
     let dispatch = (el, name, detail = {}) => {
@@ -128,7 +132,8 @@
     let isPath = (s) => s[0] === "/";
     let isId = (s) => s[0] === "#";
     Alpine2.$rc = {
-      defaultConfig: { ...defaultConfig },
+      defaultConfig,
+      globalConfig,
       makeCustomElementComponents
     };
     makeGenericComponent();
@@ -155,7 +160,7 @@
           if (isPath(exp)) {
             let html;
             try {
-              html = await sendRequest(exp);
+              html = await sendRequest(globalConfig.urlPrefix + exp);
             } catch (error) {
               data._rcError = error;
               data._rcIsLoading = false;

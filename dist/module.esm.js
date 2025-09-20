@@ -13,6 +13,10 @@ function alpine_remote_component_default(Alpine) {
     "process-slots-first": false,
     source: null
   };
+  const globalConfig = {
+    urlPrefix: "",
+    componentPrefix: "x"
+  };
   let validOptions = [
     "trigger",
     "swap",
@@ -89,7 +93,7 @@ function alpine_remote_component_default(Alpine) {
         });
       }
     }
-    customElements.define("x-component", GenericComponent);
+    customElements.define(globalConfig.componentPrefix + "-component", GenericComponent);
   };
   let makeCustomElementComponents = (components) => {
     if (!Array.isArray(components)) {
@@ -110,7 +114,7 @@ function alpine_remote_component_default(Alpine) {
           });
         }
       }
-      customElements.define("x-" + c.tag, Component);
+      customElements.define(globalConfig.componentPrefix + "-" + c.tag, Component);
     });
   };
   let dispatch = (el, name, detail = {}) => {
@@ -127,7 +131,8 @@ function alpine_remote_component_default(Alpine) {
   let isPath = (s) => s[0] === "/";
   let isId = (s) => s[0] === "#";
   Alpine.$rc = {
-    defaultConfig: { ...defaultConfig },
+    defaultConfig,
+    globalConfig,
     makeCustomElementComponents
   };
   makeGenericComponent();
@@ -154,7 +159,7 @@ function alpine_remote_component_default(Alpine) {
         if (isPath(exp)) {
           let html;
           try {
-            html = await sendRequest(exp);
+            html = await sendRequest(globalConfig.urlPrefix + exp);
           } catch (error) {
             data._rcError = error;
             data._rcIsLoading = false;
