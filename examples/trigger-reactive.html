@@ -10,8 +10,8 @@
 
   <div
     x-remote-component="/examples/components/component-a.html"
-    x-rc:trigger="reactive"
-    x-rc:watch="isLoaded"
+    data-rc-trigger="reactive"
+    data-rc-watch="isLoaded"
   ></div>
 </div>
 
@@ -27,7 +27,7 @@
 
   <div
     x-remote-component="/examples/components/component-b.html"
-    x-rc:trigger="reactive"
+    data-rc-trigger="reactive"
     x-effect="isLoaded && _rc.trigger()"
   ></div>
 </div>

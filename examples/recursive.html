@@ -56,7 +56,7 @@
   <ul x-data="{ c: tree }">
     <li
       x-remote-component="#node"
-      x-rc:swap="inner"
+      data-rc-swap="inner"
       x-data="{ isOpen: true }"
     ></li>
   </ul>
@@ -73,7 +73,7 @@
       <template x-for="c in c.children" :key="c.id">
         <li
           x-remote-component="#node"
-          x-rc:swap="inner"
+          data-rc-swap="inner"
           x-data="{ isOpen: true }"
           class="ml-6 my-1"
         ></li>

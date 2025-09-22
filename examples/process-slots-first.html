@@ -7,8 +7,8 @@
 
 <div
   x-remote-component="/examples/components/component-a.html"
-  x-rc:trigger="event"
-  x-rc:process-slots-first
+  data-rc-trigger="event"
+  data-rc-process-slots-first
   @load-component-slots.window="_rc.trigger"
 >
   <template data-for-slot="content">

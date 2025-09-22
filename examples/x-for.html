@@ -12,7 +12,7 @@
   <template x-for="c in components">
     <div
       x-remote-component="`/examples/components/${c}.html`"
-      x-rc:swap="inner"
+      data-rc-swap="inner"
     ></div>
   </template>
 </div>
@@ -32,7 +32,7 @@
     <div>
       <div
         x-remote-component="`/examples/components/${c}.html`"
-        x-rc:swap="outer"
+        data-rc-swap="outer"
       ></div>
     </div>
   </template>

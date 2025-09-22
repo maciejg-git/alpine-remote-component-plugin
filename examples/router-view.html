@@ -36,7 +36,7 @@
     <template x-if="currentComponent === c">
       <div
         x-remote-component="`/examples/components/${c}.html`"
-        x-rc:swap="inner"
+        data-rc-swap="inner"
       ></div>
     </template>
   </template>
@@ -79,7 +79,7 @@
   <template x-for="c in components">
     <div
       x-remote-component="`/examples/components/${c}.html`"
-      x-rc:swap="inner"
+      data-rc-swap="inner"
       x-show="currentComponent === c"
     ></div>
   </template>
@@ -122,8 +122,8 @@
   <template x-for="c in components">
     <div
       x-remote-component="`/examples/components/${c}.html`"
-      x-rc:trigger="reactive"
-      x-rc:swap="inner"
+      data-rc-trigger="reactive"
+      data-rc-swap="inner"
       x-show="currentComponent === c"
       x-effect="currentComponent === c && _rc.trigger()"
     ></div>

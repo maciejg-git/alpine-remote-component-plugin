@@ -9,7 +9,7 @@
 
 <div
   x-remote-component="/examples/components/component-a.html"
-  x-rc:trigger="event"
+  data-rc-trigger="event"
   @load-component-event.window="_rc.trigger"
 ></div>
 
@@ -30,11 +30,11 @@
 
 <div
   x-remote-component="/examples/components/component-a.html"
-  x-rc:trigger="event"
+  data-rc-trigger="event"
   @load-component-event-detail.window="$event.detail === 'component-a' && _rc.trigger"
 ></div>
 <div
   x-remote-component="/examples/components/component-b.html"
-  x-rc:trigger="event"
+  data-rc-trigger="event"
   @load-component-event-detail.window="$event.detail === 'component-b' && _rc.trigger"
 ></div>
