@@ -156,7 +156,7 @@
         <div x-remote-component="#example" _id="trigger-reactive">
           <template data-for-slot="title"> Trigger - Reactive </template>
           <template data-for-slot="text">
-            <p class="markdown">The `reactive` trigger loads the component when a reactive property changes. Use the `x-rc:watch` directive to define a watched property and automatically react to simple boolean changes. If you need to test for specific value, you can set up your own watcher using the `x-effect` directive or `$watch` magic.</p>
+            <p class="markdown">The `reactive` trigger loads the component when a reactive property changes. Use the `data-rc-watch` attribute to define a watched property and automatically react to simple boolean changes. If you need to test for specific value, you can set up your own watcher using the `x-effect` directive or `$watch` magic.</p>
             <p class="markdown">You can also load and remove a component based on a reactive property by combining the `load` trigger with the `x-if` directive. See the [x-if](#x-if) or [Basic navigation](#router-view) examples.</p>
           </template>
           <template data-for-slot="example">
@@ -214,7 +214,7 @@
         <div x-remote-component="#example" _id="trigger-delay">
           <template data-for-slot="title"> Trigger delay </template>
           <template data-for-slot="text">
-            <p class="markdown">You can delay loading of the component by adding two parameters to the `x-rc:trigger` value:</p>
+            <p class="markdown">You can delay loading of the component by adding two parameters to the `data-rc-trigger` attribute value:</p>
             <ul class="list-disc list-inside">
               <li>delay (ms) before sending the request.</li>
               <li>delay (ms) before inserting the component into the DOM.</li>
@@ -285,25 +285,6 @@
               data-rc-trigger="load 0 500"
               class="w-full"
             ></div>
-          </template>
-        </div>
-
-        <hr class="border-gray-200">
-
-        <div x-remote-component="#example" _id="rc">
-          <template data-for-slot="title"> Dynamic component options </template>
-          <template data-for-slot="text">
-            <p class="markdown">For dynamic component options, use the `x-rc` directive without a property and provide an object as the value.</p>
-          </template>
-          <template data-for-slot="example">
-            <div
-              x-remote-component="/examples/rc.html"
-              data-rc-name="example"
-              data-rc-trigger="load 0 500"
-              class="w-full"
-            >
-              <div x-remote-component="#placeholder"></div>
-            </div>
           </template>
         </div>
 
