@@ -134,6 +134,15 @@ export default function (Alpine) {
     });
   };
 
+  let parseTriggerValue = (s) => {
+    let [trigger, requestDelay = 0, swapDelay = 0] = s.split(" ");
+    return {
+      trigger,
+      requestDelay: parseInt(requestDelay),
+      swapDelay: parseInt(swapDelay),
+    };
+  };
+
   let dispatch = (el, name, detail = {}) => {
     el.dispatchEvent(
       new CustomEvent(name, {
@@ -274,71 +283,52 @@ export default function (Alpine) {
 
       let config = Alpine.$data(el)._rc.config;
 
-      Alpine.nextTick(() => {
-        if (config["process-slots-first"]) {
-          let templates = el.querySelectorAll("[data-for-slot]");
-          templates.forEach((t) => {
-            Array.from(t.content.children).forEach((element) => {
-              Alpine.initTree(element);
-            });
+      validOptions.forEach((option) => {
+        let value = el.getAttribute("data-rc-" + option)
+        if (value !== null) {
+          if (option === "trigger") {
+            let parsed = parseTriggerValue(value)
+            Object.assign(config, parsed)
+            return
+          }
+          if (option === "process-slots-first") {
+            value = true
+          }
+          config[option] = value
+        }
+      })
+
+      if (config["process-slots-first"]) {
+        let templates = el.querySelectorAll("[data-for-slot]");
+        templates.forEach((t) => {
+          Array.from(t.content.children).forEach((element) => {
+            Alpine.initTree(element);
+          });
+        });
+      }
+
+      dispatch(el, "rc-initialized", Alpine.$data(el)._rc);
+
+      if (config.trigger === "reactive" && config.watch) {
+        let watched = evaluate(config.watch);
+        if (watched) {
+          initRemoteComponent();
+        } else {
+          Alpine.$data(el).$watch(config.watch, (value) => {
+            if (value) {
+              initRemoteComponent();
+            }
           });
         }
+      }
 
-        dispatch(el, "rc-initialized", Alpine.$data(el)._rc);
-
-        if (config.trigger === "reactive" && config.watch) {
-          let watched = evaluate(config.watch);
-          if (watched) {
-            initRemoteComponent();
-          } else {
-            Alpine.$data(el).$watch(config.watch, (value) => {
-              if (value) {
-                initRemoteComponent();
-              }
-            });
-          }
-        }
-
-        if (config.trigger === "load") {
-          initRemoteComponent();
-        }
-      });
+      if (config.trigger === "load") {
+        initRemoteComponent();
+      }
 
       cleanup(() => {
         scopeCleanup.forEach((c) => c());
       });
     }
   ).before("show");
-
-  Alpine.directive("rc", (el, { value, expression }, { evaluate }) => {
-    let parseTriggerValue = (s) => {
-      let [trigger, requestDelay = 0, swapDelay = 0] = s.split(" ");
-      return {
-        trigger,
-        requestDelay: parseInt(requestDelay),
-        swapDelay: parseInt(swapDelay),
-      };
-    };
-
-    let exp = expression;
-    let config = Alpine.$data(el)._rc.config;
-    if (value === null) {
-      let newConfig = { ...evaluate(exp) };
-      if (newConfig.trigger) {
-        let parsed = parseTriggerValue(newConfig.trigger);
-        newConfig = Object.assign(newConfig, parsed);
-      }
-      config = Object.assign(config, defaultConfig, newConfig);
-      return;
-    }
-    if (value === "process-slots-first") {
-      exp = true;
-    }
-    if (value === "trigger") {
-      let parsed = parseTriggerValue(exp);
-      config = Object.assign(config, parsed);
-      return;
-    }
-    config[value] = exp;
-  });
 }
