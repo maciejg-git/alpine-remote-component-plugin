@@ -16,8 +16,6 @@ CDN:
 
 ## Usage
 
-The plugin defines two directives.
-
 ### Directives
 
 `x-remote-component` - the main directive that defines the component source. Valid values are:
@@ -43,42 +41,20 @@ This directive does not use argument or modifiers.
 </div>
 ```
 
-`x-rc` - a directive used to set component options:
+The component options can be set using the `data-rc-*` attributes:
 
-- `x-rc:name` - sets the component name. Optional, but can be useful in event listeners for identification. Default: `''`.
-- `x-rc:swap` - specifies how the component is inserted. Valid values: `inner` and `outer`. Default: `outer`.
-- `x-rc:trigger` - defines when the component should load. Valid triggers: `load`, `event`, `reactive`, `intersect` and `custom`. Default: `load`.
-- `x-rc:watch` - used only with the `reactive` trigger. The value is the property name to watch.
-- `x-rc:process-slots-first` - if enabled, Alpine is initialized inside `data-for-slot` template elements before the main component is loaded. Default: `false`.
-
-This directive does not use modifiers.
+- `data-rc-name` - sets the component name. Optional, but can be useful in event listeners for identification. Default: `''`.
+- `data-rc-swap` - specifies how the component is inserted. Valid values: `inner` and `outer`. Default: `outer`.
+- `data-rc-triger` - defines when the component should load. Valid triggers: `load`, `event`, `reactive`, `intersect` and `custom`. Default: `load`.
+- `data-rc-watch` - used only with the `reactive` trigger. The value is the property name to watch.
+- `data-rc-process-slots-first` - if enabled, Alpine is initialized inside `data-for-slot` template elements before the main component is loaded. Default: `false`.
 
 ```html
 <div 
   x-remote-component="#component-a"
-  x-rc:name="Component A"
-  x-rc:swap="inner"
+  data-rc-name="Component A"
+  data-rc-swap="inner"
 >
-</div>
-```
-
-You can also use `x-rc` without a property to set all options from an object, similar to the native `x-bind` directive.
-
-```html
-<div
-  x-data="{
-    component: 'component-a',
-    options: {
-      name: 'Component A',
-      trigger: 'load',
-      swap: 'inner',
-    }
-  }"
->
-  <div
-    x-remote-component="`/examples/components/${component}.html`"
-    x-rc="options"
-  ></div>
 </div>
 ```
 
