@@ -263,6 +263,8 @@ export default function (Alpine) {
 
         config.initialized = true;
         config.isRunning = false;
+
+        Alpine.initTree(el)
       };
 
       let scopeCleanup = [
