@@ -6,6 +6,7 @@
   @rc-before-load="events.push($event)"
   @rc-loaded="events.push($event)"
   @rc-loaded-with-delay="events.push($event)"
+  @rc-before-insert="events.push($event)"
   @rc-inserted="events.push($event)"
   class="flex flex-col gap-y-4 items-center"
 >
@@ -18,7 +19,7 @@
 
   <div
     x-remote-component="/examples/components/component-a.html"
-    data-rc-triger="event 500 1000"
+    data-rc-trigger="event 500 1000"
     @load-component-events.window="_rc.trigger"
   ></div>
 
