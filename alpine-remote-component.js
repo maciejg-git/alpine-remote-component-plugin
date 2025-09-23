@@ -244,6 +244,8 @@ export default function (Alpine) {
 
           copyAttributes(el, fragment.firstElementChild);
 
+          dispatch(el, "rc-before-insert", config)
+
           if (config.swap === "inner") {
             el.replaceChildren(fragment);
 
