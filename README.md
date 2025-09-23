@@ -75,6 +75,8 @@ The plugin dispatches the following events to notify the page about component st
     - `config` object
 - `rc-loaded-with-delay` - after a successful fetch including the delay. Detail:
     - `config` object
+- `rc-before-insert` - before the component fragment is inserted into the DOM. Detail:
+    - `config` object
 - `rc-inserted` - after the component fragment has been inserted into the DOM. Detail:
     - `config` object
 - `rc-error` - after an error. Detail:
@@ -88,6 +90,7 @@ The plugin adds the following properties to the component element's Alpine data:
 - `_rc` - contains the `config` object and the `trigger` function
 - `_rcIsLoading` - reactive property, `true` during the request
 - `_rcIsLoadingWithDelay` - same as `_rcIsLoading`, but also includes `swapDelay`
+- `_rcIsLoaded` - reactive property that is `true` after the component is inserted into the DOM
 - `_rcError` - reactive property storing the last error
 
 These can be used inside the component, for example to show loading indicators or error messages.
