@@ -24,6 +24,7 @@ export default function (Alpine) {
     "watch",
     "name",
     "process-slots-first",
+    "script"
   ];
 
   let sendRequest = async (url) => {
@@ -102,9 +103,8 @@ export default function (Alpine) {
     class GenericComponent extends HTMLElement {
       connectedCallback() {
         renameAttribute(this, "source", "x-remote-component");
-        renameAttribute(this, "rc", "x-rc")
         validOptions.forEach((option) => {
-          renameAttribute(this, option, "x-rc:" + option);
+          renameAttribute(this, option, "data-rc-" + option);
         });
       }
     }
@@ -124,9 +124,9 @@ export default function (Alpine) {
           this.setAttribute("x-remote-component", c.source);
           validOptions.forEach((option) => {
             if (c[option] !== undefined) {
-              this.setAttribute("x-rc:" + option, c[option]);
+              this.setAttribute("data-rc-" + option, c[option]);
             }
-            renameAttribute(this, option, "x-rc:" + option);
+            renameAttribute(this, option, "data-rc-" + option);
           });
         }
       }
@@ -194,12 +194,16 @@ export default function (Alpine) {
         data._rcIsLoadingWithDelay = true;
 
         let parsed;
+        let script
 
         if (isPath(exp)) {
           let html;
 
           try {
-            html = await sendRequest(globalConfig.urlPrefix + exp);
+            [html, script] = await Promise.all([
+              sendRequest(globalConfig.urlPrefix + exp),
+              config.script && import(config.script)
+            ])
 
             data._rcError = null;
             data._rcIsLoading = false;
@@ -243,6 +247,10 @@ export default function (Alpine) {
           swapSlotsWithTemplates(el, fragment);
 
           copyAttributes(el, fragment.firstElementChild);
+
+          if (script && script.default) {
+            Alpine.plugin(script.default)
+          }
 
           dispatch(el, "rc-before-insert", config)
 
