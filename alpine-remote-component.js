@@ -200,6 +200,15 @@ export default function (Alpine) {
 
           try {
             html = await sendRequest(globalConfig.urlPrefix + exp);
+
+            data._rcError = null;
+            data._rcIsLoading = false;
+
+            config.responseHTML = html;
+
+            dispatch(el, "rc-loaded", config);
+
+            parsed = parseResponse(html);
           } catch (error) {
             data._rcError = error;
             data._rcIsLoading = false;
@@ -208,15 +217,6 @@ export default function (Alpine) {
             dispatch(el, "rc-error", { error, config });
             return;
           }
-
-          data._rcError = null;
-          data._rcIsLoading = false;
-
-          config.responseHTML = html;
-
-          dispatch(el, "rc-loaded", config);
-
-          parsed = parseResponse(html);
         }
 
         if (config.swapDelay) {
