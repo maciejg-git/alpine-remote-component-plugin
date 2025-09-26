@@ -57,7 +57,7 @@ it("load trigger", async () => {
   document.body.innerHTML = `
     <div
       x-remote-component="/component-a.html"
-      x-rc:trigger="load"
+      data-rc-trigger="load"
     ></div>
   `;
 
@@ -70,7 +70,7 @@ it("event trigger", async () => {
   document.body.innerHTML = `
     <div
       x-remote-component="/component-a.html"
-      x-rc:trigger="event"
+      data-rc-trigger="event"
       @load-component.window="_rc.trigger"
     ></div>
   `;
@@ -82,13 +82,13 @@ it("event trigger", async () => {
   expect(await screen.findByText("component-a")).toBeInTheDocument();
 });
 
-it("reactive trigger, x-rc:watch true", async () => {
+it("reactive trigger, data-rc-watch true", async () => {
   document.body.innerHTML = `
     <div x-data="{ isVisible: true }">
       <div
         x-remote-component="/component-a.html"
-        x-rc:trigger="reactive"
-        x-rc:watch="isVisible"
+        data-rc-trigger="reactive"
+        data-rc-watch="isVisible"
       >
       </div>
     </div>
@@ -99,7 +99,7 @@ it("reactive trigger, x-rc:watch true", async () => {
   expect(await screen.findByText("component-a")).toBeInTheDocument();
 });
 
-it("reactive trigger, x-rc:watch false", async () => {
+it("reactive trigger, data-rc-watch false", async () => {
   document.body.innerHTML = `
     <div
       x-data="{ 
@@ -111,8 +111,8 @@ it("reactive trigger, x-rc:watch false", async () => {
     >
       <div
         x-remote-component="/component-a.html"
-        x-rc:trigger="reactive"
-        x-rc:watch="isVisible"
+        data-rc-trigger="reactive"
+        data-rc-watch="isVisible"
       >
       </div>
     </div>
@@ -127,8 +127,8 @@ it("swap outer", async () => {
   document.body.innerHTML = `
     <div
       x-remote-component="/component-a.html"
-      x-rc:trigger="load"
-      x-rc:swap="outer"
+      data-rc-trigger="load"
+      data-rc-swap="outer"
     ></div>
   `;
 
@@ -143,8 +143,8 @@ it("swap inner", async () => {
   document.body.innerHTML = `
     <div
       x-remote-component="/component-a.html"
-      x-rc:trigger="load"
-      x-rc:swap="inner"
+      data-rc-trigger="load"
+      data-rc-swap="inner"
     ></div>
   `;
 
@@ -157,8 +157,11 @@ it("swap inner", async () => {
 
 it("shows content when _rcIsLoading changes", async () => {
   document.body.innerHTML = `
+    <style>
+      [x-cloak] { display: none !important; }
+    </style>
     <div x-remote-component="/component-a.html">
-      <div x-show="_rcIsLoading">
+      <div x-show="_rcIsLoading" x-cloak>
         loading
       </div>
     </div>
@@ -333,7 +336,7 @@ it("request delay", async () => {
   document.body.innerHTML = `
     <div
       x-remote-component="/component-a.html"
-      x-rc:trigger="load 500 0"
+      data-rc-trigger="load 500 0"
     ></div>
   `;
 
@@ -349,7 +352,7 @@ it("swap delay", async () => {
   document.body.innerHTML = `
     <div
       x-remote-component="/component-a.html"
-      x-rc:trigger="load 0 500"
+      data-rc-trigger="load 0 500"
     ></div>
   `;
 
