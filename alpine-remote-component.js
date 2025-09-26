@@ -11,6 +11,7 @@ export default function (Alpine) {
     swapDelay: 0,
     "process-slots-first": false,
     source: null,
+    script: "",
   };
 
   const globalConfig = {
@@ -52,7 +53,7 @@ export default function (Alpine) {
   let queryAllWithDataSlot = (el) => {
     let res = Array.from(el.querySelectorAll("[data-slot]"));
 
-    el.querySelectorAll("template").forEach((t) => {
+    el.querySelectorAll("template:not([id])").forEach((t) => {
       res.push(...queryAllWithDataSlot(t.content));
     });
 
