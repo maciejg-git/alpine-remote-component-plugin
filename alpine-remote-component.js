@@ -16,7 +16,7 @@ export default function (Alpine) {
   const globalConfig = {
     urlPrefix: "",
     componentPrefix: "x",
-  }
+  };
 
   let validOptions = [
     "trigger",
@@ -24,7 +24,7 @@ export default function (Alpine) {
     "watch",
     "name",
     "process-slots-first",
-    "script"
+    "script",
   ];
 
   let sendRequest = async (url) => {
@@ -108,7 +108,10 @@ export default function (Alpine) {
         });
       }
     }
-    customElements.define(globalConfig.componentPrefix + "-component", GenericComponent);
+    customElements.define(
+      globalConfig.componentPrefix + "-component",
+      GenericComponent
+    );
   };
 
   let makeCustomElementComponents = (components) => {
@@ -130,7 +133,10 @@ export default function (Alpine) {
           });
         }
       }
-      customElements.define(globalConfig.componentPrefix + "-" + c.tag, Component);
+      customElements.define(
+        globalConfig.componentPrefix + "-" + c.tag,
+        Component
+      );
     });
   };
 
@@ -194,7 +200,7 @@ export default function (Alpine) {
         data._rcIsLoadingWithDelay = true;
 
         let parsed;
-        let script
+        let script;
 
         if (isPath(exp)) {
           let html;
@@ -202,8 +208,8 @@ export default function (Alpine) {
           try {
             [html, script] = await Promise.all([
               sendRequest(globalConfig.urlPrefix + exp),
-              config.script && import(config.script)
-            ])
+              config.script && import(config.script),
+            ]);
 
             data._rcError = null;
             data._rcIsLoading = false;
@@ -249,10 +255,10 @@ export default function (Alpine) {
           copyAttributes(el, fragment.firstElementChild);
 
           if (script && script.default) {
-            Alpine.plugin(script.default)
+            Alpine.plugin(script.default);
           }
 
-          dispatch(el, "rc-before-insert", config)
+          dispatch(el, "rc-before-insert", config);
 
           if (config.swap === "inner") {
             el.replaceChildren(fragment);
@@ -272,7 +278,7 @@ export default function (Alpine) {
         config.initialized = true;
         config.isRunning = false;
 
-        Alpine.initTree(el)
+        Alpine.initTree(el);
       };
 
       let scopeCleanup = [
@@ -296,19 +302,19 @@ export default function (Alpine) {
       let config = Alpine.$data(el)._rc.config;
 
       validOptions.forEach((option) => {
-        let value = el.getAttribute("data-rc-" + option)
+        let value = el.getAttribute("data-rc-" + option);
         if (value !== null) {
           if (option === "trigger") {
-            let parsed = parseTriggerValue(value)
-            Object.assign(config, parsed)
-            return
+            let parsed = parseTriggerValue(value);
+            Object.assign(config, parsed);
+            return;
           }
           if (option === "process-slots-first") {
-            value = true
+            value = true;
           }
-          config[option] = value
+          config[option] = value;
         }
-      })
+      });
 
       if (config["process-slots-first"]) {
         let templates = el.querySelectorAll("[data-for-slot]");
