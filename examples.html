@@ -551,7 +551,16 @@
         <div x-remote-component="#example" _id="script">
           <template data-for-slot="title"> Importing scripts </template>
           <template data-for-slot="text">
-            <p class="markdown"></p>
+            <p class="markdown">If your component data, directives, or magics are defined in a separate file, you can import them and make them available to the component using the `data-rc-script` attribute. The imported file should be compatible with the [Alpine plugin API](https://alpinejs.dev/advanced/extending#bundle-module).</p>
+            <pre class="rounded-xl overflow-hidden text-sm"><code class="language-javascript">// component-script.js
+
+export default function (Alpine) {
+  Alpine.data("component", () =&gt; {
+    return {
+      content: "Reusable component data"
+    }
+  })
+}</code></pre>
           </template>
           <template data-for-slot="example">
             <div
