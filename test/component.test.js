@@ -421,3 +421,31 @@ it("custom element component short options", async () => {
 
   expect(document.querySelector("x-component-a")).toBeInTheDocument()
 });
+
+it("swaps data-slot inside template elements", async () => {
+  document.body.innerHTML = `
+    <div x-remote-component="#component">
+      <template data-for-slot="content">
+        component-content
+      </template>
+    </div>
+
+    <template id="component">
+      <div x-data="{isVisible: true}">
+        <template x-if="isVisible">
+          <div>
+            component-a
+            <div>
+              <div data-slot="content"></div>
+            </div>
+          </div>
+        </template>
+      </div>
+    </template>
+  `;
+
+  Alpine.initTree(document.body);
+
+  expect(await screen.findByText("component-a")).toBeInTheDocument();
+  expect(await screen.findByText("component-content")).toBeInTheDocument();
+});
