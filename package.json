@@ -7,7 +7,7 @@
   },
   "scripts": {
     "tailwind": "npx @tailwindcss/cli -i ./input.css -o ./output.css --watch",
-    "dev": "npx @11ty/eleventy-dev-server",
+    "dev": "npx @11ty/eleventy-dev-server --port=8083",
     "build": "node scripts/build.js",
     "test": "vitest"
   },
