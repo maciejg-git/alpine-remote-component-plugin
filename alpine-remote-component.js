@@ -209,7 +209,7 @@ export default function (Alpine) {
           try {
             [html, script] = await Promise.all([
               sendRequest(globalConfig.urlPrefix + exp),
-              config.script && import(config.script),
+              config.script && import(globalConfig.urlPrefix + config.script),
             ]);
 
             data._rcError = null;
