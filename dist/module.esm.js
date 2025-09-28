@@ -11,7 +11,8 @@ function alpine_remote_component_default(Alpine) {
     requestDelay: 0,
     swapDelay: 0,
     "process-slots-first": false,
-    source: null
+    source: null,
+    script: ""
   };
   const globalConfig = {
     urlPrefix: "",
@@ -22,7 +23,8 @@ function alpine_remote_component_default(Alpine) {
     "swap",
     "watch",
     "name",
-    "process-slots-first"
+    "process-slots-first",
+    "script"
   ];
   let sendRequest = async (url) => {
     try {
@@ -45,7 +47,7 @@ function alpine_remote_component_default(Alpine) {
   };
   let queryAllWithDataSlot = (el) => {
     let res = Array.from(el.querySelectorAll("[data-slot]"));
-    el.querySelectorAll("template").forEach((t) => {
+    el.querySelectorAll("template:not([id])").forEach((t) => {
       res.push(...queryAllWithDataSlot(t.content));
     });
     return res;
@@ -88,13 +90,15 @@ function alpine_remote_component_default(Alpine) {
     class GenericComponent extends HTMLElement {
       connectedCallback() {
         renameAttribute(this, "source", "x-remote-component");
-        renameAttribute(this, "rc", "x-rc");
         validOptions.forEach((option) => {
-          renameAttribute(this, option, "x-rc:" + option);
+          renameAttribute(this, option, "data-rc-" + option);
         });
       }
     }
-    customElements.define(globalConfig.componentPrefix + "-component", GenericComponent);
+    customElements.define(
+      globalConfig.componentPrefix + "-component",
+      GenericComponent
+    );
   };
   let makeCustomElementComponents = (components) => {
     if (!Array.isArray(components)) {
@@ -109,13 +113,16 @@ function alpine_remote_component_default(Alpine) {
           this.setAttribute("x-remote-component", c.source);
           validOptions.forEach((option) => {
             if (c[option] !== void 0) {
-              this.setAttribute("x-rc:" + option, c[option]);
+              this.setAttribute("data-rc-" + option, c[option]);
             }
-            renameAttribute(this, option, "x-rc:" + option);
+            renameAttribute(this, option, "data-rc-" + option);
           });
         }
       }
-      customElements.define(globalConfig.componentPrefix + "-" + c.tag, Component);
+      customElements.define(
+        globalConfig.componentPrefix + "-" + c.tag,
+        Component
+      );
     });
   };
   let parseTriggerValue = (s) => {
@@ -165,10 +172,19 @@ function alpine_remote_component_default(Alpine) {
         data._rcIsLoading = true;
         data._rcIsLoadingWithDelay = true;
         let parsed;
+        let script;
         if (isPath(exp)) {
           let html;
           try {
-            html = await sendRequest(globalConfig.urlPrefix + exp);
+            [html, script] = await Promise.all([
+              sendRequest(globalConfig.urlPrefix + exp),
+              config.script && import(globalConfig.urlPrefix + config.script)
+            ]);
+            data._rcError = null;
+            data._rcIsLoading = false;
+            config.responseHTML = html;
+            dispatch(el, "rc-loaded", config);
+            parsed = parseResponse(html);
           } catch (error) {
             data._rcError = error;
             data._rcIsLoading = false;
@@ -177,11 +193,6 @@ function alpine_remote_component_default(Alpine) {
             dispatch(el, "rc-error", { error, config });
             return;
           }
-          data._rcError = null;
-          data._rcIsLoading = false;
-          config.responseHTML = html;
-          dispatch(el, "rc-loaded", config);
-          parsed = parseResponse(html);
         }
         if (config.swapDelay) {
           await delay(config.swapDelay);
@@ -202,12 +213,18 @@ function alpine_remote_component_default(Alpine) {
         if (fragment) {
           swapSlotsWithTemplates(el, fragment);
           copyAttributes(el, fragment.firstElementChild);
+          if (script && script.default) {
+            Alpine.plugin(script.default);
+          }
+          dispatch(el, "rc-before-insert", config);
           if (config.swap === "inner") {
             el.replaceChildren(fragment);
+            Alpine.initTree(el);
             dispatch(el, "rc-inserted", config);
           } else if (config.swap === "outer") {
-            let fragmentFirstChild = fragment.firstChild;
+            let fragmentFirstChild = fragment.firstElementChild;
             el.replaceWith(fragment);
+            Alpine.initTree(fragmentFirstChild);
             dispatch(fragmentFirstChild, "rc-inserted", config);
           }
         }
