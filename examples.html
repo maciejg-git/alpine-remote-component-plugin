@@ -310,6 +310,7 @@
           <template data-for-slot="title"> x-if </template>
           <template data-for-slot="text">
             <p class="markdown">The `x-if` directive requires a single root element, so you need to use the inner swap option or wrap the component in an additional element.</p>
+            <p class="markdown">Putting the component inside an `x-if` template can be useful for removing or reloading it, since components normally load only once, even if `_rc.trigger` is called multiple times.</p>
           </template>
           <template data-for-slot="example">
             <div
@@ -437,6 +438,9 @@
 
         <div x-remote-component="#example" _id="router-view">
           <template data-for-slot="title"> Basic navigation </template>
+          <template data-for-slot="text">
+            <p class="markdown">This example shows how to create simple navigation between components by combining `x-if`, `x-show`, and `x-for` templates.</p>
+          </template>
           <template data-for-slot="example">
             <div
               x-remote-component="/examples/router-view.html"
@@ -585,10 +589,11 @@ export default function (Alpine) {
               this.html = this.$event.detail.responseHTML
 
               this.$nextTick(() => {
-                hljs.highlightElement(this.$refs.code)
-                let code = this.$el.querySelector('.language-javascript')
-                if (code) {
-                  hljs.highlightElement(code)
+                let code = this.$el.querySelectorAll('.language-javascript, .language-html')
+                if (code.length) {
+                  code.forEach((el) => {
+                    hljs.highlightElement(el)
+                  })
                 }
               })
             }
@@ -620,7 +625,7 @@ export default function (Alpine) {
             <div data-slot="text"></div>
           </div>
 
-          <pre class="rounded-xl overflow-hidden text-sm"><code class="language-html" x-text="html" x-ref="code">
+          <pre class="rounded-xl overflow-hidden text-sm"><code class="language-html" x-text="html">
           </code></pre>
 
           <div class="flex flex-col gap-y-4 items-center">
