@@ -264,11 +264,15 @@ export default function (Alpine) {
           if (config.swap === "inner") {
             el.replaceChildren(fragment);
 
+            Alpine.initTree(el);
+
             dispatch(el, "rc-inserted", config);
           } else if (config.swap === "outer") {
-            let fragmentFirstChild = fragment.firstChild;
+            let fragmentFirstChild = fragment.firstElementChild;
 
             el.replaceWith(fragment);
+
+            Alpine.initTree(fragmentFirstChild);
 
             dispatch(fragmentFirstChild, "rc-inserted", config);
           }
@@ -278,8 +282,6 @@ export default function (Alpine) {
 
         config.initialized = true;
         config.isRunning = false;
-
-        Alpine.initTree(el);
       };
 
       let scopeCleanup = [
