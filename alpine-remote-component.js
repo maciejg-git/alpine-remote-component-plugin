@@ -264,17 +264,17 @@ export default function (Alpine) {
           if (config.swap === "inner") {
             el.replaceChildren(fragment);
 
-            Alpine.initTree(el);
-
             dispatch(el, "rc-inserted", config);
+
+            Alpine.initTree(el);
           } else if (config.swap === "outer") {
             let fragmentFirstChild = fragment.firstElementChild;
 
             el.replaceWith(fragment);
 
-            Alpine.initTree(fragmentFirstChild);
-
             dispatch(fragmentFirstChild, "rc-inserted", config);
+
+            Alpine.initTree(fragmentFirstChild);
           }
         }
 
