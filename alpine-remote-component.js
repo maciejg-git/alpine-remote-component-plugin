@@ -16,7 +16,7 @@ export default function (Alpine) {
 
   const globalConfig = {
     urlPrefix: "",
-    componentPrefix: "x",
+    componentPrefix: Alpine.prefixed(),
   };
 
   let validOptions = [
@@ -38,7 +38,7 @@ export default function (Alpine) {
     }
   };
 
-  let parseResponse = (html) => {
+  let parseResponseHtml = (html) => {
     const parser = new DOMParser();
     return parser.parseFromString(
       `<body><template>${html}</template></body>`,
@@ -75,6 +75,8 @@ export default function (Alpine) {
   };
 
   let swapSlotsWithTemplates = (el, fragment) => {
+    // data-slot elements can be inside Alpine x-if or x-for templates
+    // so we need to query inside them too
     let slots = queryAllWithDataSlot(fragment);
 
     slots.forEach((t) => {
@@ -110,7 +112,7 @@ export default function (Alpine) {
       }
     }
     customElements.define(
-      globalConfig.componentPrefix + "-component",
+      globalConfig.componentPrefix + "component",
       GenericComponent
     );
   };
@@ -135,7 +137,7 @@ export default function (Alpine) {
         }
       }
       customElements.define(
-        globalConfig.componentPrefix + "-" + c.tag,
+        globalConfig.componentPrefix + c.tag,
         Component
       );
     });
@@ -200,7 +202,7 @@ export default function (Alpine) {
         data._rcIsLoading = true;
         data._rcIsLoadingWithDelay = true;
 
-        let parsed;
+        let parsedHtml;
         let script;
 
         if (isPath(exp)) {
@@ -219,7 +221,7 @@ export default function (Alpine) {
 
             dispatch(el, "rc-loaded", config);
 
-            parsed = parseResponse(html);
+            parsedHtml = parseResponseHtml(html);
           } catch (error) {
             data._rcError = error;
             data._rcIsLoading = false;
@@ -239,7 +241,7 @@ export default function (Alpine) {
         data._rcIsLoadingWithDelay = false;
 
         if (isPath(exp)) {
-          fragment = parsed.querySelector("template")?.content;
+          fragment = parsedHtml.querySelector("template")?.content;
         } else if (isId(exp)) {
           fragment = document.querySelector(exp)?.content.cloneNode(true);
           if (!fragment) {
@@ -269,12 +271,15 @@ export default function (Alpine) {
             Alpine.initTree(el);
           } else if (config.swap === "outer") {
             let fragmentFirstChild = fragment.firstElementChild;
+            let fragmentChildren = [...fragment.children]
 
             el.replaceWith(fragment);
 
             dispatch(fragmentFirstChild, "rc-inserted", config);
 
-            Alpine.initTree(fragmentFirstChild);
+            fragmentChildren.forEach((el) => {
+              Alpine.initTree(el);
+            })
           }
         }
 
