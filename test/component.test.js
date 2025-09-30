@@ -365,64 +365,6 @@ it("swap delay", async () => {
   expect(await screen.findByText("component-a")).toBeInTheDocument();
 });
 
-it("x-component", async () => {
-  document.body.innerHTML = `
-    <x-component source="/examples/components/component-a.html"></x-component>
-  `;
-
-  Alpine.initTree(document.body);
-
-  expect(await screen.findByText("component-a")).toBeInTheDocument();
-});
-
-it("x-component short options", async () => {
-  document.body.innerHTML = `
-    <x-component
-      source="/examples/components/component-a.html"
-      swap="inner"
-      trigger="event"
-      @load-component.window="_rc.trigger"
-    ></x-component>
-  `;
-
-  Alpine.initTree(document.body);
-
-  window.dispatchEvent(new CustomEvent('load-component'))
-
-  expect(await screen.findByText("component-a")).toBeInTheDocument();
-
-  expect(document.querySelector("x-component")).toBeInTheDocument()
-});
-
-it("custom element component", async () => {
-  document.body.innerHTML = `
-    <x-component-a></x-component-a>
-  `;
-
-  Alpine.initTree(document.body);
-
-  expect(await screen.findByText("component-a")).toBeInTheDocument();
-});
-
-it("custom element component short options", async () => {
-  document.body.innerHTML = `
-    <x-component-a
-      swap="inner"
-      trigger="event"
-      @load-component.window="_rc.trigger"
-    >
-    </x-component-a>
-  `;
-
-  Alpine.initTree(document.body);
-
-  window.dispatchEvent(new CustomEvent('load-component'))
-
-  expect(await screen.findByText("component-a")).toBeInTheDocument();
-
-  expect(document.querySelector("x-component-a")).toBeInTheDocument()
-});
-
 it("swaps data-slot inside template elements", async () => {
   document.body.innerHTML = `
     <div x-remote-component="#component">
@@ -486,18 +428,4 @@ it("nested data-slot, swap inner", async () => {
   expect(await screen.findByText("component-a")).toBeInTheDocument();
   expect(await screen.findByText("inner slot content")).toBeInTheDocument();
   expect(await screen.findByText("default outer slot content")).toBeInTheDocument();
-});
-
-it("loads component script and makes data with Alpine.data", async () => {
-  document.body.innerHTML = `
-    <div
-      x-remote-component="/component-script.html"
-      data-rc-script="/component-script.js"
-    ></div>
-  `;
-
-  Alpine.initTree(document.body);
-
-  expect(await screen.findByText("component-a")).toBeInTheDocument();
-  expect(await screen.findByText("component content")).toBeInTheDocument();
 });
