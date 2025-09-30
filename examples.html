@@ -20,6 +20,7 @@
     <!-- alpine remote component plugin -->
     <script type="module" defer src="/builds/cdn.js"></script>
     <script defer src="/custom-elements.js"></script>
+    <script defer src="/examples.js"></script>
     <!-- alpine -->
     <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
@@ -351,6 +352,7 @@
             <p class="markdown">The contents of template elements marked with `data-for-slot` attribute replace the corresponding `data-slot` elements in the component. This provides functionality similar to slots and enhances the reusability of components.</p>
             <p class="markdown">The new content can be static or include other components.</p>
             <p class="markdown">You can use any element type for `data-slot`. The `data-slot` element's content is used as default slot content if there is no corresponding `data-for-slot`. You can nest `data-slot` elements, however, when an outer `data-slot` is replaced, its inner `data-slot` elements are also replaced and therefore unavailable for further replacement.</p>
+            <p class="markdown">You can omit the slot name in `data-slot` and `data-for-slot` for the component’s default slot.</p>
           </template>
           <template data-for-slot="example">
             <div
@@ -555,7 +557,7 @@
         <div x-remote-component="#example" _id="script">
           <template data-for-slot="title"> Importing scripts </template>
           <template data-for-slot="text">
-            <p class="markdown">If your component data, directives, or magics are defined in a separate file, you can import them and make them available to the component using the `data-rc-script` attribute. The imported file should be compatible with the [Alpine plugin API](https://alpinejs.dev/advanced/extending#bundle-module).</p>
+            <p class="markdown">If your component data is defined with the `Alpine.data` function in a separate file, you can import it and make it available to the component using the `data-rc-script` attribute. The imported file should be compatible with the [Alpine plugin API](https://alpinejs.dev/advanced/extending#bundle-module).</p>
             <pre class="rounded-xl overflow-hidden text-sm"><code class="language-javascript">// component-script.js
 
 export default function (Alpine) {
@@ -582,35 +584,7 @@ export default function (Alpine) {
 
     <template id="example">
       <div
-        x-data="{
-          html: '',
-          handleComponentInserted() {
-            if (this.$event.detail.name === 'example') {
-              this.html = this.$event.detail.responseHTML
-
-              this.$nextTick(() => {
-                let code = this.$el.querySelectorAll('.language-javascript, .language-html')
-                if (code.length) {
-                  code.forEach((el) => {
-                    hljs.highlightElement(el)
-                  })
-                }
-              })
-            }
-          },
-          init() {
-            let md = this.$el.querySelectorAll('.markdown')
-
-            md.forEach((el) => {
-              el.innerHTML = marked.parseInline(el.textContent)
-            })
-            examples[this.$el.id] = {
-              title: this.$el.querySelector('h2').textContent,
-              id: this.$el.id,
-              isVisible: false,
-            }
-          }
-        }"
+        x-data="example"
         @rc-inserted="handleComponentInserted"
         x-intersect:enter="examples[$el.id].isVisible = true"
         x-intersect:leave="examples[$el.id].isVisible = false"
