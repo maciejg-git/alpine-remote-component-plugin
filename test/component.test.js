@@ -174,7 +174,7 @@ it("shows content when _rcIsLoading changes", async () => {
   expect(await screen.findByText("component-a")).toBeInTheDocument();
 });
 
-it("data-slot default content", async () => {
+it("data-slot default slot content", async () => {
   document.body.innerHTML = `
     <div x-remote-component="/component-a.html">
     </div>
@@ -184,6 +184,22 @@ it("data-slot default content", async () => {
 
   expect(await screen.findByText("component-a")).toBeInTheDocument();
   expect(await screen.findByText("default slot content")).toBeInTheDocument();
+  expect(document.querySelector("div[data-slot]")).not.toBeInTheDocument()
+});
+
+it("data-slot default slot", async () => {
+  document.body.innerHTML = `
+    <div x-remote-component="/component-default-slot.html">
+      <template data-for-slot>
+        new default slot content
+      </template>
+    </div>
+  `;
+
+  Alpine.initTree(document.body);
+
+  expect(await screen.findByText("component-a")).toBeInTheDocument();
+  expect(await screen.findByText("new default slot content")).toBeInTheDocument();
   expect(document.querySelector("div[data-slot]")).not.toBeInTheDocument()
 });
 

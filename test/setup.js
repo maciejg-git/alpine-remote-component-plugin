@@ -23,6 +23,22 @@ let componentB = `
   </div>
 `
 
+let componentDefaultSlot = `
+  <div class="class2 class3 class4">
+    component-a
+    <div>
+      <div data-slot>
+        default slot
+      </div>
+    </div>
+    <div>
+      <div data-slot="content">
+        content slot
+      </div>
+    </div>
+  </div>
+`
+
 let componentNestedSlots = `
   <div class="class2 class3 class4">
     component-a
@@ -58,6 +74,12 @@ beforeAll(() => {
       return {
         ok: true,
         text: async () => componentB,
+      }
+    }
+    if (url.endsWith('/component-default-slot.html')) {
+      return {
+        ok: true,
+        text: async () => componentDefaultSlot,
       }
     }
     if (url.endsWith('/component-nested-slots.html')) {
