@@ -1,12 +1,12 @@
 {
   "name": "alpine-remote-component",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "",
   "exports": {
     ".": "./dist/module.esm.js"
   },
   "scripts": {
-    "tailwind": "npx @tailwindcss/cli -i ./input.css -o ./output.css --watch",
+    "tailwind": "npx @tailwindcss/cli -i ./examples/styles/input.css -o ./examples/styles/output.css --watch",
     "dev": "npx @11ty/eleventy-dev-server --port=8083",
     "build": "node scripts/build.js",
     "test": "vitest"
