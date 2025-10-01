@@ -16,7 +16,7 @@ function alpine_remote_component_default(Alpine) {
   };
   const globalConfig = {
     urlPrefix: "",
-    componentPrefix: "x"
+    componentPrefix: Alpine.prefixed()
   };
   let validOptions = [
     "trigger",
@@ -35,7 +35,7 @@ function alpine_remote_component_default(Alpine) {
       throw error;
     }
   };
-  let parseResponse = (html) => {
+  let parseResponseHtml = (html) => {
     const parser = new DOMParser();
     return parser.parseFromString(
       `<body><template>${html}</template></body>`,
@@ -96,7 +96,7 @@ function alpine_remote_component_default(Alpine) {
       }
     }
     customElements.define(
-      globalConfig.componentPrefix + "-component",
+      globalConfig.componentPrefix + "component",
       GenericComponent
     );
   };
@@ -120,7 +120,7 @@ function alpine_remote_component_default(Alpine) {
         }
       }
       customElements.define(
-        globalConfig.componentPrefix + "-" + c.tag,
+        globalConfig.componentPrefix + c.tag,
         Component
       );
     });
@@ -171,7 +171,7 @@ function alpine_remote_component_default(Alpine) {
         }
         data._rcIsLoading = true;
         data._rcIsLoadingWithDelay = true;
-        let parsed;
+        let parsedHtml;
         let script;
         if (isPath(exp)) {
           let html;
@@ -184,7 +184,7 @@ function alpine_remote_component_default(Alpine) {
             data._rcIsLoading = false;
             config.responseHTML = html;
             dispatch(el, "rc-loaded", config);
-            parsed = parseResponse(html);
+            parsedHtml = parseResponseHtml(html);
           } catch (error) {
             data._rcError = error;
             data._rcIsLoading = false;
@@ -200,7 +200,7 @@ function alpine_remote_component_default(Alpine) {
         dispatch(el, "rc-loaded-with-delay", config);
         data._rcIsLoadingWithDelay = false;
         if (isPath(exp)) {
-          fragment = parsed.querySelector("template")?.content;
+          fragment = parsedHtml.querySelector("template")?.content;
         } else if (isId(exp)) {
           fragment = document.querySelector(exp)?.content.cloneNode(true);
           if (!fragment) {
@@ -219,13 +219,16 @@ function alpine_remote_component_default(Alpine) {
           dispatch(el, "rc-before-insert", config);
           if (config.swap === "inner") {
             el.replaceChildren(fragment);
-            Alpine.initTree(el);
             dispatch(el, "rc-inserted", config);
+            Alpine.initTree(el);
           } else if (config.swap === "outer") {
             let fragmentFirstChild = fragment.firstElementChild;
+            let fragmentChildren = [...fragment.children];
             el.replaceWith(fragment);
-            Alpine.initTree(fragmentFirstChild);
             dispatch(fragmentFirstChild, "rc-inserted", config);
+            fragmentChildren.forEach((el2) => {
+              Alpine.initTree(el2);
+            });
           }
         }
         data._rcIsLoaded = true;

@@ -17,7 +17,7 @@
     };
     const globalConfig = {
       urlPrefix: "",
-      componentPrefix: "x"
+      componentPrefix: Alpine2.prefixed()
     };
     let validOptions = [
       "trigger",
@@ -36,7 +36,7 @@
         throw error;
       }
     };
-    let parseResponse = (html) => {
+    let parseResponseHtml = (html) => {
       const parser = new DOMParser();
       return parser.parseFromString(
         `<body><template>${html}</template></body>`,
@@ -97,7 +97,7 @@
         }
       }
       customElements.define(
-        globalConfig.componentPrefix + "-component",
+        globalConfig.componentPrefix + "component",
         GenericComponent
       );
     };
@@ -121,7 +121,7 @@
           }
         }
         customElements.define(
-          globalConfig.componentPrefix + "-" + c.tag,
+          globalConfig.componentPrefix + c.tag,
           Component
         );
       });
@@ -172,7 +172,7 @@
           }
           data._rcIsLoading = true;
           data._rcIsLoadingWithDelay = true;
-          let parsed;
+          let parsedHtml;
           let script;
           if (isPath(exp)) {
             let html;
@@ -185,7 +185,7 @@
               data._rcIsLoading = false;
               config.responseHTML = html;
               dispatch(el, "rc-loaded", config);
-              parsed = parseResponse(html);
+              parsedHtml = parseResponseHtml(html);
             } catch (error) {
               data._rcError = error;
               data._rcIsLoading = false;
@@ -201,7 +201,7 @@
           dispatch(el, "rc-loaded-with-delay", config);
           data._rcIsLoadingWithDelay = false;
           if (isPath(exp)) {
-            fragment = parsed.querySelector("template")?.content;
+            fragment = parsedHtml.querySelector("template")?.content;
           } else if (isId(exp)) {
             fragment = document.querySelector(exp)?.content.cloneNode(true);
             if (!fragment) {
@@ -220,13 +220,16 @@
             dispatch(el, "rc-before-insert", config);
             if (config.swap === "inner") {
               el.replaceChildren(fragment);
-              Alpine2.initTree(el);
               dispatch(el, "rc-inserted", config);
+              Alpine2.initTree(el);
             } else if (config.swap === "outer") {
               let fragmentFirstChild = fragment.firstElementChild;
+              let fragmentChildren = [...fragment.children];
               el.replaceWith(fragment);
-              Alpine2.initTree(fragmentFirstChild);
               dispatch(fragmentFirstChild, "rc-inserted", config);
+              fragmentChildren.forEach((el2) => {
+                Alpine2.initTree(el2);
+              });
             }
           }
           data._rcIsLoaded = true;
