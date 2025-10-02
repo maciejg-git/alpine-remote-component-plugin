@@ -264,7 +264,9 @@ export default function (Alpine) {
           dispatch(el, "rc-before-insert", config);
 
           if (config.swap === "inner") {
-            el.replaceChildren(fragment);
+            Alpine.mutateDom(() => {
+              el.replaceChildren(fragment);
+            })
 
             dispatch(el, "rc-inserted", config);
 
@@ -273,7 +275,9 @@ export default function (Alpine) {
             let fragmentFirstChild = fragment.firstElementChild;
             let fragmentChildren = [...fragment.children]
 
-            el.replaceWith(fragment);
+            Alpine.mutateDom(() => {
+              el.replaceWith(fragment);
+            })
 
             dispatch(fragmentFirstChild, "rc-inserted", config);
 
