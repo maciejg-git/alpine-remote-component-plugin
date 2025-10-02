@@ -1,6 +1,9 @@
 # Alpine Remote Component
 
-An Alpine plugin that enables reusable components by referencing external HTML via URL or template IDs.
+![GitHub License](https://img.shields.io/github/license/maciejg-git/alpine-remote-component-plugin)
+[![Node.js CI](https://github.com/maciejg-git/alpine-remote-component-plugin/actions/workflows/node.js.yml/badge.svg)](https://github.com/maciejg-git/alpine-remote-component-plugin/actions/workflows/node.js.yml)
+
+An [Alpine](https://github.com/alpinejs/alpine) plugin that enables reusable components by referencing external HTML via URL or template IDs.
 
 ## Examples
 
