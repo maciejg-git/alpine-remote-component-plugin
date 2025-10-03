@@ -171,7 +171,6 @@ function alpine_remote_component_default(Alpine) {
         }
         data._rcIsLoading = true;
         data._rcIsLoadingWithDelay = true;
-        let parsedHtml;
         let script;
         if (isPath(exp)) {
           let html;
@@ -180,11 +179,9 @@ function alpine_remote_component_default(Alpine) {
               sendRequest(globalConfig.urlPrefix + exp),
               config.script && import(globalConfig.urlPrefix + config.script)
             ]);
-            data._rcError = null;
-            data._rcIsLoading = false;
             config.responseHTML = html;
-            dispatch(el, "rc-loaded", config);
-            parsedHtml = parseResponseHtml(html);
+            let parsedHtml = parseResponseHtml(html);
+            fragment = parsedHtml.querySelector("template")?.content;
           } catch (error) {
             data._rcError = error;
             data._rcIsLoading = false;
@@ -193,23 +190,25 @@ function alpine_remote_component_default(Alpine) {
             dispatch(el, "rc-error", { error, config });
             return;
           }
+        } else if (isId(exp)) {
+          fragment = document.querySelector(exp)?.content.cloneNode(true);
+          if (!fragment) {
+            data._rcError = "ID not found";
+            data._rcIsLoading = false;
+            data._rcIsLoadingWithDelay = false;
+            config.isRunning = false;
+            dispatch(el, "rc-error", { error: "ID not found", config });
+            return;
+          }
         }
+        dispatch(el, "rc-loaded", config);
+        data._rcError = null;
+        data._rcIsLoading = false;
         if (config.swapDelay) {
           await delay(config.swapDelay);
         }
         dispatch(el, "rc-loaded-with-delay", config);
         data._rcIsLoadingWithDelay = false;
-        if (isPath(exp)) {
-          fragment = parsedHtml.querySelector("template")?.content;
-        } else if (isId(exp)) {
-          fragment = document.querySelector(exp)?.content.cloneNode(true);
-          if (!fragment) {
-            data.isRunning = false;
-            data._rcError = "ID not found";
-            dispatch(el, "rc-error", { error: "ID not found", config });
-            return;
-          }
-        }
         if (fragment) {
           swapSlotsWithTemplates(el, fragment);
           copyAttributes(el, fragment.firstElementChild);
@@ -218,13 +217,18 @@ function alpine_remote_component_default(Alpine) {
           }
           dispatch(el, "rc-before-insert", config);
           if (config.swap === "inner") {
-            el.replaceChildren(fragment);
+            Alpine.mutateDom(() => {
+              el.replaceChildren(fragment);
+            });
             dispatch(el, "rc-inserted", config);
             Alpine.initTree(el);
           } else if (config.swap === "outer") {
             let fragmentFirstChild = fragment.firstElementChild;
             let fragmentChildren = [...fragment.children];
-            el.replaceWith(fragment);
+            Alpine.mutateDom(() => {
+              Alpine.destroyTree(el);
+              el.replaceWith(fragment);
+            });
             dispatch(fragmentFirstChild, "rc-inserted", config);
             fragmentChildren.forEach((el2) => {
               Alpine.initTree(el2);
@@ -252,6 +256,9 @@ function alpine_remote_component_default(Alpine) {
           })
         )
       ];
+      cleanup(() => {
+        scopeCleanup.forEach((c) => c());
+      });
       let config = Alpine.$data(el)._rc.config;
       validOptions.forEach((option) => {
         let value = el.getAttribute("data-rc-" + option);
@@ -291,9 +298,6 @@ function alpine_remote_component_default(Alpine) {
       if (config.trigger === "load") {
         initRemoteComponent();
       }
-      cleanup(() => {
-        scopeCleanup.forEach((c) => c());
-      });
     }
   ).before("show");
 }

@@ -172,7 +172,6 @@
           }
           data._rcIsLoading = true;
           data._rcIsLoadingWithDelay = true;
-          let parsedHtml;
           let script;
           if (isPath(exp)) {
             let html;
@@ -181,11 +180,9 @@
                 sendRequest(globalConfig.urlPrefix + exp),
                 config.script && import(globalConfig.urlPrefix + config.script)
               ]);
-              data._rcError = null;
-              data._rcIsLoading = false;
               config.responseHTML = html;
-              dispatch(el, "rc-loaded", config);
-              parsedHtml = parseResponseHtml(html);
+              let parsedHtml = parseResponseHtml(html);
+              fragment = parsedHtml.querySelector("template")?.content;
             } catch (error) {
               data._rcError = error;
               data._rcIsLoading = false;
@@ -194,23 +191,25 @@
               dispatch(el, "rc-error", { error, config });
               return;
             }
+          } else if (isId(exp)) {
+            fragment = document.querySelector(exp)?.content.cloneNode(true);
+            if (!fragment) {
+              data._rcError = "ID not found";
+              data._rcIsLoading = false;
+              data._rcIsLoadingWithDelay = false;
+              config.isRunning = false;
+              dispatch(el, "rc-error", { error: "ID not found", config });
+              return;
+            }
           }
+          dispatch(el, "rc-loaded", config);
+          data._rcError = null;
+          data._rcIsLoading = false;
           if (config.swapDelay) {
             await delay(config.swapDelay);
           }
           dispatch(el, "rc-loaded-with-delay", config);
           data._rcIsLoadingWithDelay = false;
-          if (isPath(exp)) {
-            fragment = parsedHtml.querySelector("template")?.content;
-          } else if (isId(exp)) {
-            fragment = document.querySelector(exp)?.content.cloneNode(true);
-            if (!fragment) {
-              data.isRunning = false;
-              data._rcError = "ID not found";
-              dispatch(el, "rc-error", { error: "ID not found", config });
-              return;
-            }
-          }
           if (fragment) {
             swapSlotsWithTemplates(el, fragment);
             copyAttributes(el, fragment.firstElementChild);
@@ -219,13 +218,18 @@
             }
             dispatch(el, "rc-before-insert", config);
             if (config.swap === "inner") {
-              el.replaceChildren(fragment);
+              Alpine2.mutateDom(() => {
+                el.replaceChildren(fragment);
+              });
               dispatch(el, "rc-inserted", config);
               Alpine2.initTree(el);
             } else if (config.swap === "outer") {
               let fragmentFirstChild = fragment.firstElementChild;
               let fragmentChildren = [...fragment.children];
-              el.replaceWith(fragment);
+              Alpine2.mutateDom(() => {
+                Alpine2.destroyTree(el);
+                el.replaceWith(fragment);
+              });
               dispatch(fragmentFirstChild, "rc-inserted", config);
               fragmentChildren.forEach((el2) => {
                 Alpine2.initTree(el2);
@@ -253,6 +257,9 @@
             })
           )
         ];
+        cleanup(() => {
+          scopeCleanup.forEach((c) => c());
+        });
         let config = Alpine2.$data(el)._rc.config;
         validOptions.forEach((option) => {
           let value = el.getAttribute("data-rc-" + option);
@@ -292,9 +299,6 @@
         if (config.trigger === "load") {
           initRemoteComponent();
         }
-        cleanup(() => {
-          scopeCleanup.forEach((c) => c());
-        });
       }
     ).before("show");
   }
