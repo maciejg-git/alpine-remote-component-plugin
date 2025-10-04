@@ -57,7 +57,7 @@
     <li
       x-remote-component="#node"
       data-rc-swap="inner"
-      x-data="{ isOpen: true }"
+      x-data="{ isOpen: true, index: 0 }"
     ></li>
   </ul>
 </div>
@@ -70,11 +70,11 @@
   ></span>
   <template x-if="isDirectory">
     <ul x-show="isOpen" x-transition.opacity>
-      <template x-for="c in c.children" :key="c.id">
+      <template x-for="(c, index) in c.children" :key="c.id">
         <li
           x-remote-component="#node"
           data-rc-swap="inner"
-          x-data="{ isOpen: true }"
+          x-data="{ isOpen: true, index }"
           class="ml-6 my-1"
         ></li>
       </template>
