@@ -53,6 +53,8 @@ export default function (Alpine) {
   let queryAllWithDataSlot = (el) => {
     let res = Array.from(el.querySelectorAll("[data-slot]"));
 
+    // query data-slot elements inside templates but not templates with id
+    // as these can be id components
     el.querySelectorAll("template:not([id])").forEach((t) => {
       res.push(...queryAllWithDataSlot(t.content));
     });
@@ -60,7 +62,7 @@ export default function (Alpine) {
     return res;
   };
 
-  let copyAttributes = (fromEl, toEl) => {
+  let copyPrefixedAttributes = (fromEl, toEl) => {
     for (let attr of fromEl.attributes) {
       if (attr.name === "_class" || attr.name === "rc-class") {
         toEl.className = mergeClasses(attr.value, toEl.className);
@@ -179,6 +181,11 @@ export default function (Alpine) {
   Alpine.directive(
     "remote-component",
     (el, { expression }, { evaluate, cleanup }) => {
+      let handleError = (error, data) => {
+        data._rcError = error;
+        dispatch(el, "rc-error", { error, config });
+      }
+
       let initRemoteComponent = async () => {
         if (config.initialized || config.isRunning) return;
         config.isRunning = true;
@@ -218,21 +225,19 @@ export default function (Alpine) {
             let parsedHtml = parseResponseHtml(html);
             fragment = parsedHtml.querySelector("template")?.content;
           } catch (error) {
-            data._rcError = error;
+            handleError(error, data)
             data._rcIsLoading = false;
             data._rcIsLoadingWithDelay = false;
             config.isRunning = false;
-            dispatch(el, "rc-error", { error, config });
             return;
           }
         } else if (isId(exp)) {
           fragment = document.querySelector(exp)?.content.cloneNode(true);
           if (!fragment) {
-            data._rcError = "ID not found";
+            handleError("ID not found", data)
             data._rcIsLoading = false;
             data._rcIsLoadingWithDelay = false;
             config.isRunning = false;
-            dispatch(el, "rc-error", { error: "ID not found", config });
             return;
           }
         }
@@ -253,7 +258,7 @@ export default function (Alpine) {
         if (fragment) {
           swapSlotsWithTemplates(el, fragment);
 
-          copyAttributes(el, fragment.firstElementChild);
+          copyPrefixedAttributes(el, fragment.firstElementChild);
 
           if (script && script.default) {
             Alpine.plugin(script.default);
