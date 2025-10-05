@@ -419,6 +419,25 @@
 
         <hr class="border-gray-200">
 
+        <div x-remote-component="#example" _id="component-data-getters">
+          <template data-for-slot="title"> Passing data to component - getters </template>
+          <template data-for-slot="text">
+            <p class="markdown"></p>
+          </template>
+          <template data-for-slot="example">
+            <div
+              x-remote-component="/examples/component-data-getters.html"
+              data-rc-name="example"
+              data-rc-trigger="load 0 500"
+              class="w-full"
+            >
+              <div x-remote-component="#placeholder"></div>
+            </div>
+          </template>
+        </div>
+
+        <hr class="border-gray-200">
+
         <div x-remote-component="#example" _id="copy-attributes">
           <template data-for-slot="title"> Copy component attributes </template>
           <template data-for-slot="text">
