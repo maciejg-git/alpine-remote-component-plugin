@@ -50,13 +50,15 @@ export default function (Alpine) {
     return [...new Set(classes.flatMap((c) => c.split(/\s+/)))].join(" ");
   };
 
-  let queryAllWithDataSlot = (el) => {
+  let queryAllWithDataSlot = (el, depth = 0) => {
+    if (depth >= 10) return []
+
     let res = Array.from(el.querySelectorAll("[data-slot]"));
 
     // query data-slot elements inside templates but not templates with id
     // as these can be id components
     el.querySelectorAll("template:not([id])").forEach((t) => {
-      res.push(...queryAllWithDataSlot(t.content));
+      res.push(...queryAllWithDataSlot(t.content, depth + 1));
     });
 
     return res;
@@ -146,7 +148,7 @@ export default function (Alpine) {
   };
 
   let parseTriggerValue = (s) => {
-    let [trigger, requestDelay = 0, swapDelay = 0] = s.split(" ");
+    let [trigger, requestDelay = 0, swapDelay = 0] = s.trim().split(" ");
     return {
       trigger,
       requestDelay: parseInt(requestDelay),
@@ -187,7 +189,7 @@ export default function (Alpine) {
       }
 
       let initRemoteComponent = async () => {
-        if (config.initialized || config.isRunning) return;
+        if (config.initialized || config.isRunning || !expression) return;
         config.isRunning = true;
 
         dispatch(el, "rc-before-load", config);
