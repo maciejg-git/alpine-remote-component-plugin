@@ -45,14 +45,15 @@ function alpine_remote_component_default(Alpine) {
   let mergeClasses = (...classes) => {
     return [...new Set(classes.flatMap((c) => c.split(/\s+/)))].join(" ");
   };
-  let queryAllWithDataSlot = (el) => {
+  let queryAllWithDataSlot = (el, depth = 0) => {
+    if (depth >= 10) return [];
     let res = Array.from(el.querySelectorAll("[data-slot]"));
     el.querySelectorAll("template:not([id])").forEach((t) => {
-      res.push(...queryAllWithDataSlot(t.content));
+      res.push(...queryAllWithDataSlot(t.content, depth + 1));
     });
     return res;
   };
-  let copyAttributes = (fromEl, toEl) => {
+  let copyPrefixedAttributes = (fromEl, toEl) => {
     for (let attr of fromEl.attributes) {
       if (attr.name === "_class" || attr.name === "rc-class") {
         toEl.className = mergeClasses(attr.value, toEl.className);
@@ -126,7 +127,7 @@ function alpine_remote_component_default(Alpine) {
     });
   };
   let parseTriggerValue = (s) => {
-    let [trigger, requestDelay = 0, swapDelay = 0] = s.split(" ");
+    let [trigger, requestDelay = 0, swapDelay = 0] = s.trim().split(" ");
     return {
       trigger,
       requestDelay: parseInt(requestDelay),
@@ -155,8 +156,12 @@ function alpine_remote_component_default(Alpine) {
   Alpine.directive(
     "remote-component",
     (el, { expression }, { evaluate, cleanup }) => {
+      let handleError = (error, data) => {
+        data._rcError = error;
+        dispatch(el, "rc-error", { error, config });
+      };
       let initRemoteComponent = async () => {
-        if (config.initialized || config.isRunning) return;
+        if (config.initialized || config.isRunning || !expression) return;
         config.isRunning = true;
         dispatch(el, "rc-before-load", config);
         let fragment = null;
@@ -183,21 +188,19 @@ function alpine_remote_component_default(Alpine) {
             let parsedHtml = parseResponseHtml(html);
             fragment = parsedHtml.querySelector("template")?.content;
           } catch (error) {
-            data._rcError = error;
+            handleError(error, data);
             data._rcIsLoading = false;
             data._rcIsLoadingWithDelay = false;
             config.isRunning = false;
-            dispatch(el, "rc-error", { error, config });
             return;
           }
         } else if (isId(exp)) {
           fragment = document.querySelector(exp)?.content.cloneNode(true);
           if (!fragment) {
-            data._rcError = "ID not found";
+            handleError("ID not found", data);
             data._rcIsLoading = false;
             data._rcIsLoadingWithDelay = false;
             config.isRunning = false;
-            dispatch(el, "rc-error", { error: "ID not found", config });
             return;
           }
         }
@@ -211,7 +214,7 @@ function alpine_remote_component_default(Alpine) {
         data._rcIsLoadingWithDelay = false;
         if (fragment) {
           swapSlotsWithTemplates(el, fragment);
-          copyAttributes(el, fragment.firstElementChild);
+          copyPrefixedAttributes(el, fragment.firstElementChild);
           if (script && script.default) {
             Alpine.plugin(script.default);
           }
