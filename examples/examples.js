@@ -2,8 +2,11 @@ document.addEventListener("alpine:init", () => {
   Alpine.data("example", () => {
     return {
       html: '',
+      path: '',
       handleComponentInserted() {
         if (this.$event.detail.name === 'example') {
+          this.path = this.$event.detail.source
+
           this.html = this.$event.detail.responseHTML
 
           this.$nextTick(() => {

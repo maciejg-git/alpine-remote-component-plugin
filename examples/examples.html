@@ -35,9 +35,7 @@
         Alpine Remote Component
       </span>
       <a href="https://github.com/maciejg-git/alpine-remote-component-plugin">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" class="h-6 w-6">
-          <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8"/>
-        </svg>
+        <div x-data x-remote-component="#github-icon"></div>
       </a>
     </nav>
 
@@ -422,11 +420,41 @@
         <div x-remote-component="#example" _id="component-data-getters">
           <template data-for-slot="title"> Passing data to component - getters </template>
           <template data-for-slot="text">
-            <p class="markdown"></p>
+            <p class="markdown">In Alpine, properties defined in an `x-data` directive are available to all child elements. This is simple and convenient, as components can access data directly. However, it also has a few disadvantages:</p>
+            <ul class="list-disc list-inside">
+              <li>there’s no clear information about which external data the component is using</li>
+              <li>the component can accidentally mutate property values</li>
+              <li>it reduces reusability, since changes require updating both the component and the application</li>
+            </ul>
+            <p class="markdown">Below is an example of how to make component data safer and more reusable by adding local `x-data`. The advantages are:</p>
+            <ul class="list-disc list-inside">
+              <li>there’s clear information about which data the component expects and how it connects to the rest of the application</li>
+              <li>even if a property is mutated, only the local data changes</li>
+              <li>any changes in the application or the component now require updating only the property or the getter</li>
+            </ul>
           </template>
           <template data-for-slot="example">
             <div
               x-remote-component="/examples/component-data-getters.html"
+              data-rc-name="example"
+              data-rc-trigger="load 0 500"
+              class="w-full"
+            >
+              <div x-remote-component="#placeholder"></div>
+            </div>
+          </template>
+        </div>
+
+        <hr class="border-gray-200">
+
+        <div x-remote-component="#example" _id="component-data-attributes">
+          <template data-for-slot="title"> Passing data to component - attributes </template>
+          <template data-for-slot="text">
+            <p class="markdown"></p>
+          </template>
+          <template data-for-slot="example">
+            <div
+              x-remote-component="/examples/component-data-attributes.html"
               data-rc-name="example"
               data-rc-trigger="load 0 500"
               class="w-full"
@@ -610,9 +638,16 @@ export default function (Alpine) {
         class="scroll-mt-16"
       >
         <div class="flex flex-col gap-y-6">
-          <h2 class="text-xl font-semibold">
-            <div data-slot="title"></div>
-          </h2>
+          <div class="flex items-center justify-between">
+            <h2 class="text-xl font-semibold">
+              <div data-slot="title"></div>
+            </h2>
+            <a
+              :href="'https://github.com/maciejg-git/alpine-remote-component-plugin/tree/main' + path"
+            >
+              <div x-remote-component="#github-icon"></div>
+            </a>
+          </div>
 
           <div class="flex flex-col gap-y-4">
             <div data-slot="text"></div>
@@ -632,6 +667,11 @@ export default function (Alpine) {
         <div class="rounded-lg bg-gray-100 h-50"></div>
         <div class="rounded-lg bg-gray-100 h-20"></div>
       </div>
+    </template>
+    <template id="github-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" class="h-6 w-6 text-gray-600">
+        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8"/>
+      </svg>
     </template>
   </body>
 </html>
