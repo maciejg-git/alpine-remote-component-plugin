@@ -125,3 +125,22 @@ The plugin adds a custom `x-component` element. It is optional, and internally w
 You can also create dedicated custom elements for specific components. This allows the simplest usage with just a component tag, but it requires an additional step of registering the available components.
 
 Just like the generic `x-component` element, custom element components are optional. You can register them using the `Alpine.$rc.makeCustomElementComponents` function. Each component must define at least the `tag` and `source` properties, while other options such as `trigger` or `swap` are optional.
+
+## Scripts
+
+If your component data is defined with the `Alpine.data` function in a separate file, you can import it and make it available to the component using the `data-rc-script` attribute. The imported file should be compatible with the [Alpine plugin API](https://alpinejs.dev/advanced/extending#bundle-module).
+
+## TODO
+
+- add classes from `data-rc-class` before inserting element and remove them after
+- optional shadow DOM
+- add short modifiers to `x-remote-component` to use instead `data-rc-*` attributes
+- `$component` magic that returns `x-remote-component` element
+
+## Similar projects
+
+- [Alpine JS Component](https://github.com/markmead/alpinejs-component)
+- [Alpine AJAX](https://github.com/imacrayon/alpine-ajax)
+- [Async Alpine](https://github.com/Accudio/async-alpine)
+- [alpinejs-app](https://github.com/vseryakov/alpinejs-app)
+- [htmx](https://github.com/bigskysoftware/htmx)
