@@ -420,13 +420,13 @@
         <div x-remote-component="#example" _id="component-data-getters">
           <template data-for-slot="title"> Passing data to component - getters </template>
           <template data-for-slot="text">
-            <p class="markdown">In Alpine, properties defined in an `x-data` directive are available to all child elements. This is simple and convenient, as components can access data directly. However, it also has a few disadvantages:</p>
+            <p class="markdown">In Alpine, data defined with `x-data` can be accessed directly by child elements. This can have a few disadvantages in the context of components:</p>
             <ul class="list-disc list-inside">
               <li>there’s no clear information about which external data the component is using</li>
               <li>the component can accidentally mutate property values</li>
               <li>it reduces reusability, since changes require updating both the component and the application</li>
             </ul>
-            <p class="markdown">Below is an example of how to make component data safer and more reusable by adding local `x-data`. The advantages are:</p>
+            <p class="markdown">You can make component data safer and more reusable by adding local `x-data`. The advantages are:</p>
             <ul class="list-disc list-inside">
               <li>there’s clear information about which data the component expects and how it connects to the rest of the application</li>
               <li>even if a property is mutated, only the local data changes</li>
