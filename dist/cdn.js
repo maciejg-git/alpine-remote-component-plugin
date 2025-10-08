@@ -304,6 +304,9 @@
         }
       }
     ).before("show");
+    Alpine2.magic("rcRoot", (el) => {
+      return el.closest("[x-remote-component]");
+    });
   }
 
   // builds/cdn.js

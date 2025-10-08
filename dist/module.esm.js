@@ -303,6 +303,9 @@ function alpine_remote_component_default(Alpine) {
       }
     }
   ).before("show");
+  Alpine.magic("rcRoot", (el) => {
+    return el.closest("[x-remote-component]");
+  });
 }
 
 // builds/module.js
