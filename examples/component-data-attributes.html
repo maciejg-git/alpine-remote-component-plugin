@@ -1,7 +1,8 @@
 <div x-data="{ counter: 0 }">
   <div
     x-remote-component="/examples/components/component-data-attributes.html"
-    _:data-value="counter"
+    data-rc-swap="inner"
+    :data-value="counter"
   ></div>
 
   <button
