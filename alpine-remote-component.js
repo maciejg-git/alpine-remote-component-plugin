@@ -367,4 +367,8 @@ export default function (Alpine) {
       }
     }
   ).before("show");
+
+  Alpine.magic("rcRoot", (el) => {
+    return el.closest("[x-remote-component]");
+  });
 }
