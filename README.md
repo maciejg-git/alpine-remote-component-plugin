@@ -17,6 +17,12 @@ CDN:
 <script defer src="https://cdn.jsdelivr.net/npm/alpine-remote-component@0.x.x/dist/cdn.min.js"></script>
 ```
 
+NPM:
+
+```
+npm install alpine-remote-component
+```
+
 ## Usage
 
 ### Directives
@@ -60,6 +66,11 @@ The component options can be set using the `data-rc-*` attributes:
 >
 </div>
 ```
+
+### Magics
+
+`$rcRoot` — a magic property that gets the nearest `x-remote-component` element.
+Note that for components using the outer swap option, it may return the closest `x-remote-component` element belonging to another component.
 
 ### Default config
 
