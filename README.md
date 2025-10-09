@@ -146,7 +146,6 @@ If your component data is defined with the `Alpine.data` function in a separate 
 - add classes from `data-rc-class` before inserting element and remove them after
 - optional shadow DOM
 - add short modifiers to `x-remote-component` to use instead `data-rc-*` attributes
-- `$component` magic that returns `x-remote-component` element
 
 ## Similar projects
 
