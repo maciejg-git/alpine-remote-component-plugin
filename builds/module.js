@@ -1,3 +1,3 @@
-import remoteComponent from "../alpine-remote-component.js"
+import remoteComponent from "../index.js"
 
 export default remoteComponent

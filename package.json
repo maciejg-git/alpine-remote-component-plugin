@@ -5,7 +5,7 @@
   "files": [
     "builds",
     "dist",
-    "alpine-remote-component.js"
+    "index.js"
   ],
   "exports": {
     ".": "./dist/module.esm.js"
