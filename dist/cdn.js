@@ -1,6 +1,6 @@
 (() => {
-  // alpine-remote-component.js
-  function alpine_remote_component_default(Alpine2) {
+  // index.js
+  function index_default(Alpine2) {
     const defaultConfig = {
       swap: "outer",
       trigger: "load",
@@ -311,6 +311,6 @@
 
   // builds/cdn.js
   document.addEventListener("alpine:init", () => {
-    Alpine.plugin(alpine_remote_component_default);
+    Alpine.plugin(index_default);
   });
 })();
