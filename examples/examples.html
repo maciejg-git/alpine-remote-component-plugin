@@ -30,7 +30,6 @@
     <!-- alpine -->
     <script defer src="https://cdn.jsdelivr.net/npm/litewind-alpine@0.x.x/plugins/transition/dist/cdn.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/litewind-alpine@0.x.x/components/modal/dist/cdn.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/litewind-alpine@0.x.x/components/alert/dist/cdn.min.js"></script>
     <script
       defer
       src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"
@@ -57,8 +56,19 @@
     <div
       x-data="{
         examples: {},
+        isLoaded: false,
+        count: 0,
+        handleExampleInsert() {
+          if (this.$event.detail.name === 'example') {
+            this.count++
+            if (this.count === 28) {
+              this.isLoaded = true
+            }
+          }
+        }
       }"
       x-init="document.documentElement.style.setProperty('color-scheme', 'light')"
+      @rc-inserted="handleExampleInsert"
       class="flex"
     >
       <div class="hidden border-r border-gray-200 px-12 lg:block">
@@ -72,6 +82,14 @@
       </div>
 
       <div
+        x-remote-component="#placeholder-lg"
+        _x-show="!isLoaded"
+        _class="mx-auto mt-20 max-w-4xl w-full"
+      ></div>
+
+      <div
+        x-show="isLoaded"
+        x-transition.opacity
         class="mx-auto mb-20 mt-20 flex max-w-4xl flex-col gap-y-10 px-6 text-gray-800"
       >
         <div x-remote-component="#example" _id="basic-id-component">
@@ -735,13 +753,9 @@
               must define at least the `tag` and `source` properties, while
               other options such as `trigger` or `swap` are optional.
             </p>
-            <div x-remote-component="#alert" _class="my-6">
-              <template data-for-slot>
-                <p class="markdown" x-init="$el.innerHTML = marked.parseInline($el.textContent)">
-                  If you’re using a CDN to include files, make sure to call the `Alpine.$rc.makeCustomElementComponents` function after the plugin but before the main Alpine JS file.
-                </p>
-              </template>
-            </div>
+            <p class="markdown">
+              If you’re using a CDN to include files, make sure to call the `Alpine.$rc.makeCustomElementComponents` function after the plugin but before the main Alpine JS file.
+            </p>
             <pre
               class="overflow-hidden rounded-xl text-sm"
             ><code class="language-javascript">document.addEventListener("alpine:init", () =&gt; {
@@ -862,48 +876,11 @@ export default function (Alpine) {
       </div>
     </template>
 
-    <template id="alert">
-      <div
-        x-data="alert"
-        class="flex items-start rounded-md border p-5"
-        class-info="text-text-700 dark:text-info-200 bg-info-200/20 dark:bg-info-500/50 border-info-400 dark:border-info-500"
-        class-warn="text-text-700 dark:text-warn-200 bg-warn-400/20 dark:bg-warn-500/50 border-warn-400 dark:border-warn-500"
-        class-danger="text-text-700 dark:text-danger-200 bg-danger-300/20 dark:bg-danger-500/50 border-danger-400 dark:border-danger-500"
-        class-success="text-text-700 dark:text-success-200 bg-success-300/20 dark:bg-success-500/50 border-success-400 dark:border-success-500"
-      >
-        <div class="mr-4 empty:hidden">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="currentColor"
-            class="h-6 w-6"
-            viewBox="0 0 16 16"
-          >
-            <path
-              d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"
-            />
-            <path
-              d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"
-            />
-          </svg>
-        </div>
-        <div>
-          <div class="font-semibold">
-            <div data-slot="header"></div>
-          </div>
-          <div data-slot></div>
-        </div>
-        <button x-bind="closeButton" class="ml-auto" x-cloak>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="currentColor"
-            viewBox="0 0 384 512"
-            class="h-6 w-6 text-text-600 dark:text-text-300"
-          >
-            <path
-              d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"
-            />
-          </svg>
-        </button>
+    <template id="placeholder-lg">
+      <div class="flex flex-col gap-y-4">
+        <div class="h-10 rounded-lg bg-gray-100"></div>
+        <div class="h-90 rounded-lg bg-gray-100"></div>
+        <div class="h-30 rounded-lg bg-gray-100"></div>
       </div>
     </template>
 
