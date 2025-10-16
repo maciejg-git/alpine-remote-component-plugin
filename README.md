@@ -56,7 +56,6 @@ The component options can be set using the `data-rc-*` attributes:
 - `data-rc-swap` - specifies how the component is inserted. Valid values: `inner` and `outer`. Default: `outer`.
 - `data-rc-triger` - defines when the component should load. Valid triggers: `load`, `event`, `reactive`, `intersect` and `custom`. Default: `load`.
 - `data-rc-watch` - used only with the `reactive` trigger. The value is the property name to watch.
-- `data-rc-process-slots-first` - if enabled, Alpine is initialized inside `data-for-slot` template elements before the main component is loaded. Default: `false`.
 
 ```html
 <div 

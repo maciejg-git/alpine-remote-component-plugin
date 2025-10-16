@@ -61,7 +61,7 @@
         handleExampleInsert() {
           if (this.$event.detail.name === 'example') {
             this.count++
-            if (this.count === 28) {
+            if (this.count === 27) {
               this.isLoaded = true
             }
           }
@@ -507,30 +507,6 @@
           <template data-for-slot="example">
             <div
               x-remote-component="/examples/data-template-nested-components.html"
-              data-rc-name="example"
-              data-rc-trigger="load 0 500"
-              class="w-full"
-            >
-              <div x-remote-component="#placeholder"></div>
-            </div>
-          </template>
-        </div>
-
-        <hr class="border-gray-200" />
-
-        <div x-remote-component="#example" _id="process-slots-first">
-          <template data-for-slot="title"> Process slots first </template>
-          <template data-for-slot="text">
-            <p class="markdown">
-              The `process-slots-first` option initializes Alpine within
-              `data-for-slot` template elements before the main component is
-              loaded. This can be useful when templates contain other components
-              or dynamic content that should be set up in advance.
-            </p>
-          </template>
-          <template data-for-slot="example">
-            <div
-              x-remote-component="/examples/process-slots-first.html"
               data-rc-name="example"
               data-rc-trigger="load 0 500"
               class="w-full"

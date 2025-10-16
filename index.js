@@ -9,7 +9,6 @@ export default function (Alpine) {
     responseHTML: null,
     requestDelay: 0,
     swapDelay: 0,
-    "process-slots-first": false,
     source: null,
     script: "",
   };
@@ -24,7 +23,6 @@ export default function (Alpine) {
     "swap",
     "watch",
     "name",
-    "process-slots-first",
     "script",
   ];
 
@@ -333,21 +331,9 @@ export default function (Alpine) {
             Object.assign(config, parsed);
             return;
           }
-          if (option === "process-slots-first") {
-            value = true;
-          }
           config[option] = value;
         }
       });
-
-      if (config["process-slots-first"]) {
-        let templates = el.querySelectorAll("[data-for-slot]");
-        templates.forEach((t) => {
-          Array.from(t.content.children).forEach((element) => {
-            Alpine.initTree(element);
-          });
-        });
-      }
 
       dispatch(el, "rc-initialized", Alpine.$data(el)._rc);
 
