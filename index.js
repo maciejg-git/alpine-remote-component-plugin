@@ -234,6 +234,8 @@ export default function (Alpine) {
             return;
           }
         } else if (isId(exp)) {
+          // this could be wrapped in resolved Promise to make both url and id
+          // components async
           fragment = document.querySelector(exp)?.content.cloneNode(true);
           if (!fragment) {
             handleError("ID not found", data)
