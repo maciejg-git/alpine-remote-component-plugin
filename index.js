@@ -11,6 +11,7 @@ export default function (Alpine) {
     swapDelay: 0,
     source: null,
     script: "",
+    target: null,
   };
 
   const globalConfig = {
@@ -186,6 +187,22 @@ export default function (Alpine) {
         dispatch(el, "rc-error", { error, config });
       }
 
+      let handleCompleted = () => {
+        let target = config.target
+
+        if (target.dataset.rcTarget === "inner") {
+          target = target.children
+        } else if (target.dataset.rcTarget === "outer") {
+          target = [target]
+        }
+
+        if (config.swap === "inner") {
+          el.replaceChildren(...target)
+        } else if (config.swap === "outer") {
+          el.replaceWith(...target)
+        }
+      }
+
       let initRemoteComponent = async () => {
         if (config.initialized || config.isRunning || !expression) return;
         config.isRunning = true;
@@ -258,6 +275,14 @@ export default function (Alpine) {
         data._rcIsLoadingWithDelay = false;
 
         if (fragment) {
+          config.target = fragment.querySelector("[data-rc-target]")
+
+          if (config.target) {
+            Alpine.bind(el, {
+              "@rc-completed": handleCompleted,
+            })
+          }
+
           swapSlotsWithTemplates(el, fragment);
 
           copyPrefixedAttributes(el, fragment.firstElementChild);
@@ -268,7 +293,7 @@ export default function (Alpine) {
 
           dispatch(el, "rc-before-insert", config);
 
-          if (config.swap === "inner") {
+          if (config.swap === "inner" || config.target) {
             Alpine.mutateDom(() => {
               el.replaceChildren(fragment);
             })

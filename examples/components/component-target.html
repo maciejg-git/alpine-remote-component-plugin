@@ -1,0 +1,33 @@
+<div
+  x-data="{
+    isLoaded: false,
+    count: 0,
+    handleInsert() {
+      this.count++
+      if (this.count === 3) {
+        this.isLoaded = true
+      }
+    }
+  }"
+  @rc-inserted="handleInsert"
+>
+  <div x-show="!isLoaded" @rc-inserted.stop>
+    <div data-slot="placeholder"></div>
+  </div>
+  <div
+    x-show="isLoaded"
+    x-transition.opacity
+    data-rc-target="inner"
+    @transitionend="$dispatch('rc-completed')"
+  >
+    <div x-remote-component="/examples/components/component-a.html">
+      <template data-for-slot="content">
+        <div x-remote-component="/examples/components/component-b.html">
+          <template data-for-slot="content">
+            <div x-remote-component="/examples/components/component-c.html"></div>
+          </template>
+        </div>
+      </template>
+    </div>
+  </div>
+</div>
