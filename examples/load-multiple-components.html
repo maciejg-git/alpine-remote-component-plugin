@@ -3,9 +3,8 @@
     isLoaded: false,
     components: [],
     handleInserted() {
-      this.components = this.components.filter((c) => {
-        return c !== this.$event.detail.name
-      })
+      let name = this.$event.detail.name
+      this.components = this.components.filter((c) => c !== name)
       this.$nextTick(() => {
         this.isLoaded = !this.components.length
       })
@@ -21,7 +20,7 @@
   <div x-show="!isLoaded">
     <div x-remote-component="#placeholder"></div>
   </div>
-  <div x-show="isLoaded">
+  <div x-show="isLoaded" x-transition.opacity>
     <div
       x-remote-component="/examples/components/component-a.html"
       data-rc-name="component-a"

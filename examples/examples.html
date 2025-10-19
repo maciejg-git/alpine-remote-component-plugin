@@ -642,6 +642,16 @@
           <template data-for-slot="title"> Loading of multiple components </template>
           <template data-for-slot="text">
             <p class="markdown">
+              Normally, components are loaded independently or, if a component is nested, only after its parent has loaded. Sometimes you may prefer to wait until all components are loaded, for example, to use a single loading indicator or to prevent layout shifts.
+            </p>
+            <p class="markdown">
+              The snippet below shows how this can be done using `rc-*` events and an additional wrapper element.
+            </p>
+            <p class="markdown">
+              If you plan to reuse this approach, you can create a generic loader component by adding `data-slot` elements for the placeholder and the components.
+            </p>
+            <p class="markdown">
+              In this example, the components are displayed only after all named components have finished loading.
             </p>
           </template>
           <template data-for-slot="example">
