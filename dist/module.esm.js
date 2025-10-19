@@ -10,7 +10,6 @@ function index_default(Alpine) {
     responseHTML: null,
     requestDelay: 0,
     swapDelay: 0,
-    "process-slots-first": false,
     source: null,
     script: ""
   };
@@ -23,7 +22,6 @@ function index_default(Alpine) {
     "swap",
     "watch",
     "name",
-    "process-slots-first",
     "script"
   ];
   let sendRequest = async (url) => {
@@ -271,20 +269,9 @@ function index_default(Alpine) {
             Object.assign(config, parsed);
             return;
           }
-          if (option === "process-slots-first") {
-            value = true;
-          }
           config[option] = value;
         }
       });
-      if (config["process-slots-first"]) {
-        let templates = el.querySelectorAll("[data-for-slot]");
-        templates.forEach((t) => {
-          Array.from(t.content.children).forEach((element) => {
-            Alpine.initTree(element);
-          });
-        });
-      }
       dispatch(el, "rc-initialized", Alpine.$data(el)._rc);
       if (config.trigger === "reactive" && config.watch) {
         let watched = evaluate(config.watch);
