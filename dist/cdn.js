@@ -25,6 +25,17 @@
       "name",
       "script"
     ];
+    let validTriggers = [
+      "load",
+      "event",
+      "reactive",
+      "intersect",
+      "custom"
+    ];
+    let validSwap = [
+      "inner",
+      "outer"
+    ];
     let sendRequest = async (url) => {
       try {
         let res = await fetch(url);
@@ -157,6 +168,9 @@
       (el, { expression }, { evaluate, cleanup }) => {
         let handleError = (error, data) => {
           data._rcError = error;
+          data._rcIsLoading = false;
+          data._rcIsLoadingWithDelay = false;
+          config.isRunning = false;
           dispatch(el, "rc-error", { error, config });
         };
         let initRemoteComponent = async () => {
@@ -166,6 +180,7 @@
           let fragment = null;
           let exp = expression;
           let data = Alpine2.$data(el);
+          let script;
           if (!isPath(expression) && !isId(expression)) {
             exp = evaluate(expression);
           }
@@ -175,7 +190,6 @@
           }
           data._rcIsLoading = true;
           data._rcIsLoadingWithDelay = true;
-          let script;
           if (isPath(exp)) {
             let html;
             try {
@@ -188,18 +202,12 @@
               fragment = parsedHtml.querySelector("template")?.content;
             } catch (error) {
               handleError(error, data);
-              data._rcIsLoading = false;
-              data._rcIsLoadingWithDelay = false;
-              config.isRunning = false;
               return;
             }
           } else if (isId(exp)) {
             fragment = document.querySelector(exp)?.content.cloneNode(true);
             if (!fragment) {
               handleError("ID not found", data);
-              data._rcIsLoading = false;
-              data._rcIsLoadingWithDelay = false;
-              config.isRunning = false;
               return;
             }
           }
@@ -267,7 +275,12 @@
           if (value !== null) {
             if (option === "trigger") {
               let parsed = parseTriggerValue(value);
-              Object.assign(config, parsed);
+              if (validTriggers.includes(parsed.trigger)) {
+                Object.assign(config, parsed);
+              }
+              return;
+            }
+            if (option === "swap" && !validSwap.includes(value)) {
               return;
             }
             config[option] = value;
