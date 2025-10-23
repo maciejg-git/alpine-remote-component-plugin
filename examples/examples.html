@@ -1,767 +1,673 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title></title>
-    <!-- font -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
-      rel="stylesheet"
-    />
-    <link href="/examples/styles/output.css" rel="stylesheet" />
-    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/styles/default.min.css"> -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/styles/atom-one-light.min.css"
-    />
-    <!-- highlight.js -->
-    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/highlight.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/languages/html.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/languages/javascript.min.js"></script>
-    <!-- marked -->
-    <script src="https://cdn.jsdelivr.net/npm/marked/lib/marked.umd.js"></script>
-    <!-- alpine remote component plugin -->
-    <script type="module" defer src="/builds/cdn.js"></script>
-    <script defer src="/examples/custom-elements.js"></script>
-    <script defer src="/examples/examples.js"></script>
-    <!-- alpine -->
-    <script defer src="https://cdn.jsdelivr.net/npm/litewind-alpine@0.x.x/plugins/transition/dist/cdn.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/litewind-alpine@0.x.x/components/modal/dist/cdn.min.js"></script>
-    <script
-      defer
-      src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"
-    ></script>
-    <script
-      defer
-      src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"
-    ></script>
-    <script
-      defer
-      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
-    ></script>
-  </head>
-  <body>
-    <nav
-      class="sticky top-0 z-40 flex items-center justify-between border-b border-gray-200 bg-white p-2 pr-4 text-gray-800"
-    >
-      <span class="text-lg font-semibold"> Alpine Remote Component </span>
-      <a href="https://github.com/maciejg-git/alpine-remote-component-plugin">
-        <div x-data x-remote-component="#github-icon"></div>
-      </a>
-    </nav>
-
+<div x-remote-component="#example" _id="basic-id-component">
+  <template data-for-slot="title"> Basic ID component </template>
+  <template data-for-slot="text">
+    <p class="markdown">
+      To load the ID component use an ID string starting with `#`.
+    </p>
+  </template>
+  <template data-for-slot="example">
     <div
-      x-data="{
-        examples: {},
-        isLoaded: false,
-        count: 0,
-        handleExampleInsert() {
-          if (this.$event.detail.name === 'example') {
-            this.count++
-            if (this.count === 27) {
-              this.isLoaded = true
-            }
-          }
-        }
-      }"
-      x-init="document.documentElement.style.setProperty('color-scheme', 'light')"
-      @rc-inserted="handleExampleInsert"
-      class="flex"
+      x-remote-component="/examples/basic-id-component.html"
+      data-rc-name="example"
+      data-rc-trigger="load 0 500"
+      class="w-full"
     >
-      <div class="hidden border-r border-gray-200 px-12 lg:block">
-        <ul class="sticky top-20 flex flex-col gap-y-1 text-sm">
-          <template x-for="example in examples">
-            <li :class="{ 'font-semibold': example.isVisible }">
-              <a :href="'#' + example.id" x-text="example.title"></a>
-            </li>
-          </template>
-        </ul>
-      </div>
+      <div x-remote-component="#placeholder"></div>
+    </div>
+  </template>
+</div>
 
-      <div
-        x-remote-component="#placeholder-lg"
-        _x-show="!isLoaded"
-        _class="mx-auto mt-20 max-w-4xl w-full"
-      ></div>
+<hr class="border-gray-200" />
 
-      <div
-        x-show="isLoaded"
-        x-transition.opacity
-        class="mx-auto mb-20 mt-20 flex max-w-4xl flex-col gap-y-10 px-6 text-gray-800"
-      >
-        <div x-remote-component="#example" _id="basic-id-component">
-          <template data-for-slot="title"> Basic ID component </template>
-          <template data-for-slot="text">
-            <p class="markdown">
-              To load the ID component use an ID string starting with `#`.
-            </p>
-          </template>
-          <template data-for-slot="example">
-            <div
-              x-remote-component="/examples/basic-id-component.html"
-              data-rc-name="example"
-              data-rc-trigger="load 0 500"
-              class="w-full"
-            >
-              <div x-remote-component="#placeholder"></div>
-            </div>
-          </template>
-        </div>
+<div x-remote-component="#example" _id="basic-url-component">
+  <template data-for-slot="title"> Basic URL component </template>
+  <template data-for-slot="text">
+    <p class="markdown">
+      To load the URL component use a path starting with `/`.
+    </p>
+  </template>
+  <template data-for-slot="example">
+    <div
+      x-remote-component="/examples/basic-url-component.html"
+      data-rc-name="example"
+      data-rc-trigger="load 0 500"
+      class="w-full"
+    >
+      <div x-remote-component="#placeholder"></div>
+    </div>
+  </template>
+</div>
 
-        <hr class="border-gray-200" />
+<hr class="border-gray-200" />
 
-        <div x-remote-component="#example" _id="basic-url-component">
-          <template data-for-slot="title"> Basic URL component </template>
-          <template data-for-slot="text">
-            <p class="markdown">
-              To load the URL component use a path starting with `/`.
-            </p>
-          </template>
-          <template data-for-slot="example">
-            <div
-              x-remote-component="/examples/basic-url-component.html"
-              data-rc-name="example"
-              data-rc-trigger="load 0 500"
-              class="w-full"
-            >
-              <div x-remote-component="#placeholder"></div>
-            </div>
-          </template>
-        </div>
+<div x-remote-component="#example" _id="basic-dynamic-component">
+  <template data-for-slot="title"> Basic dynamic component </template>
+  <template data-for-slot="text">
+    <p class="markdown">
+      Values that are not ID or path are evaluated by Alpine before
+      loading the component. The result of the evaluation should be an
+      ID or path.
+    </p>
+  </template>
+  <template data-for-slot="example">
+    <div
+      x-remote-component="/examples/basic-dynamic-component.html"
+      data-rc-name="example"
+      data-rc-trigger="load 0 500"
+      class="w-full"
+    >
+      <div x-remote-component="#placeholder"></div>
+    </div>
+  </template>
+</div>
 
-        <hr class="border-gray-200" />
+<hr class="border-gray-200" />
 
-        <div x-remote-component="#example" _id="basic-dynamic-component">
-          <template data-for-slot="title"> Basic dynamic component </template>
-          <template data-for-slot="text">
-            <p class="markdown">
-              Values that are not ID or path are evaluated by Alpine before
-              loading the component. The result of the evaluation should be an
-              ID or path.
-            </p>
-          </template>
-          <template data-for-slot="example">
-            <div
-              x-remote-component="/examples/basic-dynamic-component.html"
-              data-rc-name="example"
-              data-rc-trigger="load 0 500"
-              class="w-full"
-            >
-              <div x-remote-component="#placeholder"></div>
-            </div>
-          </template>
-        </div>
+<div x-remote-component="#example" _id="trigger-load">
+  <template data-for-slot="title"> Trigger - Load </template>
+  <template data-for-slot="text">
+    <p class="markdown">
+      The `load` trigger loads the component immediately. This is
+      default trigger.
+    </p>
+  </template>
+  <template data-for-slot="example">
+    <div
+      x-remote-component="/examples/trigger-load.html"
+      data-rc-name="example"
+      data-rc-trigger="load 0 500"
+      class="w-full"
+    >
+      <div x-remote-component="#placeholder"></div>
+    </div>
+  </template>
+</div>
 
-        <hr class="border-gray-200" />
+<hr class="border-gray-200" />
 
-        <div x-remote-component="#example" _id="trigger-load">
-          <template data-for-slot="title"> Trigger - Load </template>
-          <template data-for-slot="text">
-            <p class="markdown">
-              The `load` trigger loads the component immediately. This is
-              default trigger.
-            </p>
-          </template>
-          <template data-for-slot="example">
-            <div
-              x-remote-component="/examples/trigger-load.html"
-              data-rc-name="example"
-              data-rc-trigger="load 0 500"
-              class="w-full"
-            >
-              <div x-remote-component="#placeholder"></div>
-            </div>
-          </template>
-        </div>
+<div x-remote-component="#example" _id="trigger-event">
+  <template data-for-slot="title"> Trigger - Event </template>
+  <template data-for-slot="text">
+    <p class="markdown">
+      The `event` trigger loads the component on a specified event. You
+      should add the listener separately using the `x-on` directive.
+    </p>
+  </template>
+  <template data-for-slot="example">
+    <div
+      x-remote-component="/examples/trigger-event.html"
+      data-rc-name="example"
+      data-rc-trigger="load 0 500"
+      class="w-full"
+    >
+      <div x-remote-component="#placeholder"></div>
+    </div>
+  </template>
+</div>
 
-        <hr class="border-gray-200" />
+<hr class="border-gray-200" />
 
-        <div x-remote-component="#example" _id="trigger-event">
-          <template data-for-slot="title"> Trigger - Event </template>
-          <template data-for-slot="text">
-            <p class="markdown">
-              The `event` trigger loads the component on a specified event. You
-              should add the listener separately using the `x-on` directive.
-            </p>
-          </template>
-          <template data-for-slot="example">
-            <div
-              x-remote-component="/examples/trigger-event.html"
-              data-rc-name="example"
-              data-rc-trigger="load 0 500"
-              class="w-full"
-            >
-              <div x-remote-component="#placeholder"></div>
-            </div>
-          </template>
-        </div>
+<div x-remote-component="#example" _id="trigger-reactive">
+  <template data-for-slot="title"> Trigger - Reactive </template>
+  <template data-for-slot="text">
+    <p class="markdown">
+      The `reactive` trigger loads the component when a reactive
+      property changes. Use the `data-rc-watch` attribute to define a
+      watched property and automatically react to simple boolean
+      changes. If you need to test for specific value, you can set up
+      your own watcher using the `x-effect` directive or `$watch` magic.
+    </p>
+    <p class="markdown">
+      You can also load and remove a component based on a reactive
+      property by combining the `load` trigger with the `x-if`
+      directive. See the [x-if](#x-if) or [Basic
+      navigation](#router-view) examples.
+    </p>
+  </template>
+  <template data-for-slot="example">
+    <div
+      x-remote-component="/examples/trigger-reactive.html"
+      data-rc-name="example"
+      data-rc-trigger="load 0 500"
+      class="w-full"
+    >
+      <div x-remote-component="#placeholder"></div>
+    </div>
+  </template>
+</div>
 
-        <hr class="border-gray-200" />
+<hr class="border-gray-200" />
 
-        <div x-remote-component="#example" _id="trigger-reactive">
-          <template data-for-slot="title"> Trigger - Reactive </template>
-          <template data-for-slot="text">
-            <p class="markdown">
-              The `reactive` trigger loads the component when a reactive
-              property changes. Use the `data-rc-watch` attribute to define a
-              watched property and automatically react to simple boolean
-              changes. If you need to test for specific value, you can set up
-              your own watcher using the `x-effect` directive or `$watch` magic.
-            </p>
-            <p class="markdown">
-              You can also load and remove a component based on a reactive
-              property by combining the `load` trigger with the `x-if`
-              directive. See the [x-if](#x-if) or [Basic
-              navigation](#router-view) examples.
-            </p>
-          </template>
-          <template data-for-slot="example">
-            <div
-              x-remote-component="/examples/trigger-reactive.html"
-              data-rc-name="example"
-              data-rc-trigger="load 0 500"
-              class="w-full"
-            >
-              <div x-remote-component="#placeholder"></div>
-            </div>
-          </template>
-        </div>
+<div x-remote-component="#example" _id="trigger-intersect">
+  <template data-for-slot="title"> Trigger - Intersect </template>
+  <template data-for-slot="text">
+    <p class="markdown">
+      The `intersect` trigger loads component when it enters the
+      viewport. This trigger uses Alpine intersect plugin.
+    </p>
+  </template>
+  <template data-for-slot="example">
+    <div
+      x-remote-component="/examples/trigger-intersect.html"
+      data-rc-name="example"
+      data-rc-trigger="load 0 500"
+      class="w-full"
+    >
+      <div x-remote-component="#placeholder"></div>
+    </div>
+  </template>
+</div>
 
-        <hr class="border-gray-200" />
+<hr class="border-gray-200" />
 
-        <div x-remote-component="#example" _id="trigger-intersect">
-          <template data-for-slot="title"> Trigger - Intersect </template>
-          <template data-for-slot="text">
-            <p class="markdown">
-              The `intersect` trigger loads component when it enters the
-              viewport. This trigger uses Alpine intersect plugin.
-            </p>
-          </template>
-          <template data-for-slot="example">
-            <div
-              x-remote-component="/examples/trigger-intersect.html"
-              data-rc-name="example"
-              data-rc-trigger="load 0 500"
-              class="w-full"
-            >
-              <div x-remote-component="#placeholder"></div>
-            </div>
-          </template>
-        </div>
+<div x-remote-component="#example" _id="trigger-custom">
+  <template data-for-slot="title"> Trigger - Custom </template>
+  <template data-for-slot="text">
+    <p class="markdown">
+      The `custom` trigger does not specify when or how to load the
+      component, instead it relies on calling the `trigger` function
+      manually.
+    </p>
+  </template>
+  <template data-for-slot="example">
+    <div
+      x-remote-component="/examples/trigger-custom.html"
+      data-rc-name="example"
+      data-rc-trigger="load 0 500"
+      class="w-full"
+    >
+      <div x-remote-component="#placeholder"></div>
+    </div>
+  </template>
+</div>
 
-        <hr class="border-gray-200" />
+<hr class="border-gray-200" />
 
-        <div x-remote-component="#example" _id="trigger-custom">
-          <template data-for-slot="title"> Trigger - Custom </template>
-          <template data-for-slot="text">
-            <p class="markdown">
-              The `custom` trigger does not specify when or how to load the
-              component, instead it relies on calling the `trigger` function
-              manually.
-            </p>
-          </template>
-          <template data-for-slot="example">
-            <div
-              x-remote-component="/examples/trigger-custom.html"
-              data-rc-name="example"
-              data-rc-trigger="load 0 500"
-              class="w-full"
-            >
-              <div x-remote-component="#placeholder"></div>
-            </div>
-          </template>
-        </div>
+<div x-remote-component="#example" _id="trigger-delay">
+  <template data-for-slot="title"> Trigger delay </template>
+  <template data-for-slot="text">
+    <p class="markdown">
+      You can delay loading of the component by adding two parameters to
+      the `data-rc-trigger` attribute value:
+    </p>
+    <ul class="list-inside list-disc">
+      <li>delay (ms) before sending the request.</li>
+      <li>delay (ms) before inserting the component into the DOM.</li>
+    </ul>
+  </template>
+  <template data-for-slot="example">
+    <div
+      x-remote-component="/examples/trigger-delay.html"
+      data-rc-name="example"
+      data-rc-trigger="load 0 500"
+      class="w-full"
+    >
+      <div x-remote-component="#placeholder"></div>
+    </div>
+  </template>
+</div>
 
-        <hr class="border-gray-200" />
+<hr class="border-gray-200" />
 
-        <div x-remote-component="#example" _id="trigger-delay">
-          <template data-for-slot="title"> Trigger delay </template>
-          <template data-for-slot="text">
-            <p class="markdown">
-              You can delay loading of the component by adding two parameters to
-              the `data-rc-trigger` attribute value:
-            </p>
-            <ul class="list-inside list-disc">
-              <li>delay (ms) before sending the request.</li>
-              <li>delay (ms) before inserting the component into the DOM.</li>
-            </ul>
-          </template>
-          <template data-for-slot="example">
-            <div
-              x-remote-component="/examples/trigger-delay.html"
-              data-rc-name="example"
-              data-rc-trigger="load 0 500"
-              class="w-full"
-            >
-              <div x-remote-component="#placeholder"></div>
-            </div>
-          </template>
-        </div>
+<div x-remote-component="#example" _id="indicator">
+  <template data-for-slot="title"> Loading indicator </template>
+  <template data-for-slot="text">
+    <p class="markdown">
+      The `x-remote-component` element can contain any content that will
+      be visible until it is replaced by the component. You can use it
+      for placeholders, indicators, progress bars, etc. To display it
+      conditionally while the component is loading, use the `x-show`
+      directive together with the `_rcIsLoading` or
+      `_rcIsLoadingWithDelay` properties.
+    </p>
+    <p class="markdown">
+      The second example uses indicator component for better
+      reusability.
+    </p>
+  </template>
+  <template data-for-slot="example">
+    <div
+      x-remote-component="/examples/indicator.html"
+      data-rc-name="example"
+      data-rc-trigger="load 0 500"
+      class="w-full"
+    >
+      <div x-remote-component="#placeholder"></div>
+    </div>
+  </template>
+</div>
 
-        <hr class="border-gray-200" />
+<hr class="border-gray-200" />
 
-        <div x-remote-component="#example" _id="indicator">
-          <template data-for-slot="title"> Loading indicator </template>
-          <template data-for-slot="text">
-            <p class="markdown">
-              The `x-remote-component` element can contain any content that will
-              be visible until it is replaced by the component. You can use it
-              for placeholders, indicators, progress bars, etc. To display it
-              conditionally while the component is loading, use the `x-show`
-              directive together with the `_rcIsLoading` or
-              `_rcIsLoadingWithDelay` properties.
-            </p>
-            <p class="markdown">
-              The second example uses indicator component for better
-              reusability.
-            </p>
-          </template>
-          <template data-for-slot="example">
-            <div
-              x-remote-component="/examples/indicator.html"
-              data-rc-name="example"
-              data-rc-trigger="load 0 500"
-              class="w-full"
-            >
-              <div x-remote-component="#placeholder"></div>
-            </div>
-          </template>
-        </div>
+<div x-remote-component="#example" _id="swap-inner">
+  <template data-for-slot="title"> Swap - Inner </template>
+  <template data-for-slot="text">
+    <p class="markdown">
+      Use the `inner` swap option to insert the component inside the
+      `x-remote-component` element.
+    </p>
+  </template>
+  <template data-for-slot="example">
+    <div
+      x-remote-component="/examples/swap-inner.html"
+      data-rc-name="example"
+      data-rc-trigger="load 0 500"
+      class="w-full"
+    >
+      <div x-remote-component="#placeholder"></div>
+    </div>
+  </template>
+</div>
 
-        <hr class="border-gray-200" />
+<hr class="border-gray-200" />
 
-        <div x-remote-component="#example" _id="swap-inner">
-          <template data-for-slot="title"> Swap - Inner </template>
-          <template data-for-slot="text">
-            <p class="markdown">
-              Use the `inner` swap option to insert the component inside the
-              `x-remote-component` element.
-            </p>
-          </template>
-          <template data-for-slot="example">
-            <div
-              x-remote-component="/examples/swap-inner.html"
-              data-rc-name="example"
-              data-rc-trigger="load 0 500"
-              class="w-full"
-            >
-              <div x-remote-component="#placeholder"></div>
-            </div>
-          </template>
-        </div>
+<div x-remote-component="#example" _id="swap-outer">
+  <template data-for-slot="title"> Swap - Outer </template>
+  <template data-for-slot="text">
+    <p class="markdown">
+      Use the `outer` swap option to replace the `x-remote-component`
+      element with the component.
+    </p>
+  </template>
+  <template data-for-slot="example">
+    <div
+      x-remote-component="/examples/swap-outer.html"
+      data-rc-name="example"
+      data-rc-trigger="load 0 500"
+      class="w-full"
+    ></div>
+  </template>
+</div>
 
-        <hr class="border-gray-200" />
+<hr class="border-gray-200" />
 
-        <div x-remote-component="#example" _id="swap-outer">
-          <template data-for-slot="title"> Swap - Outer </template>
-          <template data-for-slot="text">
-            <p class="markdown">
-              Use the `outer` swap option to replace the `x-remote-component`
-              element with the component.
-            </p>
-          </template>
-          <template data-for-slot="example">
-            <div
-              x-remote-component="/examples/swap-outer.html"
-              data-rc-name="example"
-              data-rc-trigger="load 0 500"
-              class="w-full"
-            ></div>
-          </template>
-        </div>
+<div x-remote-component="#example" _id="events">
+  <template data-for-slot="title"> Events </template>
+  <template data-for-slot="example">
+    <div
+      x-remote-component="/examples/events.html"
+      data-rc-name="example"
+      data-rc-trigger="load 0 500"
+      class="w-full"
+    >
+      <div x-remote-component="#placeholder"></div>
+    </div>
+  </template>
+</div>
 
-        <hr class="border-gray-200" />
+<hr class="border-gray-200" />
 
-        <div x-remote-component="#example" _id="events">
-          <template data-for-slot="title"> Events </template>
-          <template data-for-slot="example">
-            <div
-              x-remote-component="/examples/events.html"
-              data-rc-name="example"
-              data-rc-trigger="load 0 500"
-              class="w-full"
-            >
-              <div x-remote-component="#placeholder"></div>
-            </div>
-          </template>
-        </div>
+<div x-remote-component="#example" _id="x-if">
+  <template data-for-slot="title"> x-if </template>
+  <template data-for-slot="text">
+    <p class="markdown">
+      The `x-if` directive requires a single root element, so you need
+      to use the inner swap option or wrap the component in an
+      additional element.
+    </p>
+    <p class="markdown">
+      Putting the component inside an `x-if` template can be useful for
+      removing or reloading it, since components normally load only
+      once, even if `_rc.trigger` is called multiple times.
+    </p>
+  </template>
+  <template data-for-slot="example">
+    <div
+      x-remote-component="/examples/x-if.html"
+      data-rc-name="example"
+      data-rc-trigger="load 0 500"
+      class="w-full"
+    >
+      <div x-remote-component="#placeholder"></div>
+    </div>
+  </template>
+</div>
 
-        <hr class="border-gray-200" />
+<hr class="border-gray-200" />
 
-        <div x-remote-component="#example" _id="x-if">
-          <template data-for-slot="title"> x-if </template>
-          <template data-for-slot="text">
-            <p class="markdown">
-              The `x-if` directive requires a single root element, so you need
-              to use the inner swap option or wrap the component in an
-              additional element.
-            </p>
-            <p class="markdown">
-              Putting the component inside an `x-if` template can be useful for
-              removing or reloading it, since components normally load only
-              once, even if `_rc.trigger` is called multiple times.
-            </p>
-          </template>
-          <template data-for-slot="example">
-            <div
-              x-remote-component="/examples/x-if.html"
-              data-rc-name="example"
-              data-rc-trigger="load 0 500"
-              class="w-full"
-            >
-              <div x-remote-component="#placeholder"></div>
-            </div>
-          </template>
-        </div>
+<div x-remote-component="#example" _id="x-for">
+  <template data-for-slot="title"> x-for </template>
+  <template data-for-slot="text">
+    <p class="markdown">
+      The `x-for` directive requires a single root element, so you need
+      to use the inner swap option or wrap the component in an
+      additional element.
+    </p>
+  </template>
+  <template data-for-slot="example">
+    <div
+      x-remote-component="/examples/x-for.html"
+      data-rc-name="example"
+      data-rc-trigger="load 0 500"
+      class="w-full"
+    >
+      <div x-remote-component="#placeholder"></div>
+    </div>
+  </template>
+</div>
 
-        <hr class="border-gray-200" />
+<hr class="border-gray-200" />
 
-        <div x-remote-component="#example" _id="x-for">
-          <template data-for-slot="title"> x-for </template>
-          <template data-for-slot="text">
-            <p class="markdown">
-              The `x-for` directive requires a single root element, so you need
-              to use the inner swap option or wrap the component in an
-              additional element.
-            </p>
-          </template>
-          <template data-for-slot="example">
-            <div
-              x-remote-component="/examples/x-for.html"
-              data-rc-name="example"
-              data-rc-trigger="load 0 500"
-              class="w-full"
-            >
-              <div x-remote-component="#placeholder"></div>
-            </div>
-          </template>
-        </div>
+<div x-remote-component="#example" _id="basic-data-template">
+  <template data-for-slot="title"> Basic data-slot </template>
+  <template data-for-slot="text">
+    <p class="markdown">
+      The contents of template elements marked with `data-for-slot`
+      attribute replace the corresponding `data-slot` elements in the
+      component. This provides functionality similar to slots and
+      enhances the reusability of components.
+    </p>
+    <p class="markdown">
+      The new content can be static or include other components.
+    </p>
+    <p class="markdown">
+      You can use any element type for `data-slot`. The `data-slot`
+      element's content is used as default slot content if there is no
+      corresponding `data-for-slot`. You can nest `data-slot` elements,
+      however, when an outer `data-slot` is replaced, its inner
+      `data-slot` elements are also replaced and therefore unavailable
+      for further replacement.
+    </p>
+    <p class="markdown">
+      You can omit the slot name in `data-slot` and `data-for-slot` for
+      the component’s default slot.
+    </p>
+  </template>
+  <template data-for-slot="example">
+    <div
+      x-remote-component="/examples/basic-data-template.html"
+      data-rc-name="example"
+      data-rc-trigger="load 0 500"
+      class="w-full"
+    >
+      <div x-remote-component="#placeholder"></div>
+    </div>
+  </template>
+</div>
 
-        <hr class="border-gray-200" />
+<hr class="border-gray-200" />
 
-        <div x-remote-component="#example" _id="basic-data-template">
-          <template data-for-slot="title"> Basic data-slot </template>
-          <template data-for-slot="text">
-            <p class="markdown">
-              The contents of template elements marked with `data-for-slot`
-              attribute replace the corresponding `data-slot` elements in the
-              component. This provides functionality similar to slots and
-              enhances the reusability of components.
-            </p>
-            <p class="markdown">
-              The new content can be static or include other components.
-            </p>
-            <p class="markdown">
-              You can use any element type for `data-slot`. The `data-slot`
-              element's content is used as default slot content if there is no
-              corresponding `data-for-slot`. You can nest `data-slot` elements,
-              however, when an outer `data-slot` is replaced, its inner
-              `data-slot` elements are also replaced and therefore unavailable
-              for further replacement.
-            </p>
-            <p class="markdown">
-              You can omit the slot name in `data-slot` and `data-for-slot` for
-              the component’s default slot.
-            </p>
-          </template>
-          <template data-for-slot="example">
-            <div
-              x-remote-component="/examples/basic-data-template.html"
-              data-rc-name="example"
-              data-rc-trigger="load 0 500"
-              class="w-full"
-            >
-              <div x-remote-component="#placeholder"></div>
-            </div>
-          </template>
-        </div>
+<div x-remote-component="#example" _id="data-template-components">
+  <template data-for-slot="title"> data-slot components </template>
+  <template data-for-slot="example">
+    <div
+      x-remote-component="/examples/data-template-components.html"
+      data-rc-name="example"
+      data-rc-trigger="load 0 500"
+      class="w-full"
+    >
+      <div x-remote-component="#placeholder"></div>
+    </div>
+  </template>
+</div>
 
-        <hr class="border-gray-200" />
+<hr class="border-gray-200" />
 
-        <div x-remote-component="#example" _id="data-template-components">
-          <template data-for-slot="title"> data-slot components </template>
-          <template data-for-slot="example">
-            <div
-              x-remote-component="/examples/data-template-components.html"
-              data-rc-name="example"
-              data-rc-trigger="load 0 500"
-              class="w-full"
-            >
-              <div x-remote-component="#placeholder"></div>
-            </div>
-          </template>
-        </div>
+<div
+  x-remote-component="#example"
+  _id="data-template-nested-components"
+>
+  <template data-for-slot="title">
+    data-slot nested components
+  </template>
+  <template data-for-slot="example">
+    <div
+      x-remote-component="/examples/data-template-nested-components.html"
+      data-rc-name="example"
+      data-rc-trigger="load 0 500"
+      class="w-full"
+    >
+      <div x-remote-component="#placeholder"></div>
+    </div>
+  </template>
+</div>
 
-        <hr class="border-gray-200" />
+<hr class="border-gray-200" />
 
-        <div
-          x-remote-component="#example"
-          _id="data-template-nested-components"
-        >
-          <template data-for-slot="title">
-            data-slot nested components
-          </template>
-          <template data-for-slot="example">
-            <div
-              x-remote-component="/examples/data-template-nested-components.html"
-              data-rc-name="example"
-              data-rc-trigger="load 0 500"
-              class="w-full"
-            >
-              <div x-remote-component="#placeholder"></div>
-            </div>
-          </template>
-        </div>
+<div x-remote-component="#example" _id="component-data-getters">
+  <template data-for-slot="title">
+    Passing data to component - getters
+  </template>
+  <template data-for-slot="text">
+    <p class="markdown">
+      In Alpine, data defined with `x-data` can be accessed directly by
+      child elements. This can have a few disadvantages in the context
+      of components:
+    </p>
+    <ul class="list-inside list-disc">
+      <li>
+        there’s no clear information about which external data the
+        component is using
+      </li>
+      <li>the component can accidentally mutate property values</li>
+      <li>
+        it reduces reusability, since changes require updating both the
+        component and the application
+      </li>
+    </ul>
+    <p class="markdown">
+      You can make component data safer and more reusable by adding
+      local `x-data`. The advantages are:
+    </p>
+    <ul class="list-inside list-disc">
+      <li>
+        there’s clear information about which data the component expects
+        and how it connects to the rest of the application
+      </li>
+      <li>
+        even if a property is mutated, only the local data changes
+      </li>
+      <li>
+        any changes in the application or the component now require
+        updating only the property or the getter
+      </li>
+    </ul>
+  </template>
+  <template data-for-slot="example">
+    <div
+      x-remote-component="/examples/component-data-getters.html"
+      data-rc-name="example"
+      data-rc-trigger="load 0 500"
+      class="w-full"
+    >
+      <div x-remote-component="#placeholder"></div>
+    </div>
+  </template>
+</div>
 
-        <hr class="border-gray-200" />
+<hr class="border-gray-200" />
 
-        <div x-remote-component="#example" _id="component-data-getters">
-          <template data-for-slot="title">
-            Passing data to component - getters
-          </template>
-          <template data-for-slot="text">
-            <p class="markdown">
-              In Alpine, data defined with `x-data` can be accessed directly by
-              child elements. This can have a few disadvantages in the context
-              of components:
-            </p>
-            <ul class="list-inside list-disc">
-              <li>
-                there’s no clear information about which external data the
-                component is using
-              </li>
-              <li>the component can accidentally mutate property values</li>
-              <li>
-                it reduces reusability, since changes require updating both the
-                component and the application
-              </li>
-            </ul>
-            <p class="markdown">
-              You can make component data safer and more reusable by adding
-              local `x-data`. The advantages are:
-            </p>
-            <ul class="list-inside list-disc">
-              <li>
-                there’s clear information about which data the component expects
-                and how it connects to the rest of the application
-              </li>
-              <li>
-                even if a property is mutated, only the local data changes
-              </li>
-              <li>
-                any changes in the application or the component now require
-                updating only the property or the getter
-              </li>
-            </ul>
-          </template>
-          <template data-for-slot="example">
-            <div
-              x-remote-component="/examples/component-data-getters.html"
-              data-rc-name="example"
-              data-rc-trigger="load 0 500"
-              class="w-full"
-            >
-              <div x-remote-component="#placeholder"></div>
-            </div>
-          </template>
-        </div>
+<div x-remote-component="#example" _id="component-data-attributes">
+  <template data-for-slot="title">
+    Passing data to component - attributes
+  </template>
+  <template data-for-slot="text">
+    <p class="markdown">In this example, data is passed to the component through attributes. Inside the component, getters are defined to access the data bound to those attributes.</p>
+  </template>
+  <template data-for-slot="example">
+    <div
+      x-remote-component="/examples/component-data-attributes.html"
+      data-rc-name="example"
+      data-rc-trigger="load 0 500"
+      class="w-full"
+    >
+      <div x-remote-component="#placeholder"></div>
+    </div>
+  </template>
+</div>
 
-        <hr class="border-gray-200" />
+<hr class="border-gray-200" />
 
-        <div x-remote-component="#example" _id="component-data-attributes">
-          <template data-for-slot="title">
-            Passing data to component - attributes
-          </template>
-          <template data-for-slot="text">
-            <p class="markdown">In this example, data is passed to the component through attributes. Inside the component, getters are defined to access the data bound to those attributes.</p>
-          </template>
-          <template data-for-slot="example">
-            <div
-              x-remote-component="/examples/component-data-attributes.html"
-              data-rc-name="example"
-              data-rc-trigger="load 0 500"
-              class="w-full"
-            >
-              <div x-remote-component="#placeholder"></div>
-            </div>
-          </template>
-        </div>
+<div x-remote-component="#example" _id="copy-attributes">
+  <template data-for-slot="title"> Copy component attributes </template>
+  <template data-for-slot="text">
+    <p class="markdown">
+      Attributes prefixed with `_` or `rc-` are transferred to the
+      component's root element. If the attribute already exists, the
+      value is updated. Classes are an exception and are merged with the
+      existing classes.
+    </p>
+  </template>
+  <template data-for-slot="example">
+    <div
+      x-remote-component="/examples/copy-attributes.html"
+      data-rc-name="example"
+      data-rc-trigger="load 0 500"
+      class="w-full"
+    >
+      <div x-remote-component="#placeholder"></div>
+    </div>
+  </template>
+</div>
 
-        <hr class="border-gray-200" />
+<hr class="border-gray-200" />
 
-        <div x-remote-component="#example" _id="copy-attributes">
-          <template data-for-slot="title"> Copy component attributes </template>
-          <template data-for-slot="text">
-            <p class="markdown">
-              Attributes prefixed with `_` or `rc-` are transferred to the
-              component's root element. If the attribute already exists, the
-              value is updated. Classes are an exception and are merged with the
-              existing classes.
-            </p>
-          </template>
-          <template data-for-slot="example">
-            <div
-              x-remote-component="/examples/copy-attributes.html"
-              data-rc-name="example"
-              data-rc-trigger="load 0 500"
-              class="w-full"
-            >
-              <div x-remote-component="#placeholder"></div>
-            </div>
-          </template>
-        </div>
+<div x-remote-component="#example" _id="router-view">
+  <template data-for-slot="title"> Basic navigation </template>
+  <template data-for-slot="text">
+    <p class="markdown">
+      This example shows how to create simple navigation between
+      components by combining `x-if`, `x-show`, and `x-for` templates.
+    </p>
+  </template>
+  <template data-for-slot="example">
+    <div
+      x-remote-component="/examples/router-view.html"
+      data-rc-name="example"
+      data-rc-trigger="load 0 500"
+      class="w-full"
+    >
+      <div x-remote-component="#placeholder"></div>
+    </div>
+  </template>
+</div>
 
-        <hr class="border-gray-200" />
+<hr class="border-gray-200" />
 
-        <div x-remote-component="#example" _id="router-view">
-          <template data-for-slot="title"> Basic navigation </template>
-          <template data-for-slot="text">
-            <p class="markdown">
-              This example shows how to create simple navigation between
-              components by combining `x-if`, `x-show`, and `x-for` templates.
-            </p>
-          </template>
-          <template data-for-slot="example">
-            <div
-              x-remote-component="/examples/router-view.html"
-              data-rc-name="example"
-              data-rc-trigger="load 0 500"
-              class="w-full"
-            >
-              <div x-remote-component="#placeholder"></div>
-            </div>
-          </template>
-        </div>
+<div x-remote-component="#example" _id="load-multiple-components">
+  <template data-for-slot="title"> Loading of multiple components </template>
+  <template data-for-slot="text">
+    <p class="markdown">
+      Normally, components are loaded independently or, if a component is nested, only after its parent has loaded. Sometimes you may prefer to wait until all components are loaded, for example, to use a single loading indicator or to prevent layout shifts.
+    </p>
+    <p class="markdown">
+      The snippet below shows how this can be done using `rc-*` events and an additional wrapper element.
+    </p>
+    <p class="markdown">
+      In this example, the components are displayed only after all named components have finished loading. If you want to reuse this pattern, you can create a generic loader component by adding `data-slot` elements for the placeholder and the components.
+    </p>
+  </template>
+  <template data-for-slot="example">
+    <div
+      x-remote-component="/examples/load-multiple-components.html"
+      data-rc-name="example"
+      data-rc-trigger="load 0 500"
+      class="w-full"
+    >
+      <div x-remote-component="#placeholder"></div>
+    </div>
+  </template>
+</div>
 
-        <hr class="border-gray-200" />
+<hr class="border-gray-200" />
 
-        <div x-remote-component="#example" _id="load-multiple-components">
-          <template data-for-slot="title"> Loading of multiple components </template>
-          <template data-for-slot="text">
-            <p class="markdown">
-              Normally, components are loaded independently or, if a component is nested, only after its parent has loaded. Sometimes you may prefer to wait until all components are loaded, for example, to use a single loading indicator or to prevent layout shifts.
-            </p>
-            <p class="markdown">
-              The snippet below shows how this can be done using `rc-*` events and an additional wrapper element.
-            </p>
-            <p class="markdown">
-              In this example, the components are displayed only after all named components have finished loading. If you want to reuse this pattern, you can create a generic loader component by adding `data-slot` elements for the placeholder and the components.
-            </p>
-          </template>
-          <template data-for-slot="example">
-            <div
-              x-remote-component="/examples/load-multiple-components.html"
-              data-rc-name="example"
-              data-rc-trigger="load 0 500"
-              class="w-full"
-            >
-              <div x-remote-component="#placeholder"></div>
-            </div>
-          </template>
-        </div>
+<div x-remote-component="#example" _id="recursive">
+  <template data-for-slot="title"> Recursive components </template>
+  <template data-for-slot="text">
+    <p class="markdown">
+      Components can reference themselves in the template. This can be
+      useful for creating recursive structures.
+    </p>
+  </template>
+  <template data-for-slot="example">
+    <div
+      x-remote-component="/examples/recursive.html"
+      data-rc-name="example"
+      data-rc-trigger="load 0 500"
+      class="w-full"
+    >
+      <div x-remote-component="#placeholder"></div>
+    </div>
+  </template>
+</div>
 
-        <hr class="border-gray-200" />
+<hr class="border-gray-200" />
 
-        <div x-remote-component="#example" _id="recursive">
-          <template data-for-slot="title"> Recursive components </template>
-          <template data-for-slot="text">
-            <p class="markdown">
-              Components can reference themselves in the template. This can be
-              useful for creating recursive structures.
-            </p>
-          </template>
-          <template data-for-slot="example">
-            <div
-              x-remote-component="/examples/recursive.html"
-              data-rc-name="example"
-              data-rc-trigger="load 0 500"
-              class="w-full"
-            >
-              <div x-remote-component="#placeholder"></div>
-            </div>
-          </template>
-        </div>
+<div x-remote-component="#example" _id="errors">
+  <template data-for-slot="title"> Handling errors </template>
+  <template data-for-slot="text">
+    <p class="markdown">
+      The `_rcError` reactive property stores the latest error. You can
+      use it to display fallback content within the component.
+    </p>
+    <p class="markdown">An error can be:</p>
+    <ul class="list-inside list-disc">
+      <li>a request status code for URL components</li>
+      <li class="markdown">
+        an `ID not found` message for ID components when the template
+        cannot be found
+      </li>
+    </ul>
+  </template>
+  <template data-for-slot="example">
+    <div
+      x-remote-component="/examples/errors.html"
+      data-rc-name="example"
+      data-rc-trigger="load 0 500"
+      class="w-full"
+    >
+      <div x-remote-component="#placeholder"></div>
+    </div>
+  </template>
+</div>
 
-        <hr class="border-gray-200" />
+<hr class="border-gray-200" />
 
-        <div x-remote-component="#example" _id="errors">
-          <template data-for-slot="title"> Handling errors </template>
-          <template data-for-slot="text">
-            <p class="markdown">
-              The `_rcError` reactive property stores the latest error. You can
-              use it to display fallback content within the component.
-            </p>
-            <p class="markdown">An error can be:</p>
-            <ul class="list-inside list-disc">
-              <li>a request status code for URL components</li>
-              <li class="markdown">
-                an `ID not found` message for ID components when the template
-                cannot be found
-              </li>
-            </ul>
-          </template>
-          <template data-for-slot="example">
-            <div
-              x-remote-component="/examples/errors.html"
-              data-rc-name="example"
-              data-rc-trigger="load 0 500"
-              class="w-full"
-            >
-              <div x-remote-component="#placeholder"></div>
-            </div>
-          </template>
-        </div>
+<div x-remote-component="#example" _id="x-component">
+  <template data-for-slot="title"> x-component </template>
+  <template data-for-slot="text">
+    <p class="markdown">
+      The plugin adds a custom `x-component` element. It is optional,
+      and internally works the same as the `x-remote-component` element,
+      but is dedicated to components and allows simpler attributes.
+    </p>
+  </template>
+  <template data-for-slot="example">
+    <div
+      x-remote-component="/examples/x-component.html"
+      data-rc-name="example"
+      data-rc-trigger="load 0 500"
+      class="w-full"
+    >
+      <div x-remote-component="#placeholder"></div>
+    </div>
+  </template>
+</div>
 
-        <hr class="border-gray-200" />
+<hr class="border-gray-200" />
 
-        <div x-remote-component="#example" _id="x-component">
-          <template data-for-slot="title"> x-component </template>
-          <template data-for-slot="text">
-            <p class="markdown">
-              The plugin adds a custom `x-component` element. It is optional,
-              and internally works the same as the `x-remote-component` element,
-              but is dedicated to components and allows simpler attributes.
-            </p>
-          </template>
-          <template data-for-slot="example">
-            <div
-              x-remote-component="/examples/x-component.html"
-              data-rc-name="example"
-              data-rc-trigger="load 0 500"
-              class="w-full"
-            >
-              <div x-remote-component="#placeholder"></div>
-            </div>
-          </template>
-        </div>
-
-        <hr class="border-gray-200" />
-
-        <div x-remote-component="#example" _id="custom-elements">
-          <template data-for-slot="title"> Custom element components </template>
-          <template data-for-slot="text">
-            <p class="markdown">
-              You can also create dedicated custom elements for specific
-              components. This allows the simplest usage with just a component
-              tag, but it requires an additional step of registering the
-              available components.
-            </p>
-            <p class="markdown">
-              Just like the generic `x-component` element, custom element
-              components are optional. You can register them using the
-              `Alpine.$rc.makeCustomElementComponents` function. Each component
-              must define at least the `tag` and `source` properties, while
-              other options such as `trigger` or `swap` are optional.
-            </p>
-            <p class="markdown">
-              If you’re using a CDN to include files, make sure to call the `Alpine.$rc.makeCustomElementComponents` function after the plugin but before the main Alpine JS file.
-            </p>
-            <pre
-              class="overflow-hidden rounded-xl text-sm"
-            ><code class="language-javascript">document.addEventListener("alpine:init", () =&gt; {
+<div x-remote-component="#example" _id="custom-elements">
+  <template data-for-slot="title"> Custom element components </template>
+  <template data-for-slot="text">
+    <p class="markdown">
+      You can also create dedicated custom elements for specific
+      components. This allows the simplest usage with just a component
+      tag, but it requires an additional step of registering the
+      available components.
+    </p>
+    <p class="markdown">
+      Just like the generic `x-component` element, custom element
+      components are optional. You can register them using the
+      `Alpine.$rc.makeCustomElementComponents` function. Each component
+      must define at least the `tag` and `source` properties, while
+      other options such as `trigger` or `swap` are optional.
+    </p>
+    <p class="markdown">
+      If you’re using a CDN to include files, make sure to call the `Alpine.$rc.makeCustomElementComponents` function after the plugin but before the main Alpine JS file.
+    </p>
+    <pre
+      class="overflow-hidden rounded-xl text-sm"
+    ><code class="language-javascript">document.addEventListener("alpine:init", () =&gt; {
   let components = [
     {
       tag: 'component-a',
@@ -776,34 +682,34 @@
   ]
   Alpine.$rc.makeCustomElementComponents(components)
 })</code></pre>
-          </template>
-          <template data-for-slot="example">
-            <div
-              x-remote-component="/examples/custom-elements.html"
-              data-rc-name="example"
-              data-rc-trigger="load 0 500"
-              class="w-full"
-            >
-              <div x-remote-component="#placeholder"></div>
-            </div>
-          </template>
-        </div>
+  </template>
+  <template data-for-slot="example">
+    <div
+      x-remote-component="/examples/custom-elements.html"
+      data-rc-name="example"
+      data-rc-trigger="load 0 500"
+      class="w-full"
+    >
+      <div x-remote-component="#placeholder"></div>
+    </div>
+  </template>
+</div>
 
-        <hr class="border-gray-200" />
+<hr class="border-gray-200" />
 
-        <div x-remote-component="#example" _id="script">
-          <template data-for-slot="title"> Importing scripts </template>
-          <template data-for-slot="text">
-            <p class="markdown">
-              If your component data is defined with the `Alpine.data` function
-              in a separate file, you can import it and make it available to the
-              component using the `data-rc-script` attribute. The imported file
-              should be compatible with the [Alpine plugin
-              API](https://alpinejs.dev/advanced/extending#bundle-module).
-            </p>
-            <pre
-              class="overflow-hidden rounded-xl text-sm"
-            ><code class="language-javascript">// component-script.js
+<div x-remote-component="#example" _id="script">
+  <template data-for-slot="title"> Importing scripts </template>
+  <template data-for-slot="text">
+    <p class="markdown">
+      If your component data is defined with the `Alpine.data` function
+      in a separate file, you can import it and make it available to the
+      component using the `data-rc-script` attribute. The imported file
+      should be compatible with the [Alpine plugin
+      API](https://alpinejs.dev/advanced/extending#bundle-module).
+    </p>
+    <pre
+      class="overflow-hidden rounded-xl text-sm"
+    ><code class="language-javascript">// component-script.js
 
 export default function (Alpine) {
   Alpine.data("componentData", () =&gt; {
@@ -812,109 +718,15 @@ export default function (Alpine) {
     }
   })
 }</code></pre>
-          </template>
-          <template data-for-slot="example">
-            <div
-              x-remote-component="/examples/script.html"
-              data-rc-name="example"
-              data-rc-trigger="load 0 500"
-              class="w-full"
-            >
-              <div x-remote-component="#placeholder"></div>
-            </div>
-          </template>
-        </div>
-      </div>
-    </div>
-
+  </template>
+  <template data-for-slot="example">
     <div
-      x-data
-      x-remote-component="/examples/components/modal.html"
-      data-rc-trigger="load 1000 0"
-    ></div>
-
-    <template id="example">
-      <div
-        x-data="example"
-        @rc-inserted="handleComponentInserted"
-        x-intersect:enter="examples[$el.id].isVisible = true"
-        x-intersect:leave="examples[$el.id].isVisible = false"
-        class="scroll-mt-16"
-      >
-        <div class="flex flex-col gap-y-6">
-          <div class="flex items-center justify-between">
-            <h2 class="text-xl font-semibold">
-              <div data-slot="title"></div>
-            </h2>
-          </div>
-
-          <div class="flex flex-col gap-y-4">
-            <div data-slot="text"></div>
-          </div>
-
-          <div class="relative" x-show="isExampleLoaded">
-            <pre
-              class="overflow-hidden rounded-xl text-sm"
-            ><code class="language-html" x-text="html">
-            </code></pre>
-            <a
-              :href="'https://github.com/maciejg-git/alpine-remote-component-plugin/tree/main' + path"
-              class="absolute right-4 top-4"
-            >
-              <div x-remote-component="#github-icon-sm"></div>
-            </a>
-          </div>
-
-          <div class="flex flex-col items-center gap-y-4">
-            <div data-slot="example"></div>
-          </div>
-        </div>
-      </div>
-    </template>
-
-    <template id="placeholder">
-      <div class="flex flex-col gap-y-4">
-        <div class="h-50 rounded-lg bg-gray-100"></div>
-        <div class="h-20 rounded-lg bg-gray-100"></div>
-      </div>
-    </template>
-
-    <template id="placeholder-lg">
-      <div class="flex flex-col gap-y-4">
-        <div class="h-10 rounded-lg bg-gray-100"></div>
-        <div class="h-90 rounded-lg bg-gray-100"></div>
-        <div class="h-30 rounded-lg bg-gray-100"></div>
-      </div>
-    </template>
-
-    <template id="github-icon">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="16"
-        height="16"
-        fill="currentColor"
-        viewBox="0 0 16 16"
-        class="h-6 w-6 text-gray-600"
-      >
-        <path
-          d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8"
-        />
-      </svg>
-    </template>
-
-    <template id="github-icon-sm">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="16"
-        height="16"
-        fill="currentColor"
-        viewBox="0 0 16 16"
-        class="h-5 w-5 text-gray-500"
-      >
-        <path
-          d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8"
-        />
-      </svg>
-    </template>
-  </body>
-</html>
+      x-remote-component="/examples/script.html"
+      data-rc-name="example"
+      data-rc-trigger="load 0 500"
+      class="w-full"
+    >
+      <div x-remote-component="#placeholder"></div>
+    </div>
+  </template>
+</div>
