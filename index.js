@@ -87,6 +87,11 @@ export default function (Alpine) {
         toEl.setAttribute(attr.name.substring(1), attr.value);
       }
     }
+    for (let attr in toEl.dataset) {
+      if (fromEl.dataset[attr]) {
+        toEl.dataset[attr] = fromEl.dataset[attr]
+      }
+    }
   };
 
   let swapSlotsWithTemplates = (el, fragment) => {
