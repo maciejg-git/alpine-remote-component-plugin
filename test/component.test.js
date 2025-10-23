@@ -297,6 +297,27 @@ it("transfers and merges classes", async () => {
   );
 });
 
+it("transfers data attributes that are present on the component", async () => {
+  document.body.innerHTML = `
+    <div
+      x-remote-component="/component-data-attr.html"
+      data-prop="value"
+      data-prop2="value"
+    >
+    </div>
+  `;
+
+  Alpine.initTree(document.body);
+
+  expect(await screen.findByText("component-data-attr")).toHaveAttribute(
+    "data-prop",
+    "value"
+  );
+  expect(await screen.findByText("component-data-attr")).not.toHaveAttribute(
+    "data-prop2",
+  );
+});
+
 it("sets the request code status in the _rcError", async () => {
   document.body.innerHTML = `
     <div x-remote-component="/component-not-found.html">
