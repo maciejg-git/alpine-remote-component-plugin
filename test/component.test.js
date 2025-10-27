@@ -155,6 +155,27 @@ it("swap inner", async () => {
   expect(document.querySelector("[x-remote-component]")).toBeInTheDocument()
 });
 
+it("swap target", async () => {
+  document.body.innerHTML = `
+    <div
+      x-remote-component="/component-target.html"
+      data-rc-trigger="load"
+      data-rc-swap="target"
+    >
+      <div data-target></div>
+    </div>
+  `;
+
+  Alpine.initTree(document.body);
+
+  let el = await screen.findByText("component-target")
+  let target = document.querySelector("[data-target]")
+
+  expect(target).toContainElement(el)
+
+  expect(document.querySelector("[x-remote-component]")).toBeInTheDocument()
+});
+
 it("shows content when _rcIsLoading changes", async () => {
   document.body.innerHTML = `
     <style>

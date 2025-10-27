@@ -73,6 +73,18 @@ let componentDataAttr = `
   </div>
 `
 
+let componentTarget = `
+  <div class="class2 class3 class4">
+    component-target
+    <div>
+      <div data-slot="content">
+        default slot content
+      </div>
+    </div>
+    <div data-target></div>
+  </div>
+`
+
 beforeAll(() => {
   global.fetch = vi.fn(async (url) => {
     if (url.endsWith('/component-a.html')) {
@@ -109,6 +121,12 @@ beforeAll(() => {
       return {
         ok: true,
         text: async () => componentDataAttr,
+      }
+    }
+    if (url.endsWith('/component-target.html')) {
+      return {
+        ok: true,
+        text: async () => componentTarget,
       }
     }
     return {
