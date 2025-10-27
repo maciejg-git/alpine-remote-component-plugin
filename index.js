@@ -9,6 +9,7 @@ export default function (Alpine) {
     responseHTML: null,
     requestDelay: 0,
     swapDelay: 0,
+    rawSource: null,
     source: null,
     script: "",
   };
@@ -37,6 +38,7 @@ export default function (Alpine) {
   let validSwap = [
     "inner",
     "outer",
+    "target",
   ]
 
   let sendRequest = async (url) => {
@@ -304,6 +306,14 @@ export default function (Alpine) {
             fragmentChildren.forEach((el) => {
               Alpine.initTree(el);
             })
+          } else if (config.swap === "target") {
+            let target = el.querySelector("[data-target]")
+            if (target) {
+              Alpine.mutateDom(() => {
+                target.replaceChildren(fragment)
+              })
+              Alpine.initTree(target)
+            }
           }
         }
 
@@ -336,6 +346,8 @@ export default function (Alpine) {
       });
 
       let config = Alpine.$data(el)._rc.config;
+
+      config.rawSource = expression
 
       validOptions.forEach((option) => {
         let value = el.getAttribute("data-rc-" + option);
