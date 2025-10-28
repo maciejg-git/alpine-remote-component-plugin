@@ -212,6 +212,10 @@ export default function (Alpine) {
         dispatch(el, "rc-error", { error, config });
       }
 
+      let complete = (detail = {}) => {
+        dispatch(el, "rc-completed", { config, ...detail })
+      }
+
       let initRemoteComponent = async () => {
         if (config.initialized || config.isRunning || !expression) return;
         config.isRunning = true;
@@ -331,6 +335,7 @@ export default function (Alpine) {
           _rc: {
             config: { ...Alpine.$rc.defaultConfig },
             trigger: initRemoteComponent,
+            complete,
           },
         }),
         Alpine.addScopeToNode(
