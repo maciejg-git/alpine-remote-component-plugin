@@ -4,10 +4,10 @@
     handleInserted() {
       if (this.$event.detail.name === 'example') {
         this.count--
+        this.$nextTick(() => {
+          if (!this.count) this._rc.complete()
+        })
       }
-      this.$nextTick(() => {
-        if (!this.count) this.$dispatch('rc-completed')
-      })
     },
     handleInitialized() {
       if (this.$event.detail.config.name === 'example') {

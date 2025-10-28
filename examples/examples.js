@@ -49,6 +49,7 @@ document.addEventListener("alpine:init", () => {
           title: this.$el.querySelector("h2").textContent,
           id: this.$el.id,
           isVisible: false,
+          name: this.name,
         };
       },
     };

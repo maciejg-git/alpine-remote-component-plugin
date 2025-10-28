@@ -1,0 +1,60 @@
+<div
+  x-data="{
+    count: 0,
+    handleInserted() {
+      if (this.$event.detail.name === 'example') {
+        this.count--
+        this.$nextTick(() => {
+          if (!this.count) this._rc.complete()
+        })
+      }
+    },
+    handleInitialized() {
+      if (this.$event.detail.config.name === 'example') {
+        this.count++
+      }
+    }
+  }"
+  @rc-inserted="handleInserted"
+  @rc-initialized="handleInitialized"
+>
+  <div class="mb-20 mt-20 flex flex-col gap-y-10 px-6 text-gray-800">
+    <div x-remote-component="#example" _id="dropdown">
+      <template data-for-slot="title"> Dropdown </template>
+      <template data-for-slot="text">
+        <p class="markdown">
+        </p>
+      </template>
+      <template data-for-slot="example">
+        <div
+          x-remote-component="/examples/dropdown.html"
+          data-rc-name="example"
+          data-rc-trigger="load 0 500"
+          class="w-full"
+        >
+          <div x-remote-component="#placeholder"></div>
+        </div>
+      </template>
+    </div>
+
+    <hr class="border-gray-200" />
+
+    <div x-remote-component="#example" _id="tabs">
+      <template data-for-slot="title"> Tabs </template>
+      <template data-for-slot="text">
+        <p class="markdown">
+        </p>
+      </template>
+      <template data-for-slot="example">
+        <div
+          x-remote-component="/examples/tabs.html"
+          data-rc-name="example"
+          data-rc-trigger="load 0 500"
+          class="w-full"
+        >
+          <div x-remote-component="#placeholder"></div>
+        </div>
+      </template>
+    </div>
+  </div>
+</div>
