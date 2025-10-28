@@ -162,6 +162,9 @@ export default function (Alpine) {
         globalConfig.componentPrefix + c.tag,
         Component
       );
+      if (c.components) {
+        makeCustomElementComponents(c.components)
+      }
     });
   };
 
