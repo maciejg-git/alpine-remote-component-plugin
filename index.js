@@ -89,12 +89,15 @@ export default function (Alpine) {
         toEl.setAttribute(attr.name.substring(1), attr.value);
       }
     }
+  };
+
+  let copyDataAttributes = (fromEl, toEl) => {
     for (let attr in toEl.dataset) {
       if (fromEl.dataset[attr]) {
         toEl.dataset[attr] = fromEl.dataset[attr]
       }
     }
-  };
+  }
 
   let swapSlotsWithTemplates = (el, fragment) => {
     // data-slot elements can be inside Alpine x-if or x-for templates
@@ -284,6 +287,7 @@ export default function (Alpine) {
           swapSlotsWithTemplates(el, fragment);
 
           copyPrefixedAttributes(el, fragment.firstElementChild);
+          copyDataAttributes(el, fragment.firstElementChild)
 
           if (script && script.default) {
             Alpine.plugin(script.default);
