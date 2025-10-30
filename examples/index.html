@@ -47,7 +47,7 @@
     <nav
       class="sticky top-0 z-40 flex items-center justify-between border-b border-gray-200 bg-white p-2 pr-4 text-gray-800"
     >
-      <span class="text-lg font-semibold"> Alpine Remote Component </span>
+      <span class="text-lg font-semibold ml-4"> Alpine Remote Component </span>
       <a href="https://github.com/maciejg-git/alpine-remote-component-plugin">
         <div x-data x-remote-component="#github-icon"></div>
       </a>
@@ -65,8 +65,8 @@
       x-init="document.documentElement.style.setProperty('color-scheme', 'light')"
       class="flex"
     >
-      <div class="hidden border-r border-gray-200 px-12 lg:block min-w-85">
-        <div class="sticky top-20">
+      <div class="hidden border-gray-200 px-12 lg:block min-w-85 bg-gray-50">
+        <div class="sticky top-20 max-h-screen overflow-y-auto">
           <ul>
             <li :class="{ 'font-semibold': route === 'basic-examples' }">
               <a href="" @click.prevent="route = 'basic-examples'">
