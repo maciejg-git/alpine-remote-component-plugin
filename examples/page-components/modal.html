@@ -53,11 +53,18 @@
               return hljs.highlight(code, { language: 'html' }).value
             }
           }"
+          class="relative"
         >
           <pre
             class="overflow-hidden text-sm"
           ><code class="language-html hljs" x-ref="code" x-html="getComponentSource">
           </code></pre>
+          <a
+            :href="'https://github.com/maciejg-git/alpine-remote-component-plugin/tree/main' + options.path"
+            class="absolute right-4 top-4"
+          >
+            <div x-remote-component="#github-icon-sm"></div>
+          </a>
         </main>
       </div>
     </div>
