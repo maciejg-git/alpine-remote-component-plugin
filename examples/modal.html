@@ -1,0 +1,26 @@
+<button
+  x-data
+  @click="$dispatch('open-modal', { id: 'modal' })"
+  class="mx-auto block rounded-md border-violet-700 bg-violet-500 px-4 py-2 font-medium text-gray-100 hover:bg-violet-600 focus:ring-violet-200 dark:bg-violet-500 dark:hover:bg-violet-600"
+>
+  Open modal
+</button>
+
+<x-modal _id="modal">
+  <template data-for-slot="header">
+    Lorem Ipsum is simply dummy text
+  </template>
+
+  <template data-for-slot>
+    <div class="px-6 py-5">
+      Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's
+      standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to
+      make a type specimen book. It has survived not only five centuries, but also the leap into electronic
+      typesetting, remaining essentially unchanged.
+    </div>
+    <footer class="flex justify-end gap-x-6 px-10 py-6">
+      <button @click="close()" class="font-semibold">OK</button>
+      <button @click="close()" class="font-semibold">Close</button>
+    </footer>
+  </template>
+</x-modal>

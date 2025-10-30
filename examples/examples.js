@@ -14,6 +14,7 @@ document.addEventListener("alpine:init", () => {
     return {
       html: "",
       path: "",
+      litewindUrl: "https://litewind-alpine.netlify.app/documentation/",
       isExampleLoaded: false,
       handleComponentInserted() {
         if (this.$event.detail.name === "example") {
@@ -37,7 +38,7 @@ document.addEventListener("alpine:init", () => {
       },
       handlePathClick() {
         let path = this.$event.target.innerText;
-        this.$dispatch("open-modal", { id: "modal", options: { path } });
+        this.$dispatch("open-modal", { id: "code-modal", options: { path } });
       },
       init() {
         let md = this.$el.querySelectorAll(".markdown");

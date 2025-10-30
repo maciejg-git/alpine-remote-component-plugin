@@ -1,0 +1,42 @@
+<ul
+  x-data="notify"
+  id="notify-simple"
+  class="fixed bottom-4 z-50 w-full space-y-4 md:right-4 md:w-[350px]"
+  data-delay="10000"
+>
+  <template x-for="notify in getNotifications" :key="notify.notifyId">
+    <li
+      x-bind="notification"
+      x-alt-transition='{
+        "enter": ["opacity-0 scale-[0.92]", "transition ease-out duration-200 origin-top", "opacity-100"],
+        "leave": ["opacity-100", "transition ease-in duration-200 origin-top", "opacity-0 scale-[0.92]"]
+      }'
+    >
+      <x-notification :data-variant="notify.options.variant"></x-notification>
+    </li>
+  </template>
+</ul>
+
+<template id="notification">
+  <div
+    data-variant
+    class="flex w-full items-center rounded-xl bg-secondary-100 p-4 text-sm shadow-md data-[variant=success]:text-green-100 data-[variant=success]:bg-green-600 group"
+  >
+    <div>
+      <header
+        x-show="notify.header"
+        x-text="notify.header"
+        class="mb-2 px-4 font-semibold"
+      ></header>
+      <div
+        x-text="notify.text"
+        class="px-4 dark:text-secondary-300"
+      ></div>
+    </div>
+    <template x-if="notify.dismissable">
+      <button @click="close()" class="ml-auto">
+        <x-component source="#close-icon"></x-component>
+      </button>
+    </template>
+  </div>
+</template>

@@ -32,9 +32,12 @@
     <script defer src="https://cdn.jsdelivr.net/npm/litewind-alpine@0.x.x/plugins/use-floating/dist/cdn.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/litewind-alpine@0.x.x/components/dropdown/dist/cdn.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/litewind-alpine@0.x.x/components/tabs/dist/cdn.min.js"></script>
-    <!-- alpine -->
     <script defer src="https://cdn.jsdelivr.net/npm/litewind-alpine@0.x.x/plugins/transition/dist/cdn.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/litewind-alpine@0.x.x/components/modal/dist/cdn.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/litewind-alpine@0.x.x/components/notify/dist/cdn.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/litewind-alpine@0.x.x/components/alert/dist/cdn.min.js"></script>
+    <!-- alpine -->
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
     <script
       defer
       src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"
@@ -142,7 +145,7 @@
 
     <div
       x-data
-      x-remote-component="/examples/components/modal.html"
+      x-remote-component="/examples/page-components/modal.html"
       data-rc-trigger="load 1000 0"
     ></div>
 
@@ -219,6 +222,20 @@
       >
         <path
           d="M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z"
+        />
+      </svg>
+    </template>
+
+    <template id="close-icon">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        fill="currentColor"
+        viewBox="0 0 16 16"
+      >
+        <path
+          d="M1.293 1.293a1 1 0 0 1 1.414 0L8 6.586l5.293-5.293a1 1 0 1 1 1.414 1.414L9.414 8l5.293 5.293a1 1 0 0 1-1.414 1.414L8 9.414l-5.293 5.293a1 1 0 0 1-1.414-1.414L6.586 8 1.293 2.707a1 1 0 0 1 0-1.414z"
         />
       </svg>
     </template>

@@ -1,0 +1,33 @@
+<button
+  x-data
+  @click="$dispatch(
+    'show-notify', 
+    {
+      id: 'notify-simple', 
+      header: 'Default Notification', 
+      text: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.', 
+      options: { variant: 'default' }
+    }
+  )"
+  class="mx-auto block flex items-center rounded-md border-violet-700 bg-violet-500 px-4 py-2 font-medium text-gray-100 hover:bg-violet-600 focus:ring-violet-200 dark:bg-violet-500 dark:hover:bg-violet-600"
+>
+  Show default notification
+</button>
+
+<button
+  x-data
+  @click="$dispatch(
+    'show-notify', 
+    {
+      id: 'notify-simple', 
+      header: 'Success Notification', 
+      text: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.', 
+      options: { variant: 'success' }
+    }
+  )"
+  class="mx-auto block flex items-center rounded-md border-violet-700 bg-violet-500 px-4 py-2 font-medium text-gray-100 hover:bg-violet-600 focus:ring-violet-200 dark:bg-violet-500 dark:hover:bg-violet-600"
+>
+  Show success notification
+</button>
+
+<x-notify data-delay="5000"></x-notify>

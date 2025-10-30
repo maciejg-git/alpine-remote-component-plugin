@@ -1,0 +1,43 @@
+<div
+  x-data="{
+    tabs: [
+      {
+        name: 'tab',
+        label: 'Tab',
+        content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
+      },
+      {
+        name: 'tab2',
+        label: 'Tab 2',
+        content: 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using Content here, content here, making it look like readable English.'
+      },
+      {
+        name: 'tab3',
+        label: 'Tab 3',
+        content: 'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.'
+      },
+    ],
+  }"
+>
+  <x-tabs data-selected-tab="tab">
+    <template data-for-slot="tabs">
+      <template x-for="(t, index) in tabs">
+        <x-tab :data-tab="t.name" swap="inner">
+          <template data-for-slot>
+            <span x-text="t.label"></span>
+          </template>
+        </x-tab>
+      </template>
+    </template>
+
+    <template data-for-slot="tab-panels">
+      <template x-for="(t, index) in tabs">
+        <x-tab-panel :data-tab="t.name" swap="inner">
+          <template data-for-slot>
+            <span x-text="t.content"></span>
+          </template>
+        </x-tab-panel>
+      </template>
+    </template>
+  </x-tabs>
+</div>

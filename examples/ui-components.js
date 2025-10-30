@@ -24,6 +24,24 @@ document.addEventListener("alpine:init", () => {
         },
       ]
     },
+    {
+      tag: 'modal',
+      source: '/examples/components/modal.html',
+    },
+    {
+      tag: 'notify',
+      source: '/examples/components/notify.html',
+      components: [
+        {
+          tag: 'notification',
+          source: '#notification',
+        },
+      ]
+    },
+    {
+      tag: 'alert',
+      source: '/examples/components/alert.html',
+    },
   ]
   Alpine.$rc.makeCustomElementComponents(components)
 })

@@ -549,6 +549,9 @@
           value is updated. Classes are an exception and are merged with the
           existing classes.
         </p>
+        <p class="markdown">
+          Another exception is `data-*` attributes. If a `data-*` attribute exists both on the component’s root element and on the `x-remote-component` element, it is automatically updated even without a prefix.
+        </p>
       </template>
       <template data-for-slot="example">
         <div
@@ -672,6 +675,9 @@
           The plugin adds a custom `x-component` element. It is optional,
           and internally works the same as the `x-remote-component` element,
           but is dedicated to components and allows simpler attributes.
+        </p>
+        <p class="markdown">
+          The `x-component` can be particularly useful for components with a dynamic source or small reusable components like icons.
         </p>
       </template>
       <template data-for-slot="example">

@@ -1,0 +1,65 @@
+<div x-data="modal" id="code-modal" x-cloak>
+  <div
+    x-bind="backdrop"
+    x-alt-transition='{
+      "enter": ["opacity-0", "transition ease-out duration-100", "opacity-100"],
+      "leave": ["opacity-100", "transition ease-in duration-100", "opacity-0"]
+    }'
+    class="fixed inset-0 z-40 overflow-y-auto bg-black/50"
+  ></div>
+  <div
+    x-bind="container"
+    @click="closeNotStatic()"
+    class="fixed inset-0 z-40 overflow-y-auto"
+  >
+    <div
+      x-bind="positioner"
+      class="relative mx-auto flex min-h-full items-start px-6 py-6 md:w-6/12 md:px-0"
+    >
+      <div
+        x-bind="window"
+        x-alt-transition='{
+          "enter": ["opacity-0 scale-[0.97]", "transition ease-out duration-100 delay-100", "opacity-100"],
+          "leave": ["opacity-100", "transition ease-in duration-100", "opacity-0 scale-[0.97]"]
+        }'
+        class="flex-1 overflow-auto rounded-md bg-white text-text-800 shadow-lg dark:bg-dark-800 dark:text-text-300"
+      >
+        <header
+          class="flex items-center justify-between px-6 py-5 text-lg font-medium leading-6 text-text-800 dark:text-text-300"
+        >
+          <span x-text="options.path"></span>
+          <template x-if="_closable">
+            <button @click="close()" class="hover:bg-gray-200 rounded-md p-2 dark:hover:bg-dark-600">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M1.293 1.293a1 1 0 0 1 1.414 0L8 6.586l5.293-5.293a1 1 0 1 1 1.414 1.414L9.414 8l5.293 5.293a1 1 0 0 1-1.414 1.414L8 9.414l-5.293 5.293a1 1 0 0 1-1.414-1.414L6.586 8 1.293 2.707a1 1 0 0 1 0-1.414z"
+                />
+              </svg>
+            </button>
+          </template>
+        </header>
+        <main
+          x-data="{
+            async getComponentSource() {
+              if (!options.path) return
+              let res = await fetch(options.path)
+              let code = await res.text()
+              return hljs.highlight(code, { language: 'html' }).value
+            }
+          }"
+        >
+          <pre
+            class="overflow-hidden text-sm"
+          ><code class="language-html hljs" x-ref="code" x-html="getComponentSource">
+          </code></pre>
+        </main>
+      </div>
+    </div>
+  </div>
+</div>

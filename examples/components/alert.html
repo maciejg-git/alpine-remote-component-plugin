@@ -1,0 +1,38 @@
+<div
+  x-data="alert"
+  data-variant
+  class="flex items-start rounded-md border p-5"
+  class-info="text-text-700 dark:text-info-200 bg-info-200/20 dark:bg-info-500/50 border-info-400 dark:border-info-500"
+  class-warn="text-text-700 dark:text-warn-200 bg-warn-400/20 dark:bg-warn-500/50 border-warn-400 dark:border-warn-500"
+  class-danger="text-text-700 dark:text-danger-200 bg-danger-300/20 dark:bg-danger-500/50 border-danger-400 dark:border-danger-500"
+  class-success="text-text-700 dark:text-success-200 bg-success-300/20 dark:bg-success-500/50 border-success-400 dark:border-success-500"
+>
+  <div class="mr-4 empty:hidden">
+    <div data-slot="icon">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="currentColor"
+        class="h-6 w-6"
+        viewBox="0 0 16 16"
+      >
+        <path
+          d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"
+        />
+        <path
+          d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"
+        />
+      </svg>
+    </div>
+  </div>
+  <div>
+    <div class="font-semibold">
+      <div data-slot="header"></div>
+    </div>
+    <div>
+      <div data-slot></div>
+    </div>
+  </div>
+  <button x-bind="closeButton" class="ml-auto" x-cloak>
+    <x-component source="#close-icon"></x-component>
+  </button>
+</div>
