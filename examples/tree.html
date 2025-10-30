@@ -1,0 +1,114 @@
+<div
+  x-data="{
+    url: 'https://api.github.com/repos/maciejg-git/alpine-remote-component-plugin/contents/',
+    isLoading: false,
+    tree: {
+      name: 'root',
+      id: 1,
+      type: 'dir',
+      children: [],
+    },
+    async init() {
+      let files = await this.getData('')
+      this.tree.children.push(...files)
+    },
+    async getData(path) {
+      this.isLoading = path
+      let res = await fetch(this.url + path)
+      res = await res.json()
+      await new Promise((resolve) => setTimeout(resolve, 200));
+      this.isLoading = false
+      return res
+    },
+    async open() {
+      this.isOpen = true
+      if (this.c.type === 'dir' && !this.isLoaded) {
+        this.c.children = []
+        let files = await this.getData(this.c.path)
+        this.isLoaded = true
+        if (!files.length) {
+          return
+        }
+        this.c.children.push(...files)
+      }
+    },
+    close() {
+      this.isOpen = false
+    },
+    toggle() {
+      this.isOpen ? this.close() : this.open()
+    },
+    isDirectory() {
+      return this.c.type === 'dir'
+    }
+  }"
+>
+  <ul x-data="{ c: tree }">
+    <li
+      x-remote-component="#node-file"
+      data-rc-swap="inner"
+      x-data="{ isOpen: true, isLoaded: true, index: 0 }"
+    ></li>
+  </ul>
+</div>
+
+<template id="node-file">
+  <div
+    class="flex items-center"
+    @click="toggle"
+  >
+    <div class="w-5">
+      <template x-if="isDirectory">
+        <x-component
+          _:class="{'rotate-90': isOpen}"
+          source="#chevron-tree"
+        ></x-component>
+      </template>
+    </div>
+    <span
+      x-text="c.name"
+      :class="{ 'font-semibold': isDirectory() }"
+    ></span>
+  </div>
+  <template x-if="isDirectory">
+    <ul x-show="isOpen" x-transition.opacity>
+      <template x-for="(c, index) in c.children" :key="c.sha">
+        <li
+          x-remote-component="#node-file"
+          data-rc-swap="inner"
+          x-data="{ isOpen: false, isLoaded: false, index }"
+          class="ml-6 my-1"
+        ></li>
+      </template>
+      <template x-if="isLoading === c.path">
+        <li class="ml-11 my-1">
+          <x-component source="#placeholder-file-list"></x-component>
+        </li>
+      </template>
+    </ul>
+  </template>
+</template>
+
+<template id="chevron-tree">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="16"
+    height="16"
+    fill="currentColor"
+    viewBox="0 0 16 16"
+    class="transition"
+  >
+    <path
+      d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"
+    />
+  </svg>
+</template>
+
+<template id="placeholder-file-list">
+  <div class="flex flex-col gap-y-4">
+    <div class="h-2 rounded-lg bg-gray-100"></div>
+    <div class="h-2 rounded-lg bg-gray-100"></div>
+    <div class="h-2 rounded-lg bg-gray-100"></div>
+    <div class="h-2 rounded-lg bg-gray-100"></div>
+  </div>
+</template>

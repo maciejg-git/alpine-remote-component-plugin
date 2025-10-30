@@ -13,12 +13,39 @@
       if (this.$event.detail.config.name === 'example') {
         this.count++
       }
+    },
+    init() {
+      this.$dispatch('rc-completing')
     }
   }"
   @rc-inserted="handleInserted"
   @rc-initialized="handleInitialized"
 >
   <div class="mb-20 mt-20 flex flex-col gap-y-10 px-6 text-gray-800">
+    <div x-remote-component="#example" _id="alert">
+      <template data-for-slot="title"> Alert </template>
+      <template data-for-slot="text">
+        <p class="markdown">
+        </p>
+        <button
+          @click="$dispatch('open-modal', { id: 'code-modal', options: { path: '/examples/components/alert.html' } })"
+          class="text-blue-400 underline font-semibold mr-auto"
+        >x-alert</button>
+      </template>
+      <template data-for-slot="example">
+        <div
+          x-remote-component="/examples/alert.html"
+          data-rc-name="example"
+          data-rc-trigger="load 0 500"
+          class="w-full"
+        >
+          <div x-remote-component="#placeholder"></div>
+        </div>
+      </template>
+    </div>
+
+    <hr class="border-gray-200" />
+
     <div x-remote-component="#example" _id="dropdown">
       <template data-for-slot="title"> Dropdown </template>
       <template data-for-slot="text">
@@ -140,19 +167,43 @@
 
     <hr class="border-gray-200" />
 
-    <div x-remote-component="#example" _id="alert">
-      <template data-for-slot="title"> Alert </template>
+    <div x-remote-component="#example" _id="datepicker">
+      <template data-for-slot="title"> Datepicker </template>
       <template data-for-slot="text">
         <p class="markdown">
         </p>
         <button
-          @click="$dispatch('open-modal', { id: 'code-modal', options: { path: '/examples/components/alert.html' } })"
+          @click="$dispatch('open-modal', { id: 'code-modal', options: { path: '/examples/components/dropdown.html' } })"
           class="text-blue-400 underline font-semibold mr-auto"
-        >x-alert</button>
+        >x-dropdown</button>
+        <button
+          @click="$dispatch('open-modal', { id: 'code-modal', options: { path: '/examples/components/datepicker.html' } })"
+          class="text-blue-400 underline font-semibold mr-auto"
+        >x-datepicker</button>
       </template>
       <template data-for-slot="example">
         <div
-          x-remote-component="/examples/alert.html"
+          x-remote-component="/examples/datepicker.html"
+          data-rc-name="example"
+          data-rc-trigger="load 0 500"
+          class="w-full"
+        >
+          <div x-remote-component="#placeholder"></div>
+        </div>
+      </template>
+    </div>
+
+    <hr class="border-gray-200" />
+
+    <div x-remote-component="#example" _id="tree">
+      <template data-for-slot="title"> Tree </template>
+      <template data-for-slot="text">
+        <p class="markdown">
+        </p>
+      </template>
+      <template data-for-slot="example">
+        <div
+          x-remote-component="/examples/tree.html"
           data-rc-name="example"
           data-rc-trigger="load 0 500"
           class="w-full"

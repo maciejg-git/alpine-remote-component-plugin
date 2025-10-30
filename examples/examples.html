@@ -13,6 +13,9 @@
       if (this.$event.detail.config.name === 'example') {
         this.count++
       }
+    },
+    init() {
+      this.$dispatch('rc-completing')
     }
   }"
   @rc-inserted="handleInserted"
@@ -709,6 +712,9 @@
           `Alpine.$rc.makeCustomElementComponents` function. Each component
           must define at least the `tag` and `source` properties, while
           other options such as `trigger` or `swap` are optional.
+        </p>
+        <p class="markdown">
+          You can nest registered components by placing them inside the `components` array. This is optional and mainly for better organization, as nested components can still be used as standalone, top-level components. See an example of nested components [here](https://github.com/maciejg-git/alpine-remote-component-plugin/blob/main/examples/ui-components.js).
         </p>
         <p class="markdown">
           If you’re using a CDN to include files, make sure to call the `Alpine.$rc.makeCustomElementComponents` function after the plugin but before the main Alpine JS file.

@@ -13,14 +13,16 @@
     </button>
   </template>
   <template data-for-slot="menu">
-    <x-menu-item data-action="action">
-      <template data-for-slot>Item</template>
-    </x-menu-item>
-    <x-menu-item data-action="action2">
-      <template data-for-slot>Item 2</template>
-    </x-menu-item>
-    <x-menu-item data-action="action3">
-      <template data-for-slot>Item 3</template>
-    </x-menu-item>
+    <div class="px-2 py-1">
+      <x-menu-item data-action="action">
+        <template data-for-slot>Item</template>
+      </x-menu-item>
+      <x-menu-item data-action="action2">
+        <template data-for-slot>Item 2</template>
+      </x-menu-item>
+      <x-menu-item data-action="action3">
+        <template data-for-slot>Item 3</template>
+      </x-menu-item>
+    </div>
   </template>
 </x-dropdown>

@@ -3,6 +3,7 @@ document.addEventListener("alpine:init", () => {
     {
       tag: 'dropdown',
       source: '/examples/components/dropdown.html',
+      script: 'https://cdn.jsdelivr.net/npm/litewind-alpine@0.x.x/components/dropdown/dist/module.esm.js',
       components: [
         {
           tag: 'menu-item',
@@ -13,6 +14,7 @@ document.addEventListener("alpine:init", () => {
     {
       tag: 'tabs',
       source: '/examples/components/tabs.html',
+      script: 'https://cdn.jsdelivr.net/npm/litewind-alpine@0.x.x/components/tabs/dist/module.esm.js',
       components: [
         {
           tag: 'tab',
@@ -31,6 +33,7 @@ document.addEventListener("alpine:init", () => {
     {
       tag: 'notify',
       source: '/examples/components/notify.html',
+      script: 'https://cdn.jsdelivr.net/npm/litewind-alpine@0.x.x/components/notify/dist/module.esm.js',
       components: [
         {
           tag: 'notification',
@@ -41,6 +44,12 @@ document.addEventListener("alpine:init", () => {
     {
       tag: 'alert',
       source: '/examples/components/alert.html',
+      script: 'https://cdn.jsdelivr.net/npm/litewind-alpine@0.x.x/components/alert/dist/module.esm.js',
+    },
+    {
+      tag: 'datepicker',
+      source: '/examples/components/datepicker.html',
+      script: 'https://cdn.jsdelivr.net/npm/litewind-alpine@0.x.x/components/datepicker/dist/module.esm.js',
     },
   ]
   Alpine.$rc.makeCustomElementComponents(components)

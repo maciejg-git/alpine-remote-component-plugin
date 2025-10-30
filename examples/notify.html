@@ -3,7 +3,7 @@
   @click="$dispatch(
     'show-notify', 
     {
-      id: 'notify-simple', 
+      id: 'notify', 
       header: 'Default Notification', 
       text: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.', 
       options: { variant: 'default' }
@@ -19,7 +19,7 @@
   @click="$dispatch(
     'show-notify', 
     {
-      id: 'notify-simple', 
+      id: 'notify', 
       header: 'Success Notification', 
       text: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.', 
       options: { variant: 'success' }
@@ -30,4 +30,6 @@
   Show success notification
 </button>
 
-<x-notify data-delay="5000"></x-notify>
+<template x-teleport="body">
+  <x-notify data-delay="5000"></x-notify>
+</template>
