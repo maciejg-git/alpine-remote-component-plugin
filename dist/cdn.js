@@ -11,6 +11,7 @@
       responseHTML: null,
       requestDelay: 0,
       swapDelay: 0,
+      rawSource: null,
       source: null,
       script: ""
     };
@@ -34,7 +35,8 @@
     ];
     let validSwap = [
       "inner",
-      "outer"
+      "outer",
+      "target"
     ];
     let sendRequest = async (url) => {
       try {
@@ -73,6 +75,13 @@
           toEl.setAttribute(attr.name.substring(3), attr.value);
         } else if (attr.name.startsWith("_")) {
           toEl.setAttribute(attr.name.substring(1), attr.value);
+        }
+      }
+    };
+    let copyDataAttributes = (fromEl, toEl) => {
+      for (let attr in toEl.dataset) {
+        if (fromEl.dataset[attr]) {
+          toEl.dataset[attr] = fromEl.dataset[attr];
         }
       }
     };
@@ -134,6 +143,9 @@
           globalConfig.componentPrefix + c.tag,
           Component
         );
+        if (c.components) {
+          makeCustomElementComponents(c.components);
+        }
       });
     };
     let parseTriggerValue = (s) => {
@@ -172,6 +184,9 @@
           data._rcIsLoadingWithDelay = false;
           config.isRunning = false;
           dispatch(el, "rc-error", { error, config });
+        };
+        let complete = (detail = {}) => {
+          dispatch(el, "rc-completed", { config, ...detail });
         };
         let initRemoteComponent = async () => {
           if (config.initialized || config.isRunning || !expression) return;
@@ -222,6 +237,7 @@
           if (fragment) {
             swapSlotsWithTemplates(el, fragment);
             copyPrefixedAttributes(el, fragment.firstElementChild);
+            copyDataAttributes(el, fragment.firstElementChild);
             if (script && script.default) {
               Alpine2.plugin(script.default);
             }
@@ -243,6 +259,14 @@
               fragmentChildren.forEach((el2) => {
                 Alpine2.initTree(el2);
               });
+            } else if (config.swap === "target") {
+              let target = el.querySelector("[data-target]");
+              if (target) {
+                Alpine2.mutateDom(() => {
+                  target.replaceChildren(fragment);
+                });
+                Alpine2.initTree(target);
+              }
             }
           }
           data._rcIsLoaded = true;
@@ -253,7 +277,8 @@
           Alpine2.addScopeToNode(el, {
             _rc: {
               config: { ...Alpine2.$rc.defaultConfig },
-              trigger: initRemoteComponent
+              trigger: initRemoteComponent,
+              complete
             }
           }),
           Alpine2.addScopeToNode(
@@ -270,6 +295,7 @@
           scopeCleanup.forEach((c) => c());
         });
         let config = Alpine2.$data(el)._rc.config;
+        config.rawSource = expression;
         validOptions.forEach((option) => {
           let value = el.getAttribute("data-rc-" + option);
           if (value !== null) {
