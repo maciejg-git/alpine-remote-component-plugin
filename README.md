@@ -14,7 +14,13 @@ An [Alpine](https://github.com/alpinejs/alpine) plugin that enables reusable com
 CDN:
 
 ```html
-<script defer src="https://cdn.jsdelivr.net/npm/alpine-remote-component@0.x.x/dist/cdn.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/alpine-remote-component@0.x.x/remote-component/dist/cdn.min.js"></script>
+```
+
+Optionally, for the lite version:
+
+```html
+<script defer src="https://cdn.jsdelivr.net/npm/alpine-remote-component-lite@0.x.x/remote-component-lite/dist/cdn.min.js"></script>
 ```
 
 NPM:
