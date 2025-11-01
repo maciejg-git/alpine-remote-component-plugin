@@ -24,7 +24,8 @@
     <!-- marked -->
     <script src="https://cdn.jsdelivr.net/npm/marked/lib/marked.umd.js"></script>
     <!-- alpine remote component plugin -->
-    <script type="module" defer src="/builds/cdn.js"></script>
+    <script type="module" defer src="/remote-component/builds/cdn.js"></script>
+    <script type="module" defer src="/remote-component-lite/builds/cdn.js"></script>
     <script defer src="/examples/custom-elements.js"></script>
     <script defer src="/examples/examples.js"></script>
     <!-- ui-components -->
@@ -49,7 +50,7 @@
     >
       <span class="text-lg font-semibold ml-4"> Alpine Remote Component </span>
       <a href="https://github.com/maciejg-git/alpine-remote-component-plugin">
-        <div x-data x-remote-component="#github-icon"></div>
+        <div x-data x-remote-component="#github-icon-lg"></div>
       </a>
     </nav>
 
@@ -239,7 +240,7 @@
       </svg>
     </template>
 
-    <template id="github-icon">
+    <template id="github-icon-lg">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="16"

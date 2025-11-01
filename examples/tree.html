@@ -45,8 +45,9 @@
 >
   <ul x-data="{ c: tree }">
     <li
-      x-remote-component="#node-file"
+      x-rc-lite="#node-file"
       data-rc-swap="inner"
+      data-rc-init
       x-data="{ isOpen: true, isLoaded: true, index: 0 }"
     ></li>
   </ul>
@@ -74,8 +75,9 @@
     <ul x-show="isOpen" x-transition.opacity>
       <template x-for="(c, index) in c.children" :key="c.sha">
         <li
-          x-remote-component="#node-file"
+          x-rc-lite="#node-file"
           data-rc-swap="inner"
+          data-rc-init
           x-data="{ isOpen: false, isLoaded: false, index }"
           class="ml-6 my-1"
         ></li>

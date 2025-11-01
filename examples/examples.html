@@ -547,7 +547,7 @@
       <template data-for-slot="title"> Copy component attributes </template>
       <template data-for-slot="text">
         <p class="markdown">
-          Attributes prefixed with `_` or `rc-` are transferred to the
+          Attributes prefixed with `_` or `rc:` are transferred to the
           component's root element. If the attribute already exists, the
           value is updated. Classes are an exception and are merged with the
           existing classes.
@@ -776,6 +776,26 @@
       <template data-for-slot="example">
         <div
           x-remote-component="/examples/script.html"
+          data-rc-name="example"
+          data-rc-trigger="load 0 500"
+          class="w-full"
+        >
+          <div x-remote-component="#placeholder"></div>
+        </div>
+      </template>
+    </div>
+
+    <hr class="border-gray-200" />
+
+    <div x-remote-component="#example" _id="rc-lite">
+      <template data-for-slot="title"> rc-lite </template>
+      <template data-for-slot="text">
+        <p class="markdown">
+        </p>
+      </template>
+      <template data-for-slot="example">
+        <div
+          x-remote-component="/examples/remote-component-lite.html"
           data-rc-name="example"
           data-rc-trigger="load 0 500"
           class="w-full"
