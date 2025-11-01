@@ -1,5 +1,5 @@
 (() => {
-  // index.js
+  // remote-component/index.js
   function index_default(Alpine2) {
     const defaultConfig = {
       swap: "outer",
@@ -87,6 +87,9 @@
     };
     let swapSlotsWithTemplates = (el, fragment) => {
       let slots = queryAllWithDataSlot(fragment);
+      if (!slots.length) {
+        return;
+      }
       slots.forEach((t) => {
         let element = el.content ?? el;
         let forSlot = element.querySelector(
@@ -335,7 +338,7 @@
     });
   }
 
-  // builds/cdn.js
+  // remote-component/builds/cdn.js
   document.addEventListener("alpine:init", () => {
     Alpine.plugin(index_default);
   });
