@@ -8,7 +8,8 @@
     "index.js"
   ],
   "exports": {
-    ".": "./dist/module.esm.js"
+    "./remote-component.js": "./remote-component/dist/module.esm.js",
+    "./remote-component-lite.js": "./remote-component-lite/dist/module.esm.js"
   },
   "scripts": {
     "tailwind": "npx @tailwindcss/cli -i ./examples/styles/input.css -o ./examples/styles/output.css --watch",
