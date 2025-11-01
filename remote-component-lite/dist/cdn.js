@@ -3,12 +3,11 @@
   function index_default(Alpine2) {
     const defaultConfig = {
       swap: "outer",
-      name: "",
       init: false,
       initialized: false
     };
     Alpine2.directive(
-      "remote-component-lite",
+      "rc-lite",
       (el, { expression }, { evaluate }) => {
         let initRemoteComponent = async () => {
           if (config.initialized || !expression) return;
@@ -43,7 +42,6 @@
         };
         let config = { ...defaultConfig };
         config.swap = el.getAttribute("data-rc-swap") ?? config.swap;
-        config.name = el.getAttribute("data-rc-name") ?? config.name;
         config.init = el.getAttribute("data-rc-init") === "" || config.init;
         initRemoteComponent();
       }

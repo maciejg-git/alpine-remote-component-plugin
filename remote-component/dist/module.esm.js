@@ -66,11 +66,11 @@ function index_default(Alpine) {
   };
   let copyPrefixedAttributes = (fromEl, toEl) => {
     for (let attr of fromEl.attributes) {
-      if (attr.name === "_class" || attr.name === "rc-class") {
+      if (attr.name === "_class" || attr.name === "rc:class") {
         toEl.className = mergeClasses(attr.value, toEl.className);
         continue;
       }
-      if (attr.name.startsWith("rc-")) {
+      if (attr.name.startsWith("rc:")) {
         toEl.setAttribute(attr.name.substring(3), attr.value);
       } else if (attr.name.startsWith("_")) {
         toEl.setAttribute(attr.name.substring(1), attr.value);
