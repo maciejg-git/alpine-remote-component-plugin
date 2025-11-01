@@ -276,12 +276,12 @@ it("transfers attributes with _ prefix", async () => {
   );
 });
 
-it("transfers attributes with rc- prefix", async () => {
+it("transfers attributes with rc: prefix", async () => {
   document.body.innerHTML = `
     <div
       x-remote-component="/component-a.html"
-      rc-data-attr="a"
-      rc-data-attr2="b"
+      rc:data-attr="a"
+      rc:data-attr2="b"
     >
     </div>
   `;

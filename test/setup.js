@@ -1,5 +1,6 @@
 import Alpine from 'alpinejs'
-import alpineRemoteComponent from "../builds/module.js"
+import alpineRemoteComponent from "../remote-component/builds/module.js"
+import alpineRemoteComponentLite from "../remote-component-lite/builds/module.js"
 
 let componentA = `
   <div class="class2 class3 class4">
@@ -151,6 +152,7 @@ beforeAll(() => {
   global.Alpine = Alpine
 
   Alpine.plugin(alpineRemoteComponent)
+  Alpine.plugin(alpineRemoteComponentLite)
 
   let components = [
     {
