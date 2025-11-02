@@ -82,13 +82,13 @@ it("event trigger", async () => {
   expect(await screen.findByText("component-a")).toBeInTheDocument();
 });
 
-it("reactive trigger, data-rc-watch true", async () => {
+it("reactive trigger, expression true", async () => {
   document.body.innerHTML = `
     <div x-data="{ isVisible: true }">
       <div
         x-remote-component="/component-a.html"
         data-rc-trigger="reactive"
-        data-rc-watch="isVisible"
+        x-effect="_rc.triggerEffect(isVisible)"
       >
       </div>
     </div>
@@ -99,7 +99,7 @@ it("reactive trigger, data-rc-watch true", async () => {
   expect(await screen.findByText("component-a")).toBeInTheDocument();
 });
 
-it("reactive trigger, data-rc-watch false", async () => {
+it("reactive trigger, expression false", async () => {
   document.body.innerHTML = `
     <div
       x-data="{ 
@@ -112,7 +112,7 @@ it("reactive trigger, data-rc-watch false", async () => {
       <div
         x-remote-component="/component-a.html"
         data-rc-trigger="reactive"
-        data-rc-watch="isVisible"
+        x-effect="_rc.triggerEffect(isVisible)"
       >
       </div>
     </div>
