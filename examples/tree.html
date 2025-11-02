@@ -55,7 +55,7 @@
 
 <template id="node-file">
   <div
-    class="flex items-center"
+    class="flex items-center hover:bg-gray-50 rounded-md py-1 px-2"
     @click="toggle"
   >
     <div class="w-5">
@@ -79,7 +79,7 @@
           data-rc-swap="inner"
           data-rc-init
           x-data="{ isOpen: false, isLoaded: false, index }"
-          class="ml-6 my-1"
+          class="ml-6"
         ></li>
       </template>
       <template x-if="isLoading === c.path">

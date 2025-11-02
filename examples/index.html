@@ -113,7 +113,7 @@
             x-remote-component="/examples/examples.html"
             data-rc-swap="inner"
             data-rc-trigger="reactive"
-            x-effect="route === 'basic-examples' && _rc.trigger()"
+            x-effect="_rc.triggerEffect(route === 'basic-examples')"
             x-show="isCompleted"
             x-transition.opacity
           >
@@ -134,7 +134,7 @@
             x-remote-component="/examples/ui-components.html"
             data-rc-swap="inner"
             data-rc-trigger="reactive"
-            x-effect="route === 'ui-components' && _rc.trigger()"
+            x-effect="_rc.triggerEffect(route === 'ui-components')"
             x-show="isCompleted"
             x-transition.opacity
           >

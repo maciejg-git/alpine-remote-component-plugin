@@ -5,7 +5,7 @@
       if (this.$event.detail.name === 'example') {
         this.count--
         this.$nextTick(() => {
-          if (!this.count) this._rc.complete()
+          if (!this.count) this.$dispatch('rc-completed')
         })
       }
     },
@@ -135,11 +135,7 @@
       <template data-for-slot="title"> Trigger - Reactive </template>
       <template data-for-slot="text">
         <p class="markdown">
-          The `reactive` trigger loads the component when a reactive
-          property changes. Use the `data-rc-watch` attribute to define a
-          watched property and automatically react to simple boolean
-          changes. If you need to test for specific value, you can set up
-          your own watcher using the `x-effect` directive or `$watch` magic.
+          The `reactive` trigger loads the component when reactive properties change. You should add the `x-effect` directive with the `_rc.triggerEffect` function and provide the expressions to evaluate as arguments.
         </p>
         <p class="markdown">
           You can also load and remove a component based on a reactive
@@ -599,10 +595,10 @@
           Normally, components are loaded independently or, if a component is nested, only after its parent has loaded. Sometimes you may prefer to wait until all components are loaded, for example, to use a single loading indicator or to prevent layout shifts.
         </p>
         <p class="markdown">
-          The snippet below shows how this can be done using `rc-*` events and an additional wrapper element.
+          The snippet below shows how this can be done using `rc-*` events and an additional wrapper element that handles the loading of inner components.
         </p>
         <p class="markdown">
-          In this example, the components are displayed only after all named components have finished loading. If you want to reuse this pattern, you can create a generic loader component by adding `data-slot` elements for the placeholder and the components.
+          In this example, the components are displayed only after all named components have finished loading.
         </p>
       </template>
       <template data-for-slot="example">
@@ -791,7 +787,15 @@
       <template data-for-slot="title"> rc-lite </template>
       <template data-for-slot="text">
         <p class="markdown">
+          `rc-lite` is a lightweight version of the plugin, optimized for performance and offering a limited set of options. It can be used to load ID or dynamic ID components only.
         </p>
+        <p class="markdown">
+          The available options are:
+        </p>
+        <ul class="list-inside list-disc">
+          <li class="markdown">`data-rc-swap` — specifies whether to use an inner or outer swap</li>
+          <li class="markdown">`data-rc-init` — initializes Alpine inside the component, useful if the component contains nested components or any Alpine directives</li>
+        </ul>
       </template>
       <template data-for-slot="example">
         <div

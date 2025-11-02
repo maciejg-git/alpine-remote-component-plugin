@@ -1,51 +1,13 @@
 <div
-  x-data="{
-    isLoaded: false,
-    components: [],
-    handleInserted() {
-      let name = this.$event.detail.name
-      this.components = this.components.filter((c) => c !== name)
-      this.$nextTick(() => {
-        this.isLoaded = !this.components.length
-      })
-    },
-    handleInitialized() {
-      if (!this.$event.detail.config.name) return
-      this.components.push(this.$event.detail.config.name)
-    }
-  }"
-  @rc-inserted="handleInserted"
-  @rc-initialized="handleInitialized"
+  x-data="{ isCompleted: false }"
+  @rc-completed="isCompleted = true"
 >
-  <div x-show="!isLoaded">
+  <div x-show="!isCompleted">
     <div x-remote-component="#placeholder"></div>
   </div>
-  <div x-show="isLoaded" x-transition.opacity>
-    <div
-      x-remote-component="/examples/components/component-a.html"
-      data-rc-name="component-a"
-    >
-      <template data-for-slot="content">
-        <div
-          x-remote-component="/examples/components/component-b.html"
-          data-rc-name="component-b"
-        >
-          <template data-for-slot="content">
-            <div
-              x-remote-component="/examples/components/component-c.html"
-              data-rc-name="component-c"
-            ></div>
-          </template>
-        </div>
-      </template>
-    </div>
-    <div
-      x-remote-component="/examples/components/component-b.html"
-      data-rc-name="component-b-outer"
-    ></div>
-    <div
-      x-remote-component="/examples/components/component-c.html"
-      data-rc-name="component-c-outer"
-    ></div>
-  </div>
+  <div
+    x-remote-component="/examples/components/component-load.html"
+    data-rc-swap="inner"
+    x-show="isCompleted"
+  ></div>
 </div>

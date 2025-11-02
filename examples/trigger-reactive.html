@@ -1,6 +1,7 @@
-<!-- load component using reactive trigger and x-rc:watch directive -->
-
-<div x-data="{ isLoaded: false }" class="flex flex-col items-center gap-y-4">
+<div
+  x-data="{ isLoaded: false, component: 'component-a' }"
+  class="flex flex-col items-center gap-y-4"
+>
   <button
     @click="isLoaded = true"
     class="flex items-center rounded-md border-violet-700 bg-violet-500 px-4 py-2 font-medium text-gray-100 hover:bg-violet-600 focus:ring-violet-200 dark:bg-violet-500 dark:hover:bg-violet-600"
@@ -11,23 +12,6 @@
   <div
     x-remote-component="/examples/components/component-a.html"
     data-rc-trigger="reactive"
-    data-rc-watch="isLoaded"
-  ></div>
-</div>
-
-<!-- load component using reactive trigger and x-effect directive -->
-
-<div x-data="{ isLoaded: false }" class="flex flex-col items-center gap-y-4">
-  <button
-    @click="isLoaded = true"
-    class="flex items-center rounded-md border-violet-700 bg-violet-500 px-4 py-2 font-medium text-gray-100 hover:bg-violet-600 focus:ring-violet-200 dark:bg-violet-500 dark:hover:bg-violet-600"
-  >
-    Load component
-  </button>
-
-  <div
-    x-remote-component="/examples/components/component-b.html"
-    data-rc-trigger="reactive"
-    x-effect="isLoaded && _rc.trigger()"
+    x-effect="_rc.triggerEffect(isLoaded, component === 'component-a')"
   ></div>
 </div>
