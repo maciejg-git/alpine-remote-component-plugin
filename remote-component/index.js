@@ -2,7 +2,6 @@ export default function (Alpine) {
   const defaultConfig = {
     swap: "outer",
     trigger: "load",
-    watch: null,
     name: "",
     isRunning: false,
     initialized: false,
@@ -22,7 +21,6 @@ export default function (Alpine) {
   let validOptions = [
     "trigger",
     "swap",
-    "watch",
     "name",
     "script",
   ];
@@ -63,15 +61,13 @@ export default function (Alpine) {
     return [...new Set(classes.flatMap((c) => c.split(/\s+/)))].join(" ");
   };
 
-  let queryAllWithDataSlot = (el, depth = 0) => {
-    if (depth >= 10) return []
-
+  let queryAllWithDataSlot = (el) => {
     let res = Array.from(el.querySelectorAll("[data-slot]"));
 
     // query data-slot elements inside templates but not templates with id
     // as these can be id components
     el.querySelectorAll("template:not([id])").forEach((t) => {
-      res.push(...queryAllWithDataSlot(t.content, depth + 1));
+      res.push(...queryAllWithDataSlot(t.content));
     });
 
     return res;
@@ -154,6 +150,7 @@ export default function (Alpine) {
       if (!c.tag || !c.source) {
         return;
       }
+
       class Component extends HTMLElement {
         connectedCallback() {
           this.setAttribute("x-remote-component", c.source);
@@ -217,10 +214,6 @@ export default function (Alpine) {
         data._rcIsLoadingWithDelay = false;
         config.isRunning = false;
         dispatch(el, "rc-error", { error, config });
-      }
-
-      let complete = (detail = {}) => {
-        dispatch(el, "rc-completed", { config, ...detail })
       }
 
       let initRemoteComponent = async () => {
@@ -338,12 +331,18 @@ export default function (Alpine) {
         config.isRunning = false;
       };
 
+      let config = { ...Alpine.$rc.defaultConfig }
+
       let scopeCleanup = [
         Alpine.addScopeToNode(el, {
           _rc: {
-            config: { ...Alpine.$rc.defaultConfig },
+            config,
             trigger: initRemoteComponent,
-            complete,
+            triggerEffect(...expression) {
+              if (expression.every(Boolean)) {
+                initRemoteComponent()
+              }
+            }
           },
         }),
         Alpine.addScopeToNode(
@@ -360,8 +359,6 @@ export default function (Alpine) {
       cleanup(() => {
         scopeCleanup.forEach((c) => c());
       });
-
-      let config = Alpine.$data(el)._rc.config;
 
       config.rawSource = expression
 
@@ -383,19 +380,6 @@ export default function (Alpine) {
       });
 
       dispatch(el, "rc-initialized", Alpine.$data(el)._rc);
-
-      if (config.trigger === "reactive" && config.watch) {
-        let watched = evaluate(config.watch);
-        if (watched) {
-          initRemoteComponent();
-        } else {
-          Alpine.$data(el).$watch(config.watch, (value) => {
-            if (value) {
-              initRemoteComponent();
-            }
-          });
-        }
-      }
 
       if (config.trigger === "load") {
         initRemoteComponent();
