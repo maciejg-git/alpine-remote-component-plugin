@@ -4,7 +4,6 @@
     const defaultConfig = {
       swap: "outer",
       trigger: "load",
-      watch: null,
       name: "",
       isRunning: false,
       initialized: false,
@@ -22,7 +21,6 @@
     let validOptions = [
       "trigger",
       "swap",
-      "watch",
       "name",
       "script"
     ];
@@ -57,11 +55,10 @@
     let mergeClasses = (...classes) => {
       return [...new Set(classes.flatMap((c) => c.split(/\s+/)))].join(" ");
     };
-    let queryAllWithDataSlot = (el, depth = 0) => {
-      if (depth >= 10) return [];
+    let queryAllWithDataSlot = (el) => {
       let res = Array.from(el.querySelectorAll("[data-slot]"));
       el.querySelectorAll("template:not([id])").forEach((t) => {
-        res.push(...queryAllWithDataSlot(t.content, depth + 1));
+        res.push(...queryAllWithDataSlot(t.content));
       });
       return res;
     };
@@ -188,9 +185,6 @@
           config.isRunning = false;
           dispatch(el, "rc-error", { error, config });
         };
-        let complete = (detail = {}) => {
-          dispatch(el, "rc-completed", { config, ...detail });
-        };
         let initRemoteComponent = async () => {
           if (config.initialized || config.isRunning || !expression) return;
           config.isRunning = true;
@@ -276,12 +270,17 @@
           config.initialized = true;
           config.isRunning = false;
         };
+        let config = { ...Alpine2.$rc.defaultConfig };
         let scopeCleanup = [
           Alpine2.addScopeToNode(el, {
             _rc: {
-              config: { ...Alpine2.$rc.defaultConfig },
+              config,
               trigger: initRemoteComponent,
-              complete
+              triggerEffect(...expression2) {
+                if (expression2.every(Boolean)) {
+                  initRemoteComponent();
+                }
+              }
             }
           }),
           Alpine2.addScopeToNode(
@@ -297,7 +296,6 @@
         cleanup(() => {
           scopeCleanup.forEach((c) => c());
         });
-        let config = Alpine2.$data(el)._rc.config;
         config.rawSource = expression;
         validOptions.forEach((option) => {
           let value = el.getAttribute("data-rc-" + option);
@@ -316,18 +314,6 @@
           }
         });
         dispatch(el, "rc-initialized", Alpine2.$data(el)._rc);
-        if (config.trigger === "reactive" && config.watch) {
-          let watched = evaluate(config.watch);
-          if (watched) {
-            initRemoteComponent();
-          } else {
-            Alpine2.$data(el).$watch(config.watch, (value) => {
-              if (value) {
-                initRemoteComponent();
-              }
-            });
-          }
-        }
         if (config.trigger === "load") {
           initRemoteComponent();
         }
