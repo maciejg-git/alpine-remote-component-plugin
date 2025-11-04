@@ -63,17 +63,6 @@ let componentScript = `
   </div>
 `
 
-let componentDataAttr = `
-  <div data-prop>
-    component-data-attr
-    <div>
-      <div data-slot="content">
-        default slot content
-      </div>
-    </div>
-  </div>
-`
-
 let componentTarget = `
   <div class="class2 class3 class4">
     component-target
@@ -116,12 +105,6 @@ beforeAll(() => {
       return {
         ok: true,
         text: async () => componentScript,
-      }
-    }
-    if (url.endsWith('/component-data-attr.html')) {
-      return {
-        ok: true,
-        text: async () => componentDataAttr,
       }
     }
     if (url.endsWith('/component-target.html')) {

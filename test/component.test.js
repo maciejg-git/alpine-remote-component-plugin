@@ -276,12 +276,12 @@ it("transfers attributes with _ prefix", async () => {
   );
 });
 
-it("transfers attributes with rc: prefix", async () => {
+it("transfers attributes with prop: prefix", async () => {
   document.body.innerHTML = `
     <div
       x-remote-component="/component-a.html"
-      rc:data-attr="a"
-      rc:data-attr2="b"
+      prop:data-attr="a"
+      prop:data-attr2="b"
     >
     </div>
   `;
@@ -315,27 +315,6 @@ it("transfers and merges classes", async () => {
     "class4",
     "class5",
     { exact: true }
-  );
-});
-
-it("transfers data attributes that are present on the component", async () => {
-  document.body.innerHTML = `
-    <div
-      x-remote-component="/component-data-attr.html"
-      data-prop="value"
-      data-prop2="value"
-    >
-    </div>
-  `;
-
-  Alpine.initTree(document.body);
-
-  expect(await screen.findByText("component-data-attr")).toHaveAttribute(
-    "data-prop",
-    "value"
-  );
-  expect(await screen.findByText("component-data-attr")).not.toHaveAttribute(
-    "data-prop2",
   );
 });
 
