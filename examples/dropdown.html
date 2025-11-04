@@ -1,4 +1,4 @@
-<x-dropdown data-offset-y="5">
+<x-dropdown prop:data-offset-y="5">
   <template data-for-slot="trigger">
     <button
       x-bind="trigger"
@@ -7,20 +7,19 @@
       Dropdown menu
       <x-component
         source="#chevron"
-        swap="inner"
-        :data-is-active="_isOpen"
+        prop::data-is-active="_isOpen"
       ></x-component>
     </button>
   </template>
   <template data-for-slot="menu">
     <div class="px-2 py-1">
-      <x-menu-item data-action="action">
+      <x-menu-item prop:data-action="action">
         <template data-for-slot>Item</template>
       </x-menu-item>
-      <x-menu-item data-action="action2">
+      <x-menu-item prop:data-action="action2">
         <template data-for-slot>Item 2</template>
       </x-menu-item>
-      <x-menu-item data-action="action3">
+      <x-menu-item prop:data-action="action3">
         <template data-for-slot>Item 3</template>
       </x-menu-item>
     </div>

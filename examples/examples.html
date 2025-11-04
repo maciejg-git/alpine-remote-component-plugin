@@ -543,13 +543,7 @@
       <template data-for-slot="title"> Copy component attributes </template>
       <template data-for-slot="text">
         <p class="markdown">
-          Attributes prefixed with `_` or `rc:` are transferred to the
-          component's root element. If the attribute already exists, the
-          value is updated. Classes are an exception and are merged with the
-          existing classes.
-        </p>
-        <p class="markdown">
-          Another exception is `data-*` attributes. If a `data-*` attribute exists both on the component’s root element and on the `x-remote-component` element, it is automatically updated even without a prefix.
+          Attributes prefixed with `prop:` or `_` are transferred to the component’s root element. For components with multiple root elements, the attributes are transferred to the first child element. If an attribute already exists, its value is updated. Classes are an exception and are merged with the existing classes.
         </p>
       </template>
       <template data-for-slot="example">

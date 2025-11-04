@@ -2,7 +2,6 @@
   x-data="notify"
   id="notify"
   class="fixed bottom-4 z-50 w-full space-y-4 md:right-4 md:w-[350px]"
-  data-delay="10000"
 >
   <template x-for="notify in getNotifications" :key="notify.notifyId">
     <li
@@ -12,14 +11,13 @@
         "leave": ["opacity-100", "transition ease-in duration-200 origin-top", "opacity-0 scale-[0.92]"]
       }'
     >
-      <x-notification :data-variant="notify.options.variant"></x-notification>
+      <x-notification prop::data-variant="notify.options.variant"></x-notification>
     </li>
   </template>
 </ul>
 
 <template id="notification">
   <div
-    data-variant
     class="flex w-full items-center rounded-xl bg-secondary-100 p-4 text-sm shadow-md data-[variant=success]:text-green-100 data-[variant=success]:bg-green-600 group"
   >
     <div>

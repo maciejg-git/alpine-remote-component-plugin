@@ -1,7 +1,7 @@
 <div
   x-data="{
     get value() {
-      return Alpine.bound($rcRoot, 'data-value')
+      return Alpine.bound($el, 'data-value')
     }
   }"
   class="rounded-lg border-2 border-dashed border-gray-200 bg-gray-50 p-4 px-12"

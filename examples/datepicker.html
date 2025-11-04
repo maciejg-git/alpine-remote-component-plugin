@@ -7,7 +7,7 @@
     }
   }"
 >
-  <x-dropdown data-offset-y="5">
+  <x-dropdown prop:data-offset-y="5">
     <template data-for-slot="trigger">
       <button
         x-bind="trigger"
@@ -16,13 +16,12 @@
         <span x-text="getDate() || 'Select date...'"></span>
         <x-component
           source="#chevron"
-          swap="inner"
-          :data-is-active="_isOpen"
+          prop::data-is-active="_isOpen"
         ></x-component>
       </button>
     </template>
     <template data-for-slot="menu">
-      <x-datepicker _x-model="date"></x-datepicker>
+      <x-datepicker prop:x-model="date"></x-datepicker>
     </template>
   </x-dropdown>
 </div>

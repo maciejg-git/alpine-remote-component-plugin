@@ -19,10 +19,10 @@
     ],
   }"
 >
-  <x-tabs data-selected-tab="tab">
+  <x-tabs prop:data-selected-tab="tab">
     <template data-for-slot="tabs">
       <template x-for="(t, index) in tabs">
-        <x-tab :data-tab="t.name" swap="inner">
+        <x-tab prop::data-tab="t.name" swap="inner">
           <template data-for-slot>
             <span x-text="t.label"></span>
           </template>
@@ -32,7 +32,7 @@
 
     <template data-for-slot="tab-panels">
       <template x-for="(t, index) in tabs">
-        <x-tab-panel :data-tab="t.name" swap="inner">
+        <x-tab-panel prop::data-tab="t.name" swap="inner">
           <template data-for-slot>
             <span x-text="t.content"></span>
           </template>

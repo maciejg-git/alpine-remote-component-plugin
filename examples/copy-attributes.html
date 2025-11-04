@@ -1,15 +1,15 @@
+<!-- copy attributes with prop: prefix -->
+
+<div
+  x-remote-component="/examples/components/component-b.html"
+  prop:class="!border-red-400"
+  prop:x-on:click="console.log('You can copy any attribute including Alpine directives.')"
+></div>
+
 <!-- copy attributes with _ prefix -->
 
 <div
   x-remote-component="/examples/components/component-a.html"
   _class="!border-red-400"
   _x-on:click="console.log('You can copy any attribute including Alpine directives.')"
-></div>
-
-<!-- copy attributes with rc: prefix -->
-
-<div
-  x-remote-component="/examples/components/component-b.html"
-  rc:class="!border-red-400"
-  rc:x-on:click="console.log('You can copy any attribute including Alpine directives.')"
 ></div>

@@ -1,7 +1,4 @@
-<div
-  x-data="dropdown"
-  data-offset-y
->
+<div x-data="dropdown">
   <div data-slot="trigger"></div>
   <div
     x-bind="menu"
@@ -21,7 +18,6 @@
     href="#"
     class="text-text-800 hover:bg-secondary-100 focus:bg-primary-500 dark:text-text-300 dark:hover:bg-dark-700 dark:focus:bg-primary-500 my-1 block w-full px-4 py-2 text-left focus:text-white focus:outline-hidden dark:focus:text-white rounded-md my-1"
     @click.prevent="console.log($el.dataset.action)"
-    data-action
   >
     <div data-slot></div>
   </a>

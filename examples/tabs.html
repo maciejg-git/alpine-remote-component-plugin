@@ -1,28 +1,28 @@
-<x-tabs data-selected-tab="tab">
+<x-tabs prop:data-selected-tab="tab">
   <template data-for-slot="tabs">
-    <x-tab data-tab="tab">
+    <x-tab prop:data-tab="tab">
       <template data-for-slot>Tab</template>
     </x-tab>
-    <x-tab data-tab="tab2">
+    <x-tab prop:data-tab="tab2">
       <template data-for-slot>Tab 2</template>
     </x-tab>
-    <x-tab data-tab="tab3">
+    <x-tab prop:data-tab="tab3">
       <template data-for-slot>Tab 3</template>
     </x-tab>
   </template>
 
   <template data-for-slot="tab-panels">
-    <x-tab-panel data-tab="tab">
+    <x-tab-panel prop:data-tab="tab">
       <template data-for-slot>
         Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
       </template>
     </x-tab-panel>
-    <x-tab-panel data-tab="tab2">
+    <x-tab-panel prop:data-tab="tab2">
       <template data-for-slot>
         It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.
       </template>
     </x-tab-panel>
-    <x-tab-panel data-tab="tab3">
+    <x-tab-panel prop:data-tab="tab3">
       <template data-for-slot>
         Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.
       </template>
