@@ -11,6 +11,7 @@ export default function (Alpine) {
     rawSource: null,
     source: null,
     script: "",
+    tags: {},
   };
 
   const globalConfig = {
@@ -23,6 +24,7 @@ export default function (Alpine) {
     "swap",
     "name",
     "script",
+    "tags",
   ];
 
   let validTriggers = [
@@ -75,25 +77,17 @@ export default function (Alpine) {
 
   let copyPrefixedAttributes = (fromEl, toEl) => {
     for (let attr of fromEl.attributes) {
-      if (attr.name === "_class" || attr.name === "rc:class") {
+      if (attr.name === "_class" || attr.name === "prop:class") {
         toEl.className = mergeClasses(attr.value, toEl.className);
         continue;
       }
-      if (attr.name.startsWith("rc:")) {
-        toEl.setAttribute(attr.name.substring(3), attr.value);
+      if (attr.name.startsWith("prop:")) {
+        toEl.setAttribute(attr.name.substring(5), attr.value);
       } else if (attr.name.startsWith("_")) {
         toEl.setAttribute(attr.name.substring(1), attr.value);
       }
     }
   };
-
-  let copyDataAttributes = (fromEl, toEl) => {
-    for (let attr in toEl.dataset) {
-      if (fromEl.dataset[attr]) {
-        toEl.dataset[attr] = fromEl.dataset[attr]
-      }
-    }
-  }
 
   let swapSlotsWithTemplates = (el, fragment) => {
     // data-slot elements can be inside Alpine x-if or x-for templates
@@ -284,7 +278,6 @@ export default function (Alpine) {
           swapSlotsWithTemplates(el, fragment);
 
           copyPrefixedAttributes(el, fragment.firstElementChild);
-          copyDataAttributes(el, fragment.firstElementChild)
 
           if (script && script.default) {
             Alpine.plugin(script.default);
@@ -373,6 +366,12 @@ export default function (Alpine) {
             return;
           }
           if (option === "swap" && !validSwap.includes(value)) {
+            return
+          }
+          if (option === "tags") {
+            config.tags = Object.fromEntries(value.split(" ").map((tag) => {
+              return [tag, true]
+            }))
             return
           }
           config[option] = value;
