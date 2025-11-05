@@ -59,9 +59,10 @@ export default function (Alpine) {
     );
   };
 
-  let mergeClasses = (...classes) => {
-    return [...new Set(classes.flatMap((c) => c.split(/\s+/)))].join(" ");
-  };
+  let mergeClasses = (classes, el) => {
+    let classesToAdd = classes.split(" ")
+    el.classList.add(...classesToAdd)
+  }
 
   let queryAllWithDataSlot = (el) => {
     let res = Array.from(el.querySelectorAll("[data-slot]"));
@@ -78,7 +79,7 @@ export default function (Alpine) {
   let copyPrefixedAttributes = (fromEl, toEl) => {
     for (let attr of fromEl.attributes) {
       if (attr.name === "_class" || attr.name === "prop:class") {
-        toEl.className = mergeClasses(attr.value, toEl.className);
+        mergeClasses(attr.value, toEl);
         continue;
       }
       if (attr.name.startsWith("prop:")) {
