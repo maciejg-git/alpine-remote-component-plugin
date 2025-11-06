@@ -78,14 +78,15 @@ export default function (Alpine) {
 
   let copyPrefixedAttributes = (fromEl, toEl) => {
     for (let attr of fromEl.attributes) {
-      if (attr.name === "_class" || attr.name === "prop:class") {
-        mergeClasses(attr.value, toEl);
+      let { name, value } = attr
+      if (name === "_class" || name === "prop:class") {
+        mergeClasses(value, toEl);
         continue;
       }
-      if (attr.name.startsWith("prop:")) {
-        toEl.setAttribute(attr.name.substring(5), attr.value);
-      } else if (attr.name.startsWith("_")) {
-        toEl.setAttribute(attr.name.substring(1), attr.value);
+      if (name.startsWith("prop:")) {
+        toEl.setAttribute(name.substring(5), value);
+      } else if (name.startsWith("_")) {
+        toEl.setAttribute(name.substring(1), value);
       }
     }
   };
