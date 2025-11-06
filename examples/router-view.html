@@ -125,7 +125,7 @@
       data-rc-trigger="reactive"
       data-rc-swap="inner"
       x-show="currentComponent === c"
-      x-effect="currentComponent === c && _rc.trigger()"
+      x-effect="_rc.triggerEffect(currentComponent === c)"
     ></div>
   </template>
 </div>

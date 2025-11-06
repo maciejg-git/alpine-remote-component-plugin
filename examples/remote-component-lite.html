@@ -1,13 +1,18 @@
-<div x-rc-lite="#github-icon"></div>
+<div class="flex items-center gap-x-4">
+  <!-- ID component -->
+  <div x-rc-lite="#github-icon"></div>
 
-<div x-data="{ icon: 'github-icon' }">
-  <div x-rc-lite="'#' + icon"></div>
+  <!-- dynamic ID component -->
+  <div x-data="{ icon: 'github-icon' }">
+    <div x-rc-lite="'#' + icon"></div>
+  </div>
+
+  <!-- initialize Alpine inside component to load nested component -->
+  <div
+    x-rc-lite="#component-lite"
+    data-rc-init
+  ></div>
 </div>
-
-<div
-  x-rc-lite="#component-lite"
-  data-rc-init
-></div>
 
 <template id="component-lite">
   <div class="rounded-lg border-2 border-dashed border-gray-200 bg-gray-50 p-4 px-6">

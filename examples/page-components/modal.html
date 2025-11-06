@@ -46,18 +46,27 @@
         </header>
         <main
           x-data="{
-            async getComponentSource() {
+            html: '',
+            init() {
+              this.$watch('options', () => {
+                this.getComponentSource()
+              })
+            },
+            async getComponentSource(path) {
               if (!options.path) return
-              let res = await fetch(options.path)
+              let res = await fetch(path || options.path)
               let code = await res.text()
-              return hljs.highlight(code, { language: 'html' }).value
+              this.html = hljs.highlight(code, { language: 'html' }).value
+            },
+            handlePathClick() {
+              this.getComponentSource(this.$event.target.innerText)
             }
           }"
           class="relative"
         >
           <pre
             class="overflow-hidden text-sm"
-          ><code class="language-html hljs" x-ref="code" x-html="getComponentSource">
+          ><code class="language-html hljs" x-ref="code" x-html="html">
           </code></pre>
           <a
             :href="'https://github.com/maciejg-git/alpine-remote-component-plugin/tree/main' + options.path"
