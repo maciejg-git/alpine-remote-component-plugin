@@ -12,7 +12,8 @@
       swapDelay: 0,
       rawSource: null,
       source: null,
-      script: ""
+      script: "",
+      tags: {}
     };
     const globalConfig = {
       urlPrefix: "",
@@ -22,7 +23,8 @@
       "trigger",
       "swap",
       "name",
-      "script"
+      "script",
+      "tags"
     ];
     let validTriggers = [
       "load",
@@ -52,8 +54,9 @@
         "text/html"
       );
     };
-    let mergeClasses = (...classes) => {
-      return [...new Set(classes.flatMap((c) => c.split(/\s+/)))].join(" ");
+    let mergeClasses = (classes, el) => {
+      let classesToAdd = classes.split(" ");
+      el.classList.add(...classesToAdd);
     };
     let queryAllWithDataSlot = (el) => {
       let res = Array.from(el.querySelectorAll("[data-slot]"));
@@ -64,21 +67,15 @@
     };
     let copyPrefixedAttributes = (fromEl, toEl) => {
       for (let attr of fromEl.attributes) {
-        if (attr.name === "_class" || attr.name === "rc:class") {
-          toEl.className = mergeClasses(attr.value, toEl.className);
+        let { name, value } = attr;
+        if (name === "_class" || name === "prop:class") {
+          mergeClasses(value, toEl);
           continue;
         }
-        if (attr.name.startsWith("rc:")) {
-          toEl.setAttribute(attr.name.substring(3), attr.value);
-        } else if (attr.name.startsWith("_")) {
-          toEl.setAttribute(attr.name.substring(1), attr.value);
-        }
-      }
-    };
-    let copyDataAttributes = (fromEl, toEl) => {
-      for (let attr in toEl.dataset) {
-        if (fromEl.dataset[attr]) {
-          toEl.dataset[attr] = fromEl.dataset[attr];
+        if (name.startsWith("prop:")) {
+          toEl.setAttribute(name.substring(5), value);
+        } else if (name.startsWith("_")) {
+          toEl.setAttribute(name.substring(1), value);
         }
       }
     };
@@ -234,7 +231,6 @@
           if (fragment) {
             swapSlotsWithTemplates(el, fragment);
             copyPrefixedAttributes(el, fragment.firstElementChild);
-            copyDataAttributes(el, fragment.firstElementChild);
             if (script && script.default) {
               Alpine2.plugin(script.default);
             }
@@ -308,6 +304,12 @@
               return;
             }
             if (option === "swap" && !validSwap.includes(value)) {
+              return;
+            }
+            if (option === "tags") {
+              config.tags = Object.fromEntries(value.split(" ").map((tag) => {
+                return [tag, true];
+              }));
               return;
             }
             config[option] = value;
