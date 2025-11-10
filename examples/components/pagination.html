@@ -1,0 +1,49 @@
+<nav
+  x-data="pagination"
+  class="flex w-auto gap-x-2"
+>
+  <a
+    x-bind="prevButton"
+    class="flex w-12 cursor-pointer flex-col items-center justify-center rounded-sm border border-gray-300 p-2 text-sm font-medium hover:bg-secondary-50 dark:border-dark-600 dark:text-text-300 dark:hover:bg-dark-700"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      fill="currentColor"
+      viewBox="0 0 16 16"
+    >
+      <path
+        fill-rule="evenodd"
+        d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"
+      />
+    </svg>
+  </a>
+  <template x-for="page in getPages">
+    <a
+      x-bind="pageButton"
+      x-text="page"
+      class="z-10 flex h-10 w-12 flex-none cursor-pointer items-center justify-center rounded-sm border text-sm font-semibold transition-shadow"
+      class-default="border-gray-300 hover:bg-secondary-50 dark:border-dark-600 dark:text-text-300 dark:hover:bg-dark-800"
+      class-selected="border-primary-200 bg-primary-500 font-semibold text-white ring-2 ring-primary-200 hover:bg-primary-400 dark:border-primary-200 dark:bg-primary-500 dark:text-text-100 dark:ring-primary-200 dark:hover:bg-primary-400"
+    >
+    </a>
+  </template>
+  <a
+    x-bind="nextButton"
+    class="flex w-12 cursor-pointer flex-col items-center justify-center rounded-sm border border-gray-300 p-2 text-sm font-medium hover:bg-secondary-50 dark:border-dark-600 dark:text-text-300 dark:hover:bg-dark-700"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      fill="currentColor"
+      viewBox="0 0 16 16"
+    >
+      <path
+        fill-rule="evenodd"
+        d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"
+      />
+    </svg>
+  </a>
+</nav>

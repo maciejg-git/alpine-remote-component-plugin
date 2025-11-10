@@ -51,6 +51,21 @@ document.addEventListener("alpine:init", () => {
       source: '/examples/components/datepicker.html',
       script: 'https://cdn.jsdelivr.net/npm/litewind-alpine@0.x.x/components/datepicker/dist/module.esm.js',
     },
+    {
+      tag: 'table',
+      source: '/examples/components/table.html',
+      script: 'https://cdn.jsdelivr.net/npm/litewind-alpine@0.x.x/components/table/dist/module.esm.js'
+    },
+    {
+      tag: 'pagination',
+      source: '/examples/components/pagination.html',
+      script: 'https://cdn.jsdelivr.net/npm/litewind-alpine@0.x.x/components/pagination/dist/module.esm.js'
+    },
+    {
+      tag: 'input',
+      source: '/examples/components/input.html',
+      script: 'https://cdn.jsdelivr.net/npm/litewind-alpine@0.x.x/components/input/dist/module.esm.js'
+    },
   ]
   Alpine.$rc.makeCustomElementComponents(components)
 })

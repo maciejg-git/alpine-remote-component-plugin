@@ -1,0 +1,34 @@
+<div
+  x-data="{
+    itemsCount: 0,
+    itemsPerPage: 10,
+    page: 1,
+    filter: '',
+  }"
+  @update:items="itemsCount = $event.detail.length"
+  class="flex flex-col gap-y-4 w-full px-2"
+>
+  <x-input
+    prop:x-model="filter"
+    prop:data-clearable="true"
+  >
+  </x-input>
+
+  <x-table
+    prop::data-items="$store.table.items"
+    prop:data-primary-key="id"
+    prop::data-items-per-page="itemsPerPage"
+    prop::data-page="page"
+    prop::data-filter="filter"
+  >
+  </x-table>
+
+  <x-pagination
+    prop:x-model="page"
+    prop::data-items-count="itemsCount"
+    prop::data-items-per-page="itemsPerPage"
+    prop:data-max-pages="7"
+    prop:class="ml-auto"
+  >
+  </x-pagination>
+</div>

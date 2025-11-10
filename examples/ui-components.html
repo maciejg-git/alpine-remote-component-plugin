@@ -212,5 +212,37 @@
         </div>
       </template>
     </div>
+
+    <hr class="border-gray-200" />
+
+    <div x-remote-component="#example" _id="data-table">
+      <template data-for-slot="title"> Data table </template>
+      <template data-for-slot="text">
+        <p class="markdown">
+        </p>
+        <button
+          @click="$dispatch('open-modal', { id: 'code-modal', options: { path: '/examples/components/table.html' } })"
+          class="text-blue-400 underline font-semibold mr-auto"
+        >x-table</button>
+        <button
+          @click="$dispatch('open-modal', { id: 'code-modal', options: { path: '/examples/components/pagination.html' } })"
+          class="text-blue-400 underline font-semibold mr-auto"
+        >x-pagination</button>
+        <button
+          @click="$dispatch('open-modal', { id: 'code-modal', options: { path: '/examples/components/input.html' } })"
+          class="text-blue-400 underline font-semibold mr-auto"
+        >x-input</button>
+      </template>
+      <template data-for-slot="example">
+        <div
+          x-remote-component="/examples/table.html"
+          data-rc-name="example"
+          data-rc-trigger="load 0 500"
+          class="w-full"
+        >
+          <div x-remote-component="#placeholder"></div>
+        </div>
+      </template>
+    </div>
   </div>
 </div>
