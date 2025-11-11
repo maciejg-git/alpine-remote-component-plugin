@@ -5,7 +5,9 @@
   class-valid="border-success-300 bg-white text-success-600 focus-within:ring-success-200 dark:border-success-400 dark:bg-dark-800 dark:text-success-600 dark:focus-within:ring-success-300"
   class-invalid="border-danger-300 bg-white text-danger-600 focus-within:ring-danger-200 dark:border-danger-400 dark:bg-dark-800 dark:text-danger-600 dark:focus-within:ring-danger-300"
 >
-  <div data-icon class="mr-3 empty:hidden"></div>
+  <div data-icon class="mr-3 empty:hidden">
+    <div data-slot="icon"></div>
+  </div>
   <div data-prepend class="mr-3 empty:hidden"></div>
   <div class="mr-3 flex flex-1 flex-wrap">
     <input

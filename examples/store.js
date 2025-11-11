@@ -1,5 +1,31 @@
 document.addEventListener("alpine:init", () => {
   Alpine.store("table", {
+    definition: [
+      {
+        key: "manufacturer",
+        sortable: true,
+      },
+      {
+        key: "model",
+        sortable: true,
+      },
+      {
+        key: "type",
+        sortable: true,
+      },
+      {
+        key: "fuel",
+        sortable: true,
+      },
+      {
+        key: "year",
+        sortable: true,
+      },
+      {
+        key: "price",
+        sortable: true,
+      },
+    ],
     items: [
       {
         "id": 1,

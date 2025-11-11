@@ -11,11 +11,19 @@
   <x-input
     prop:x-model="filter"
     prop:data-clearable="true"
+    prop:data-placeholder="Search"
   >
+    <template data-for-slot="icon">
+      <x-component
+        source="#search-icon"
+        prop:class="text-gray-500"
+      ></x-component>
+    </template>
   </x-input>
 
   <x-table
     prop::data-items="$store.table.items"
+    prop::data-definition="$store.table.definition"
     prop:data-primary-key="id"
     prop::data-items-per-page="itemsPerPage"
     prop::data-page="page"

@@ -68,7 +68,7 @@
       class="flex"
     >
       <div class="hidden border-gray-200 px-12 lg:block min-w-85 bg-gray-50">
-        <div class="sticky top-20 max-h-screen overflow-y-auto">
+        <div class="sticky top-20 max-h-screen min-h-screen overflow-y-auto">
           <ul>
             <li :class="{ 'font-semibold': route === 'basic-examples' }">
               <a href="" @click.prevent="route = 'basic-examples'">
@@ -223,6 +223,12 @@
         <path
           d="M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z"
         />
+      </svg>
+    </template>
+
+    <template id="search-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
       </svg>
     </template>
 
