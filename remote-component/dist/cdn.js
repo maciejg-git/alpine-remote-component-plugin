@@ -17,6 +17,7 @@
     };
     const globalConfig = {
       urlPrefix: "",
+      fetchOptions: null,
       componentPrefix: Alpine2.prefixed()
     };
     let validOptions = [
@@ -40,7 +41,7 @@
     ];
     let sendRequest = async (url) => {
       try {
-        let res = await fetch(url);
+        let res = await fetch(url, globalConfig.fetchOptions || {});
         if (!res.ok) throw res.status;
         return await res.text();
       } catch (error) {
@@ -57,6 +58,20 @@
     let mergeClasses = (classes, el) => {
       let classesToAdd = classes.split(" ");
       el.classList.add(...classesToAdd);
+    };
+    let queryTemplateByIdPath = (path) => {
+      let pathParts = path.split(".");
+      let template = document.querySelector(pathParts.shift());
+      if (!template) {
+        return null;
+      }
+      for (let id of pathParts) {
+        template = template.content.querySelector("#" + id);
+        if (!template) {
+          return null;
+        }
+      }
+      return template;
     };
     let queryAllWithDataSlot = (el) => {
       let res = Array.from(el.querySelectorAll("[data-slot]"));
@@ -214,7 +229,8 @@
               return;
             }
           } else if (isId(exp)) {
-            fragment = document.querySelector(exp)?.content.cloneNode(true);
+            fragment = queryTemplateByIdPath(exp);
+            fragment = fragment?.content.cloneNode(true);
             if (!fragment) {
               handleError("ID not found", data);
               return;
