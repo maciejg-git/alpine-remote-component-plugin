@@ -78,7 +78,17 @@ Note that for components using the outer swap option, it may return the closest 
 
 ### Default config
 
-The default options for all components can be configured in the `Alpine.$rc.defaultConfig` object. Additionally, this config allows setting the `urlPrefix` option, which defines the prefix used for all URL components.
+The default options for all components can be configured in the `Alpine.$rc` object. 
+
+The defaultConfig allows setting defaults for options such as swap or trigger, which can be modified on individual components using `data-rc-*` attributes.
+
+The globalConfig defines options that apply to all components: 
+
+- `urlPrefix` — prefix for all URL-based components
+- `fetchOptions` — options object passed to fetch when loading URL components
+- `componentPrefix` — prefix used for custom element components
+
+If you’re using a CDN to include files, make sure to modify `Alpine.$rc` configs after the plugin but before the main Alpine JS file.
 
 ### Events
 
