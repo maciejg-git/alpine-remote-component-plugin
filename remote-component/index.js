@@ -16,6 +16,7 @@ export default function (Alpine) {
 
   const globalConfig = {
     urlPrefix: "",
+    fetchOptions: null,
     componentPrefix: Alpine.prefixed(),
   };
 
@@ -43,7 +44,7 @@ export default function (Alpine) {
 
   let sendRequest = async (url) => {
     try {
-      let res = await fetch(url);
+      let res = await fetch(url, globalConfig.fetchOptions || {});
       if (!res.ok) throw res.status;
       return await res.text();
     } catch (error) {
@@ -62,6 +63,26 @@ export default function (Alpine) {
   let mergeClasses = (classes, el) => {
     let classesToAdd = classes.split(" ")
     el.classList.add(...classesToAdd)
+  }
+
+  let queryTemplateByIdPath = (path) => {
+    let pathParts = path.split(".")
+
+    let template = document.querySelector(pathParts.shift())
+
+    if (!template) {
+      return null
+    }
+
+    for (let id of pathParts) {
+      template = template.content.querySelector("#" + id)
+
+      if (!template) {
+        return null
+      }
+    }
+
+    return template
   }
 
   let queryAllWithDataSlot = (el) => {
@@ -256,7 +277,9 @@ export default function (Alpine) {
         } else if (isId(exp)) {
           // this could be wrapped in resolved Promise to make both url and id
           // components async
-          fragment = document.querySelector(exp)?.content.cloneNode(true);
+          // fragment = document.querySelector(exp)?.content.cloneNode(true);
+          fragment = queryTemplateByIdPath(exp)
+          fragment = fragment?.content.cloneNode(true)
           if (!fragment) {
             handleError("ID not found", data)
             return;
