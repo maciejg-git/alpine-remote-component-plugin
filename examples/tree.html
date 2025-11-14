@@ -45,7 +45,7 @@
 >
   <ul x-data="{ c: tree }">
     <li
-      x-rc-lite="#node-file"
+      x-rc-lite="#tree.node"
       data-rc-swap="inner"
       data-rc-init
       x-data="{ isOpen: true, isLoaded: true, index: 0 }"
@@ -53,7 +53,7 @@
   </ul>
 </div>
 
-<template id="node-file">
+<template id="tree.node">
   <div
     class="flex items-center hover:bg-gray-50 rounded-md py-1 px-2"
     @click="toggle"
@@ -61,7 +61,7 @@
     <div class="w-5">
       <template x-if="isDirectory">
         <x-component
-          source="#chevron-tree"
+          source="#icon.chevron-tree"
           prop::data-is-open="isOpen"
         ></x-component>
       </template>
@@ -75,7 +75,7 @@
     <ul x-show="isOpen" x-transition.opacity>
       <template x-for="(c, index) in c.children" :key="c.sha">
         <li
-          x-rc-lite="#node-file"
+          x-rc-lite="#tree.node"
           data-rc-swap="inner"
           data-rc-init
           x-data="{ isOpen: false, isLoaded: false, index }"
@@ -84,14 +84,14 @@
       </template>
       <template x-if="isLoading === c.path">
         <li class="ml-11 my-1">
-          <x-component source="#placeholder-file-list"></x-component>
+          <x-component source="#placeholder.file-list"></x-component>
         </li>
       </template>
     </ul>
   </template>
 </template>
 
-<template id="chevron-tree">
+<template id="icon.chevron-tree">
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="16"
@@ -106,7 +106,7 @@
   </svg>
 </template>
 
-<template id="placeholder-file-list">
+<template id="placeholder.file-list">
   <div class="flex flex-col gap-y-4">
     <div class="h-2 rounded-lg bg-gray-100"></div>
     <div class="h-2 rounded-lg bg-gray-100"></div>

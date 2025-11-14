@@ -7,7 +7,7 @@ document.addEventListener("alpine:init", () => {
       components: [
         {
           tag: 'menu-item',
-          source: '#menu-item',
+          source: '#dropdown.menu-item',
         },
       ]
     },
@@ -18,11 +18,11 @@ document.addEventListener("alpine:init", () => {
       components: [
         {
           tag: 'tab',
-          source: '#tab',
+          source: '#tabs.tab',
         },
         {
           tag: 'tab-panel',
-          source: '#tab-panel',
+          source: '#tabs.panel',
         },
       ]
     },
