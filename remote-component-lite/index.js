@@ -17,7 +17,7 @@ export default function (Alpine) {
           exp = evaluate(expression);
         }
 
-        let fragment = document.querySelector(exp)?.content.cloneNode(true);
+        let fragment = document.querySelector(exp.replace(/\./g, '\\.'))?.content.cloneNode(true);
 
         if (!fragment) {
           return;
