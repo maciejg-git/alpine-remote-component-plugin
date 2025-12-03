@@ -93,27 +93,62 @@ export default function (Alpine) {
   };
 
   let swapSlotsWithTemplates = (el, fragment) => {
-    // data-slot elements can be inside Alpine x-if or x-for templates
-    // so we need to query inside them too
-    let slots = queryAllWithDataSlot(fragment);
+    let toReplace = []
+    let toRemove = []
 
-    if (!slots.length) {
-      return
+    let slotTemplates = new Map()
+    Array.from(el.querySelectorAll("template[data-for-slot]")).forEach((t) => {
+      slotTemplates.set(t.dataset.forSlot, t)
+    })
+
+    let findAndSwapSlots = (fragment, context = null) => {
+      fragment = fragment.content ?? fragment
+
+      for (let c of fragment.children) {
+        if (c.tagName === "TEMPLATE" && c.id) {
+          continue
+        }
+
+        let slot = c.hasAttribute("data-slot") && c
+        let template = c.hasAttribute("data-slot-template") && c
+
+        findAndSwapSlots(c, slot || template || context)
+
+        if (slot) {
+          let forSlot = slotTemplates.get(c.dataset.slot)
+
+          toReplace.push(c)
+
+          if (forSlot) {
+            c.slotReplace = forSlot
+            if (context) {
+              context.replaced = true
+            }
+          } else {
+            if (context && c.replaced) {
+              context.replaced = true
+            }
+          }
+        } else if (template) {
+          if (c.replaced) {
+            toReplace.push(c)
+          } else {
+            toRemove.push(c)
+          }
+        }
+      }
     }
 
-    slots.forEach((t) => {
-      let element = el.content ?? el;
-      let forSlot = element.querySelector(
-        `template[data-for-slot='${t.dataset.slot}']`
-      );
+    findAndSwapSlots(fragment)
 
-      if (!forSlot) {
-        t.replaceWith(...t.childNodes);
-        return;
+    toReplace.forEach((el) => {
+      if (el.slotReplace) {
+        el.replaceWith(el.slotReplace.content)
+      } else {
+        el.replaceWith(...(el.content?.childNodes || el.childNodes))
       }
-
-      t.replaceWith(forSlot.content.cloneNode(true));
-    });
+    })
+    toRemove.forEach((el) => el.remove())
   };
 
   let renameAttribute = (el, name, newName) => {
