@@ -24,9 +24,11 @@
     </div>
   </div>
   <div>
-    <div class="font-semibold">
-      <div data-slot="header"></div>
-    </div>
+    <template data-slot-template>
+      <div class="font-semibold">
+        <div data-slot="header"></div>
+      </div>
+    </template>
     <div>
       <div data-slot></div>
     </div>

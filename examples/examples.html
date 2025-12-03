@@ -21,7 +21,7 @@
   @rc-inserted="handleInserted"
   @rc-initialized="handleInitialized"
 >
-  <div class="mb-20 mt-20 flex flex-col gap-y-10 px-6 text-gray-800">
+  <div class="mb-20 mt-20 flex flex-col gap-y-10 px-6 text-gray-800 dark:text-gray-300">
     <div x-remote-component="#example" _id="basic-id-component">
       <template data-for-slot="title"> Basic ID component </template>
       <template data-for-slot="text">
@@ -40,7 +40,7 @@
       </template>
     </div>
 
-    <hr class="border-gray-200" />
+    <hr class="border-gray-200 dark:border-neutral-700" />
 
     <div x-remote-component="#example" _id="basic-url-component">
       <template data-for-slot="title"> Basic URL component </template>
@@ -60,7 +60,7 @@
       </template>
     </div>
 
-    <hr class="border-gray-200" />
+    <hr class="border-gray-200 dark:border-neutral-700" />
 
     <div x-remote-component="#example" _id="basic-dynamic-component">
       <template data-for-slot="title"> Basic dynamic component </template>
@@ -82,7 +82,7 @@
       </template>
     </div>
 
-    <hr class="border-gray-200" />
+    <hr class="border-gray-200 dark:border-neutral-700" />
 
     <div x-remote-component="#example" _id="trigger-load">
       <template data-for-slot="title"> Trigger - Load </template>
@@ -103,7 +103,7 @@
       </template>
     </div>
 
-    <hr class="border-gray-200" />
+    <hr class="border-gray-200 dark:border-neutral-700" />
 
     <div x-remote-component="#example" _id="trigger-event">
       <template data-for-slot="title"> Trigger - Event </template>
@@ -124,7 +124,7 @@
       </template>
     </div>
 
-    <hr class="border-gray-200" />
+    <hr class="border-gray-200 dark:border-neutral-700" />
 
     <div x-remote-component="#example" _id="trigger-reactive">
       <template data-for-slot="title"> Trigger - Reactive </template>
@@ -150,7 +150,7 @@
       </template>
     </div>
 
-    <hr class="border-gray-200" />
+    <hr class="border-gray-200 dark:border-neutral-700" />
 
     <div x-remote-component="#example" _id="trigger-intersect">
       <template data-for-slot="title"> Trigger - Intersect </template>
@@ -171,7 +171,7 @@
       </template>
     </div>
 
-    <hr class="border-gray-200" />
+    <hr class="border-gray-200 dark:border-neutral-700" />
 
     <div x-remote-component="#example" _id="trigger-custom">
       <template data-for-slot="title"> Trigger - Custom </template>
@@ -193,7 +193,7 @@
       </template>
     </div>
 
-    <hr class="border-gray-200" />
+    <hr class="border-gray-200 dark:border-neutral-700" />
 
     <div x-remote-component="#example" _id="trigger-delay">
       <template data-for-slot="title"> Trigger delay </template>
@@ -218,7 +218,7 @@
       </template>
     </div>
 
-    <hr class="border-gray-200" />
+    <hr class="border-gray-200 dark:border-neutral-700" />
 
     <div x-remote-component="#example" _id="indicator">
       <template data-for-slot="title"> Loading indicator </template>
@@ -247,7 +247,7 @@
       </template>
     </div>
 
-    <hr class="border-gray-200" />
+    <hr class="border-gray-200 dark:border-neutral-700" />
 
     <div x-remote-component="#example" _id="swap-inner">
       <template data-for-slot="title"> Swap - Inner </template>
@@ -268,7 +268,7 @@
       </template>
     </div>
 
-    <hr class="border-gray-200" />
+    <hr class="border-gray-200 dark:border-neutral-700" />
 
     <div x-remote-component="#example" _id="swap-outer">
       <template data-for-slot="title"> Swap - Outer </template>
@@ -288,7 +288,7 @@
       </template>
     </div>
 
-    <hr class="border-gray-200" />
+    <hr class="border-gray-200 dark:border-neutral-700" />
 
     <div x-remote-component="#example" _id="swap-target">
       <template data-for-slot="title"> Swap - Target </template>
@@ -308,7 +308,7 @@
       </template>
     </div>
 
-    <hr class="border-gray-200" />
+    <hr class="border-gray-200 dark:border-neutral-700" />
 
     <div x-remote-component="#example" _id="events">
       <template data-for-slot="title"> Events </template>
@@ -323,7 +323,7 @@
       </template>
     </div>
 
-    <hr class="border-gray-200" />
+    <hr class="border-gray-200 dark:border-neutral-700" />
 
     <div x-remote-component="#example" _id="x-if">
       <template data-for-slot="title"> x-if </template>
@@ -350,7 +350,7 @@
       </template>
     </div>
 
-    <hr class="border-gray-200" />
+    <hr class="border-gray-200 dark:border-neutral-700" />
 
     <div x-remote-component="#example" _id="x-for">
       <template data-for-slot="title"> x-for </template>
@@ -372,7 +372,7 @@
       </template>
     </div>
 
-    <hr class="border-gray-200" />
+    <hr class="border-gray-200 dark:border-neutral-700" />
 
     <div x-remote-component="#example" _id="basic-data-template">
       <template data-for-slot="title"> Basic data-slot </template>
@@ -410,7 +410,7 @@
       </template>
     </div>
 
-    <hr class="border-gray-200" />
+    <hr class="border-gray-200 dark:border-neutral-700" />
 
     <div x-remote-component="#example" _id="data-template-components">
       <template data-for-slot="title"> data-slot components </template>
@@ -425,7 +425,7 @@
       </template>
     </div>
 
-    <hr class="border-gray-200" />
+    <hr class="border-gray-200 dark:border-neutral-700" />
 
     <div
       x-remote-component="#example"
@@ -445,7 +445,27 @@
       </template>
     </div>
 
-    <hr class="border-gray-200" />
+    <hr class="border-gray-200 dark:border-neutral-700" />
+
+    <div x-remote-component="#example" _id="data-slot-template">
+      <template data-for-slot="title"> data-slot template </template>
+      <template data-for-slot="text">
+        <p class="markdown">
+          Sometimes you may want to include certain slot-related elements only when the user provides content for the slot. You can do this by placing one or more `data-slot` elements inside a `template` element marked with the `data-slot-template` attribute. If no content is provided for that slot, the entire `template`, including the `data-slot` element and any additional elements, is removed.
+        </p>
+      </template>
+      <template data-for-slot="example">
+        <div
+          x-remote-component="/examples/data-slot-template.html"
+          data-rc-name="example"
+          data-rc-trigger="load 0 500"
+          class="w-full"
+        >
+        </div>
+      </template>
+    </div>
+
+    <hr class="border-gray-200 dark:border-neutral-700" />
 
     <div x-remote-component="#example" _id="component-data-getters">
       <template data-for-slot="title">
@@ -497,7 +517,7 @@
       </template>
     </div>
 
-    <hr class="border-gray-200" />
+    <hr class="border-gray-200 dark:border-neutral-700" />
 
     <div x-remote-component="#example" _id="component-data-attributes">
       <template data-for-slot="title">
@@ -517,7 +537,7 @@
       </template>
     </div>
 
-    <hr class="border-gray-200" />
+    <hr class="border-gray-200 dark:border-neutral-700" />
 
     <div x-remote-component="#example" _id="copy-attributes">
       <template data-for-slot="title"> Copy component attributes </template>
@@ -537,7 +557,7 @@
       </template>
     </div>
 
-    <hr class="border-gray-200" />
+    <hr class="border-gray-200 dark:border-neutral-700" />
 
     <div x-remote-component="#example" _id="router-view">
       <template data-for-slot="title"> Basic navigation </template>
@@ -558,7 +578,7 @@
       </template>
     </div>
 
-    <hr class="border-gray-200" />
+    <hr class="border-gray-200 dark:border-neutral-700" />
 
     <div x-remote-component="#example" _id="load-multiple-components">
       <template data-for-slot="title"> Loading of multiple components </template>
@@ -584,7 +604,7 @@
       </template>
     </div>
 
-    <hr class="border-gray-200" />
+    <hr class="border-gray-200 dark:border-neutral-700" />
 
     <div x-remote-component="#example" _id="recursive">
       <template data-for-slot="title"> Recursive components </template>
@@ -605,7 +625,7 @@
       </template>
     </div>
 
-    <hr class="border-gray-200" />
+    <hr class="border-gray-200 dark:border-neutral-700" />
 
     <div x-remote-component="#example" _id="errors">
       <template data-for-slot="title"> Handling errors </template>
@@ -634,7 +654,7 @@
       </template>
     </div>
 
-    <hr class="border-gray-200" />
+    <hr class="border-gray-200 dark:border-neutral-700" />
 
     <div x-remote-component="#example" _id="x-component">
       <template data-for-slot="title"> x-component </template>
@@ -659,7 +679,7 @@
       </template>
     </div>
 
-    <hr class="border-gray-200" />
+    <hr class="border-gray-200 dark:border-neutral-700" />
 
     <div x-remote-component="#example" _id="custom-elements">
       <template data-for-slot="title"> Custom element components </template>
@@ -712,7 +732,7 @@
       </template>
     </div>
 
-    <hr class="border-gray-200" />
+    <hr class="border-gray-200 dark:border-neutral-700" />
 
     <div x-remote-component="#example" _id="script">
       <template data-for-slot="title"> Importing scripts </template>
@@ -747,7 +767,7 @@
       </template>
     </div>
 
-    <hr class="border-gray-200" />
+    <hr class="border-gray-200 dark:border-neutral-700" />
 
     <div x-remote-component="#example" _id="rc-lite">
       <template data-for-slot="title"> rc-lite </template>
