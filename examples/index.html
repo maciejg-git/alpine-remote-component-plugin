@@ -17,6 +17,10 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/styles/atom-one-light.min.css"
     />
+    <link
+      rel="stylesheet"
+      href="/examples/styles/oceanicnext.css"
+    />
     <!-- highlight.js -->
     <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/highlight.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/languages/html.min.js"></script>
@@ -68,7 +72,7 @@
       x-init="document.documentElement.style.setProperty('color-scheme', 'light')"
       class="flex"
     >
-      <div class="hidden border-gray-200 px-12 lg:block min-w-85 bg-gray-50 dark:bg-[#202020] dark:text-gray-300">
+      <div class="hidden border-gray-200 px-12 lg:block min-w-85 dark:text-gray-300">
         <div class="sticky top-20 max-h-screen min-h-screen overflow-y-auto pb-20">
           <ul>
             <li :class="{ 'font-semibold': route === 'basic-examples' }">
@@ -82,6 +86,7 @@
               </a>
             </li>
           </ul>
+          <hr class="border-gray-200 dark:border-neutral-700 my-6" />
           <div
             x-remote-component="#placeholder.list"
             _x-show="isLoading"
