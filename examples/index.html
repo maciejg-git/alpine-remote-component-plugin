@@ -52,7 +52,7 @@
   </head>
   <body class="dark:bg-[#191919]">
     <nav
-      class="sticky top-0 z-40 flex items-center justify-between border-b border-gray-200 bg-white dark:bg-[#191919] dark:border-neutral-700 p-2 pr-4 text-gray-800"
+      class="fixed top-0 w-full z-40 flex items-center justify-between border-b border-gray-200 bg-white dark:bg-[#191919] dark:border-neutral-700 p-2 pr-4 text-gray-800 h-12"
     >
       <span class="text-lg font-semibold ml-4 dark:text-gray-300"> Alpine Remote Component </span>
       <a href="https://github.com/maciejg-git/alpine-remote-component-plugin">
@@ -69,11 +69,10 @@
       }"
       @rc-completing="isLoading = true"
       @rc-completed="isLoading = false"
-      x-init="document.documentElement.style.setProperty('color-scheme', 'light')"
       class="flex"
     >
-      <div class="hidden border-gray-200 px-12 lg:block min-w-85 dark:text-gray-300">
-        <div class="sticky top-20 max-h-screen min-h-screen overflow-y-auto pb-20">
+      <div class="hidden border-gray-200 lg:block min-w-85 dark:text-gray-300">
+        <div class="sticky top-12 max-h-[calc(100vh-3rem)] min-h-[calc(100vh-3rem)] overflow-y-scroll pb-20 px-12 pt-6">
           <ul>
             <li :class="{ 'font-semibold': route === 'basic-examples' }">
               <a href="" @click.prevent="route = 'basic-examples'">
@@ -188,7 +187,7 @@
             </a>
           </div>
 
-          <div class="flex flex-col items-center gap-y-4">
+          <div class="flex flex-col items-center gap-y-4 mt-6 mb-2">
             <div data-slot="example"></div>
           </div>
         </div>
