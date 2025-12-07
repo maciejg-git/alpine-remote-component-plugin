@@ -20,27 +20,11 @@ export default function (Alpine) {
     componentPrefix: Alpine.prefixed(),
   };
 
-  let validOptions = [
-    "trigger",
-    "swap",
-    "name",
-    "script",
-    "tags",
-  ];
+  let validOptions = ["trigger", "swap", "name", "script", "tags"];
 
-  let validTriggers = [
-    "load",
-    "event",
-    "reactive",
-    "intersect",
-    "custom",
-  ]
+  let validTriggers = ["load", "event", "reactive", "intersect", "custom"];
 
-  let validSwap = [
-    "inner",
-    "outer",
-    "target",
-  ]
+  let validSwap = ["inner", "outer", "target"];
 
   let sendRequest = async (url) => {
     try {
@@ -61,9 +45,9 @@ export default function (Alpine) {
   };
 
   let mergeClasses = (classes, el) => {
-    let classesToAdd = classes.split(" ")
-    el.classList.add(...classesToAdd)
-  }
+    let classesToAdd = classes.split(" ");
+    el.classList.add(...classesToAdd);
+  };
 
   let queryAllWithDataSlot = (el) => {
     let res = Array.from(el.querySelectorAll("[data-slot]"));
@@ -79,7 +63,7 @@ export default function (Alpine) {
 
   let copyPrefixedAttributes = (fromEl, toEl) => {
     for (let attr of fromEl.attributes) {
-      let { name, value } = attr
+      let { name, value } = attr;
       if (name === "_class" || name === "prop:class") {
         mergeClasses(value, toEl);
         continue;
@@ -93,62 +77,62 @@ export default function (Alpine) {
   };
 
   let swapSlotsWithTemplates = (el, fragment) => {
-    let toReplace = []
-    let toRemove = []
+    let toReplace = [];
+    let toRemove = [];
 
-    let slotTemplates = new Map()
+    let slotTemplates = new Map();
     Array.from(el.querySelectorAll("template[data-for-slot]")).forEach((t) => {
-      slotTemplates.set(t.dataset.forSlot, t)
-    })
+      slotTemplates.set(t.dataset.forSlot, t);
+    });
 
     let findAndSwapSlots = (fragment, context = null) => {
-      fragment = fragment.content ?? fragment
+      fragment = fragment.content ?? fragment;
 
       for (let c of fragment.children) {
         if (c.tagName === "TEMPLATE" && c.id) {
-          continue
+          continue;
         }
 
-        let slot = c.hasAttribute("data-slot") && c
-        let template = c.hasAttribute("data-slot-template") && c
+        let slot = c.hasAttribute("data-slot") && c;
+        let template = c.hasAttribute("data-slot-template") && c;
 
-        findAndSwapSlots(c, slot || template || context)
+        findAndSwapSlots(c, slot || template || context);
 
         if (slot) {
-          let forSlot = slotTemplates.get(c.dataset.slot)
+          let forSlot = slotTemplates.get(c.dataset.slot);
 
-          toReplace.push(c)
+          toReplace.push(c);
 
           if (forSlot) {
-            c.slotReplace = forSlot
+            c.slotReplace = forSlot;
             if (context) {
-              context.replaced = true
+              context.replaced = true;
             }
           } else {
             if (context && c.replaced) {
-              context.replaced = true
+              context.replaced = true;
             }
           }
         } else if (template) {
           if (c.replaced) {
-            toReplace.push(c)
+            toReplace.push(c);
           } else {
-            toRemove.push(c)
+            toRemove.push(c);
           }
         }
       }
-    }
+    };
 
-    findAndSwapSlots(fragment)
+    findAndSwapSlots(fragment);
 
     toReplace.forEach((el) => {
       if (el.slotReplace) {
-        el.replaceWith(el.slotReplace.content)
+        el.replaceWith(el.slotReplace.content);
       } else {
-        el.replaceWith(...(el.content?.childNodes || el.childNodes))
+        el.replaceWith(...(el.content?.childNodes || el.childNodes));
       }
-    })
-    toRemove.forEach((el) => el.remove())
+    });
+    toRemove.forEach((el) => el.remove());
   };
 
   let renameAttribute = (el, name, newName) => {
@@ -194,12 +178,9 @@ export default function (Alpine) {
           });
         }
       }
-      customElements.define(
-        globalConfig.componentPrefix + c.tag,
-        Component
-      );
+      customElements.define(globalConfig.componentPrefix + c.tag, Component);
       if (c.components) {
-        makeCustomElementComponents(c.components)
+        makeCustomElementComponents(c.components);
       }
     });
   };
@@ -246,7 +227,7 @@ export default function (Alpine) {
         data._rcIsLoadingWithDelay = false;
         config.isRunning = false;
         dispatch(el, "rc-error", { error, config });
-      }
+      };
 
       let initRemoteComponent = async () => {
         if (config.initialized || config.isRunning || !expression) return;
@@ -286,15 +267,17 @@ export default function (Alpine) {
             let parsedHtml = parseResponseHtml(html);
             fragment = parsedHtml.querySelector("template")?.content;
           } catch (error) {
-            handleError(error, data)
+            handleError(error, data);
             return;
           }
         } else if (isId(exp)) {
           // this could be wrapped in resolved Promise to make both url and id
           // components async
-          fragment = document.querySelector(exp.replace(/\./g, '\\.'))?.content.cloneNode(true);
+          fragment = document
+            .querySelector(exp.replace(/\./g, "\\."))
+            ?.content.cloneNode(true);
           if (!fragment) {
-            handleError("ID not found", data)
+            handleError("ID not found", data);
             return;
           }
         }
@@ -326,32 +309,32 @@ export default function (Alpine) {
           if (config.swap === "inner") {
             Alpine.mutateDom(() => {
               el.replaceChildren(fragment);
-            })
+            });
 
             dispatch(el, "rc-inserted", config);
 
             Alpine.initTree(el);
           } else if (config.swap === "outer") {
             let fragmentFirstChild = fragment.firstElementChild;
-            let fragmentChildren = [...fragment.children]
+            let fragmentChildren = [...fragment.children];
 
             Alpine.mutateDom(() => {
-              Alpine.destroyTree(el)
+              Alpine.destroyTree(el);
               el.replaceWith(fragment);
-            })
+            });
 
             dispatch(fragmentFirstChild, "rc-inserted", config);
 
             fragmentChildren.forEach((el) => {
               Alpine.initTree(el);
-            })
+            });
           } else if (config.swap === "target") {
-            let target = el.querySelector("[data-target]")
+            let target = el.querySelector("[data-target]");
             if (target) {
               Alpine.mutateDom(() => {
-                target.replaceChildren(fragment)
-              })
-              Alpine.initTree(target)
+                target.replaceChildren(fragment);
+              });
+              Alpine.initTree(target);
             }
           }
         }
@@ -362,7 +345,7 @@ export default function (Alpine) {
         config.isRunning = false;
       };
 
-      let config = { ...Alpine.$rc.defaultConfig }
+      let config = { ...Alpine.$rc.defaultConfig };
 
       let scopeCleanup = [
         Alpine.addScopeToNode(el, {
@@ -371,9 +354,9 @@ export default function (Alpine) {
             trigger: initRemoteComponent,
             triggerEffect(...expression) {
               if (expression.every(Boolean)) {
-                initRemoteComponent()
+                initRemoteComponent();
               }
-            }
+            },
           },
         }),
         Alpine.addScopeToNode(
@@ -391,7 +374,7 @@ export default function (Alpine) {
         scopeCleanup.forEach((c) => c());
       });
 
-      config.rawSource = expression
+      config.rawSource = expression;
 
       validOptions.forEach((option) => {
         let value = el.getAttribute("data-rc-" + option);
@@ -404,13 +387,15 @@ export default function (Alpine) {
             return;
           }
           if (option === "swap" && !validSwap.includes(value)) {
-            return
+            return;
           }
           if (option === "tags") {
-            config.tags = Object.fromEntries(value.split(" ").map((tag) => {
-              return [tag, true]
-            }))
-            return
+            config.tags = Object.fromEntries(
+              value.split(" ").map((tag) => {
+                return [tag, true];
+              })
+            );
+            return;
           }
           config[option] = value;
         }
