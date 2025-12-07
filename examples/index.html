@@ -104,9 +104,9 @@
         </div>
       </div>
 
-      <div class="mx-auto max-w-4xl w-full">
+      <div class="mx-auto max-w-4xl w-full mt-12">
         <div
-          x-data="{ isCompleted: false, name: 'basic-examples' }"
+          x-data="{ isCompleted: false }"
           x-show="route === 'basic-examples'"
           @rc-completed="isCompleted = true"
         >
@@ -122,12 +122,13 @@
             x-effect="_rc.triggerEffect(route === 'basic-examples')"
             x-show="isCompleted"
             x-transition.opacity
+            x-data="{ name: 'basic-examples' }"
           >
           </div>
         </div>
 
         <div
-          x-data="{ isCompleted: false, name: 'ui-components' }"
+          x-data="{ isCompleted: false }"
           x-show="route === 'ui-components'"
           @rc-completed="isCompleted = true"
         >
@@ -143,6 +144,7 @@
             x-effect="_rc.triggerEffect(route === 'ui-components')"
             x-show="isCompleted"
             x-transition.opacity
+            x-data="{ name: 'ui-components' }"
           >
           </div>
         </div>
