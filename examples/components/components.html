@@ -1,0 +1,26 @@
+<div
+  x-remote-component="/examples/components/component-a.html"
+  data-rc-name="component-a"
+>
+  <template data-for-slot="content">
+    <div
+      x-remote-component="/examples/components/component-b.html"
+      data-rc-name="component-b"
+    >
+      <template data-for-slot="content">
+        <div
+          x-remote-component="/examples/components/component-c.html"
+          data-rc-name="component-c"
+        ></div>
+      </template>
+    </div>
+  </template>
+</div>
+<div
+  x-remote-component="/examples/components/component-b.html"
+  data-rc-name="component-b-outer"
+></div>
+<div
+  x-remote-component="/examples/components/component-c.html"
+  data-rc-name="component-c-outer"
+></div>

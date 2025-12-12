@@ -16,23 +16,12 @@
 <!-- load component based on event detail -->
 
 <button
-  @click="$dispatch('load-component-event-detail', 'component-a')"
-  class="flex items-center rounded-md border-violet-700 bg-violet-500 px-4 py-2 font-medium text-gray-100 hover:bg-violet-600 focus:ring-violet-200 dark:bg-violet-500 dark:hover:bg-violet-600"
->
-  Load component A
-</button>
-<button
   @click="$dispatch('load-component-event-detail', 'component-b')"
   class="flex items-center rounded-md border-violet-700 bg-violet-500 px-4 py-2 font-medium text-gray-100 hover:bg-violet-600 focus:ring-violet-200 dark:bg-violet-500 dark:hover:bg-violet-600"
 >
   Load component B
 </button>
 
-<div
-  x-remote-component="/examples/components/component-a.html"
-  data-rc-trigger="event"
-  @load-component-event-detail.window="$event.detail === 'component-a' && _rc.trigger"
-></div>
 <div
   x-remote-component="/examples/components/component-b.html"
   data-rc-trigger="event"

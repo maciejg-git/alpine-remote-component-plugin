@@ -325,9 +325,7 @@
       <template data-for-slot="title"> x-if </template>
       <template data-for-slot="text">
         <p class="markdown">
-          The `x-if` directive requires a single root element, so you need
-          to use the inner swap option or wrap the component in an
-          additional element.
+          The `x-if` directive requires a single root element, so when a component is loaded inside an `x-if` template you need to use the `inner` swap option, or wrap the component in an additional element.
         </p>
         <p class="markdown">
           Putting the component inside an `x-if` template can be useful for
@@ -352,9 +350,7 @@
       <template data-for-slot="title"> x-for </template>
       <template data-for-slot="text">
         <p class="markdown">
-          The `x-for` directive requires a single root element, so you need
-          to use the inner swap option or wrap the component in an
-          additional element.
+          The `x-for` directive requires a single root element, so when a component is loaded inside an `x-for` template you need to use the inner swap option, or wrap the component in an additional element.
         </p>
       </template>
       <template data-for-slot="example">
@@ -577,7 +573,7 @@
     <hr class="border-gray-200 dark:border-neutral-700" />
 
     <div x-remote-component="#example" _id="load-multiple-components">
-      <template data-for-slot="title"> Loading of multiple components </template>
+      <template data-for-slot="title"> Components loading </template>
       <template data-for-slot="text">
         <p class="markdown">
           Normally, components are loaded independently or, if a component is nested, only after its parent has loaded. Sometimes you may prefer to wait until all components are loaded, for example, to use a single loading indicator or to prevent layout shifts.
@@ -592,6 +588,25 @@
       <template data-for-slot="example">
         <div
           x-remote-component="/examples/load-multiple-components.html"
+          data-rc-name="example"
+          data-rc-trigger="load 0 500"
+          class="w-full"
+        >
+        </div>
+      </template>
+    </div>
+
+    <hr class="border-gray-200 dark:border-neutral-700" />
+
+    <div x-remote-component="#example" _id="components-loading-slot">
+      <template data-for-slot="title"> Components loading - loader </template>
+      <template data-for-slot="text">
+        <p class="markdown">
+        </p>
+      </template>
+      <template data-for-slot="example">
+        <div
+          x-remote-component="/examples/components-loading-slot.html"
           data-rc-name="example"
           data-rc-trigger="load 0 500"
           class="w-full"

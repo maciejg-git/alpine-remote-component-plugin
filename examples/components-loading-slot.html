@@ -1,0 +1,17 @@
+<div
+  x-data="{ isCompleted: false }"
+  @rc-completed="isCompleted = true"
+>
+  <div x-show="!isCompleted">
+    <div x-remote-component="#placeholder"></div>
+  </div>
+  <div
+    x-remote-component="#loader"
+    data-rc-swap="inner"
+    x-show="isCompleted"
+  >
+    <template data-for-slot>
+      <div x-remote-component="/examples/components/components.html"></div>
+    </template>
+  </div>
+</div>
