@@ -254,6 +254,35 @@ it("data-slot nested components", async () => {
   expect(await screen.findByText("component-b")).toBeInTheDocument();
 });
 
+it("data-slot slot template", async () => {
+  document.body.innerHTML = `
+    <div x-remote-component="/component-slot-template.html">
+      <template data-for-slot="content">
+        slot content
+      </template>
+    </div>
+  `;
+
+  Alpine.initTree(document.body);
+
+  expect(await screen.findByText("component-a")).toBeInTheDocument();
+  expect(await screen.findByText("slot content")).toBeInTheDocument();
+  expect(document.querySelector(".class2.class3.class4")).toBeInTheDocument()
+});
+
+it("data-slot slot template, no content provided", async () => {
+  document.body.innerHTML = `
+    <div x-remote-component="/component-slot-template.html">
+    </div>
+  `;
+
+  Alpine.initTree(document.body);
+
+  expect(await screen.findByText("component-a")).toBeInTheDocument();
+  expect(screen.queryByText("slot content")).not.toBeInTheDocument()
+  expect(document.querySelector(".class2.class3.class4")).not.toBeInTheDocument()
+});
+
 it("transfers attributes with _ prefix", async () => {
   document.body.innerHTML = `
     <div

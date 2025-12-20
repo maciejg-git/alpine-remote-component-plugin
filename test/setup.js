@@ -54,6 +54,19 @@ let componentNestedSlots = `
   </div>
 `
 
+let componentSlotTemplate = `
+  <div>
+    component-a
+    <template data-slot-template>
+      <div class="class2 class3 class4">
+        <div data-slot="content">
+          content slot
+        </div>
+      </div>
+    </template>
+  </div>
+`
+
 let componentScript = `
   <div x-data="componentScript" class="class2 class3 class4">
     component-a
@@ -111,6 +124,12 @@ beforeAll(() => {
       return {
         ok: true,
         text: async () => componentTarget,
+      }
+    }
+    if (url.endsWith('/component-slot-template.html')) {
+      return {
+        ok: true,
+        text: async () => componentSlotTemplate,
       }
     }
     return {
