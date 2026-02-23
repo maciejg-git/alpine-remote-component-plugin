@@ -207,8 +207,10 @@
       <div
         x-data="{
           components: [],
+          isCompleted: false,
           handleInserted() {
             let name = this.$event.detail.name
+            if (!name) return
             this.components = this.components.filter((c) => c !== name)
             this.$nextTick(() => {
               if (!this.components.length) this.$dispatch('rc-completed', this._rc.config)
@@ -221,8 +223,16 @@
         }"
         @rc-inserted="handleInserted"
         @rc-initialized="handleInitialized"
+        @rc-completed="isCompleted = true"
       >
-        <div data-slot></div>
+        <div x-show="!isCompleted">
+          <div data-slot="indicator">
+          </div>
+        </div>
+        <div x-show="isCompleted">
+          <div data-slot>
+          </div>
+        </div>
       </div>
     </template>
 
