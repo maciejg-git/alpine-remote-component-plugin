@@ -26,6 +26,7 @@
       <template data-for-slot="title"> Alert </template>
       <template data-for-slot="text">
         <p class="markdown">
+
         </p>
         <button
           @click="$dispatch('open-modal', { id: 'code-modal', options: { path: '/examples/components/alert.html' } })"
@@ -94,9 +95,6 @@
     <div x-remote-component="#example" _id="dynamic-tabs">
       <template data-for-slot="title"> Dynamic tabs </template>
       <template data-for-slot="text">
-        <p class="markdown">
-          This uses the same `x-tabs` component as the previous example, but the tabs are generated dynamically, so they can be added or removed.
-        </p>
         <button
           @click="$dispatch('open-modal', { id: 'code-modal', options: { path: '/examples/components/tabs.html' } })"
           class="text-blue-400 underline font-semibold mr-auto"
