@@ -59,7 +59,7 @@ This directive does not use argument or modifiers.
 The component options can be set using the `data-rc-*` attributes:
 
 - `data-rc-name` - sets the component name. Optional, but can be useful in event listeners for identification. Default: `''`.
-- `data-rc-swap` - specifies how the component is inserted. Valid values: `inner` and `outer`. Default: `outer`.
+- `data-rc-swap` - specifies how the component is inserted. Valid values: `inner`, `outer` and `target`. Default: `outer`.
 - `data-rc-triger` - defines when the component should load. Valid triggers: `load`, `event`, `reactive`, `intersect` and `custom`. Default: `load`.
 
 ```html

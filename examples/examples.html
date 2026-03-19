@@ -566,7 +566,7 @@
       <template data-for-slot="title"> Components loading </template>
       <template data-for-slot="text">
         <p class="markdown">
-          Normally, components are loaded independently or, if a component is nested, only after its parent has loaded. Sometimes you may prefer to wait until all components are loaded, for example, to use a single loading indicator or to prevent layout shifts.
+          Normally, components are loaded independently or, if a component is nested, only after its parent has loaded. Sometimes you may prefer to hide components until all are loaded.
         </p>
         <p class="markdown">
           In this example, loading is handled by an additional wrapper element using `rc-*` events. The component is displayed only after all inner named components have finished loading.
