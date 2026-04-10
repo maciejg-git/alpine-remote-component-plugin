@@ -20,25 +20,9 @@
       fetchOptions: null,
       componentPrefix: Alpine2.prefixed()
     };
-    let validOptions = [
-      "trigger",
-      "swap",
-      "name",
-      "script",
-      "tags"
-    ];
-    let validTriggers = [
-      "load",
-      "event",
-      "reactive",
-      "intersect",
-      "custom"
-    ];
-    let validSwap = [
-      "inner",
-      "outer",
-      "target"
-    ];
+    let validOptions = ["trigger", "swap", "name", "script", "tags"];
+    let validTriggers = ["load", "event", "reactive", "intersect", "custom"];
+    let validSwap = ["inner", "outer", "target"];
     let sendRequest = async (url) => {
       try {
         let res = await fetch(url, globalConfig.fetchOptions || {});
@@ -58,20 +42,6 @@
     let mergeClasses = (classes, el) => {
       let classesToAdd = classes.split(" ");
       el.classList.add(...classesToAdd);
-    };
-    let queryTemplateByIdPath = (path) => {
-      let pathParts = path.split(".");
-      let template = document.querySelector(pathParts.shift());
-      if (!template) {
-        return null;
-      }
-      for (let id of pathParts) {
-        template = template.content.querySelector("#" + id);
-        if (!template) {
-          return null;
-        }
-      }
-      return template;
     };
     let queryAllWithDataSlot = (el) => {
       let res = Array.from(el.querySelectorAll("[data-slot]"));
@@ -95,21 +65,52 @@
       }
     };
     let swapSlotsWithTemplates = (el, fragment) => {
-      let slots = queryAllWithDataSlot(fragment);
-      if (!slots.length) {
-        return;
-      }
-      slots.forEach((t) => {
-        let element = el.content ?? el;
-        let forSlot = element.querySelector(
-          `template[data-for-slot='${t.dataset.slot}']`
-        );
-        if (!forSlot) {
-          t.replaceWith(...t.childNodes);
-          return;
-        }
-        t.replaceWith(forSlot.content.cloneNode(true));
+      let toReplace = [];
+      let toRemove = [];
+      let slotTemplates = /* @__PURE__ */ new Map();
+      Array.from(el.querySelectorAll("template[data-for-slot]")).forEach((t) => {
+        slotTemplates.set(t.dataset.forSlot, t);
       });
+      let findAndSwapSlots = (fragment2, context = null) => {
+        fragment2 = fragment2.content ?? fragment2;
+        for (let c of fragment2.children) {
+          if (c.tagName === "TEMPLATE" && c.id) {
+            continue;
+          }
+          let slot = c.hasAttribute("data-slot") && c;
+          let template = c.hasAttribute("data-slot-template") && c;
+          findAndSwapSlots(c, slot || template || context);
+          if (slot) {
+            let forSlot = slotTemplates.get(c.dataset.slot);
+            toReplace.push(c);
+            if (forSlot) {
+              c.slotReplace = forSlot;
+              if (context) {
+                context.replaced = true;
+              }
+            } else {
+              if (context && c.replaced) {
+                context.replaced = true;
+              }
+            }
+          } else if (template) {
+            if (c.replaced) {
+              toReplace.push(c);
+            } else {
+              toRemove.push(c);
+            }
+          }
+        }
+      };
+      findAndSwapSlots(fragment);
+      toReplace.forEach((el2) => {
+        if (el2.slotReplace) {
+          el2.replaceWith(el2.slotReplace.content);
+        } else {
+          el2.replaceWith(...el2.content?.childNodes || el2.childNodes);
+        }
+      });
+      toRemove.forEach((el2) => el2.remove());
     };
     let renameAttribute = (el, name, newName) => {
       if (el.hasAttribute(name)) {
@@ -151,10 +152,7 @@
             });
           }
         }
-        customElements.define(
-          globalConfig.componentPrefix + c.tag,
-          Component
-        );
+        customElements.define(globalConfig.componentPrefix + c.tag, Component);
         if (c.components) {
           makeCustomElementComponents(c.components);
         }
@@ -229,8 +227,7 @@
               return;
             }
           } else if (isId(exp)) {
-            fragment = queryTemplateByIdPath(exp);
-            fragment = fragment?.content.cloneNode(true);
+            fragment = document.querySelector(exp.replace(/\./g, "\\."))?.content.cloneNode(true);
             if (!fragment) {
               handleError("ID not found", data);
               return;
@@ -323,9 +320,11 @@
               return;
             }
             if (option === "tags") {
-              config.tags = Object.fromEntries(value.split(" ").map((tag) => {
-                return [tag, true];
-              }));
+              config.tags = Object.fromEntries(
+                value.split(" ").map((tag) => {
+                  return [tag, true];
+                })
+              );
               return;
             }
             config[option] = value;
