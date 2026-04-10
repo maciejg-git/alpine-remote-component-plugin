@@ -8,8 +8,17 @@
   @rc-loaded-with-delay="events.push($event)"
   @rc-before-insert="events.push($event)"
   @rc-inserted="events.push($event)"
-  class="flex flex-col gap-y-4 items-center"
+  class="flex flex-col gap-y-4 items-center w-full"
 >
+  <div class="rounded-lg bg-gray-50 p-4 w-full">
+    <span class="mb-2 font-semibold">Events:</span>
+    <ul class="font-mono">
+      <template x-for="ev in events">
+        <li x-text="ev.type"></li>
+      </template>
+    </ul>
+  </div>
+
   <button
     @click="$dispatch('load-component-events')"
     class="flex items-center rounded-md border-violet-700 bg-violet-500 px-4 py-2 font-medium text-gray-100 hover:bg-violet-600 focus:ring-violet-200 dark:bg-violet-500 dark:hover:bg-violet-600"
@@ -22,13 +31,4 @@
     data-rc-trigger="event 500 1000"
     @load-component-events.window="_rc.trigger"
   ></div>
-
-  <div class="rounded-lg bg-gray-50 p-4 w-full">
-    <span class="mb-2 font-semibold">Events:</span>
-    <ul>
-      <template x-for="ev in events">
-        <li x-text="ev.type"></li>
-      </template>
-    </ul>
-  </div>
 </div>
