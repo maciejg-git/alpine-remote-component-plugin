@@ -372,8 +372,7 @@
         <p class="markdown">
           The contents of template elements marked with `data-for-slot`
           attribute replace the corresponding `data-slot` elements in the
-          component. This provides functionality similar to slots and
-          enhances the reusability of components.
+          component.
         </p>
         <p class="markdown">
           The new content can be static or include other components.
@@ -471,21 +470,8 @@
         </p>
         <p class="markdown">
           You can make components safer and more reusable by adding
-          local component `x-data`. The advantages are:
+          local component `x-data`.
         </p>
-        <ul class="list-inside list-disc">
-          <li>
-            there’s clear information about which data the component expects
-            and how it connects to the rest of the application
-          </li>
-          <li>
-            even if a property is mutated, only the local data changes
-          </li>
-          <li>
-            any changes in the application or the component now require
-            updating only the property or the getter
-          </li>
-        </ul>
       </template>
       <template data-for-slot="example">
         <div
@@ -690,8 +676,7 @@
           available components.
         </p>
         <p class="markdown">
-          Just like the generic `x-component` element, custom element
-          components are optional. You can register them using the
+          You can register them using the
           `Alpine.$rc.makeCustomElementComponents` function. Each component
           must define at least the `tag` and `source` properties, while
           other options such as `trigger` or `swap` are optional.
