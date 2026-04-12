@@ -1,3 +1,5 @@
+import { validOptions, getOptions } from "./options.js"
+
 export default function (Alpine) {
   const defaultConfig = {
     swap: "outer",
@@ -19,12 +21,6 @@ export default function (Alpine) {
     fetchOptions: null,
     componentPrefix: Alpine.prefixed(),
   };
-
-  let validOptions = ["trigger", "swap", "name", "script", "tags"];
-
-  let validTriggers = ["load", "event", "reactive", "intersect", "custom"];
-
-  let validSwap = ["inner", "outer", "target"];
 
   let sendRequest = async (url) => {
     try {
@@ -183,15 +179,6 @@ export default function (Alpine) {
         makeCustomElementComponents(c.components);
       }
     });
-  };
-
-  let parseTriggerValue = (s) => {
-    let [trigger, requestDelay = 0, swapDelay = 0] = s.trim().split(" ");
-    return {
-      trigger,
-      requestDelay: parseInt(requestDelay),
-      swapDelay: parseInt(swapDelay),
-    };
   };
 
   let dispatch = (el, name, detail = {}) => {
@@ -376,30 +363,9 @@ export default function (Alpine) {
 
       config.rawSource = expression;
 
-      validOptions.forEach((option) => {
-        let value = el.getAttribute("data-rc-" + option);
-        if (value !== null) {
-          if (option === "trigger") {
-            let parsed = parseTriggerValue(value);
-            if (validTriggers.includes(parsed.trigger)) {
-              Object.assign(config, parsed);
-            }
-            return;
-          }
-          if (option === "swap" && !validSwap.includes(value)) {
-            return;
-          }
-          if (option === "tags") {
-            config.tags = Object.fromEntries(
-              value.split(" ").map((tag) => {
-                return [tag, true];
-              })
-            );
-            return;
-          }
-          config[option] = value;
-        }
-      });
+      let options = getOptions(el)
+
+      Object.assign(config, options)
 
       dispatch(el, "rc-initialized", Alpine.$data(el)._rc);
 
