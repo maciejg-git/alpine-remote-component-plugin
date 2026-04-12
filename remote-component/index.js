@@ -17,7 +17,6 @@ export default function (Alpine) {
   };
 
   const globalConfig = {
-    urlPrefix: "",
     fetchOptions: null,
     componentPrefix: Alpine.prefixed(),
   };
@@ -245,8 +244,8 @@ export default function (Alpine) {
 
           try {
             [html, script] = await Promise.all([
-              sendRequest(globalConfig.urlPrefix + exp),
-              config.script && import(globalConfig.urlPrefix + config.script),
+              sendRequest(exp),
+              config.script && import(config.script),
             ]);
 
             config.responseHTML = html;
