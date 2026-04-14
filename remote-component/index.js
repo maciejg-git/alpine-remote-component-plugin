@@ -16,14 +16,9 @@ export default function (Alpine) {
     tags: {},
   };
 
-  const globalConfig = {
-    fetchOptions: null,
-    componentPrefix: Alpine.prefixed(),
-  };
-
   let sendRequest = async (url) => {
     try {
-      let res = await fetch(url, globalConfig.fetchOptions || {});
+      let res = await fetch(url);
       if (!res.ok) throw res.status;
       return await res.text();
     } catch (error) {
@@ -198,7 +193,6 @@ export default function (Alpine) {
 
   Alpine.$rc = {
     defaultConfig,
-    globalConfig,
     makeCustomElementComponents,
   };
 
