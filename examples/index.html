@@ -111,48 +111,50 @@
         </div>
       </div>
 
-      <div class="mx-auto max-w-4xl mt-12">
-        <div
-          x-data="{ isCompleted: false }"
-          x-show="route === 'basic-examples'"
-          @rc-completed="isCompleted = true"
-        >
+      <div class="flex-1 mt-12">
+        <div class="mx-auto max-w-4xl">
           <div
-            x-remote-component="#placeholder.example"
-            _x-show="!isCompleted"
-            _class="mx-auto mt-20"
-          ></div>
-          <div
-            x-remote-component="/examples/examples.html"
-            data-rc-swap="inner"
-            data-rc-trigger="reactive"
-            data-rc-name="basic-examples"
-            x-effect="_rc.triggerEffect(route === 'basic-examples')"
-            x-show="isCompleted"
-            x-transition.opacity
+            x-data="{ isCompleted: false }"
+            x-show="route === 'basic-examples'"
+            @rc-completed="isCompleted = true"
           >
+            <div
+              x-remote-component="#placeholder.example"
+              _x-show="!isCompleted"
+              _class="mx-auto mt-20"
+            ></div>
+            <div
+              x-remote-component="/examples/examples.html"
+              data-rc-swap="inner"
+              data-rc-trigger="reactive"
+              data-rc-name="basic-examples"
+              x-effect="_rc.triggerEffect(route === 'basic-examples')"
+              x-show="isCompleted"
+              x-transition.opacity
+            >
+            </div>
           </div>
-        </div>
 
-        <div
-          x-data="{ isCompleted: false }"
-          x-show="route === 'ui-components'"
-          @rc-completed="isCompleted = true"
-        >
           <div
-            x-remote-component="#placeholder.example"
-            _x-show="!isCompleted"
-            _class="mx-auto mt-20"
-          ></div>
-          <div
-            x-remote-component="/examples/ui-components.html"
-            data-rc-swap="inner"
-            data-rc-trigger="reactive"
-            data-rc-name="ui-components"
-            x-effect="_rc.triggerEffect(route === 'ui-components')"
-            x-show="isCompleted"
-            x-transition.opacity
+            x-data="{ isCompleted: false }"
+            x-show="route === 'ui-components'"
+            @rc-completed="isCompleted = true"
           >
+            <div
+              x-remote-component="#placeholder.example"
+              _x-show="!isCompleted"
+              _class="mx-auto mt-20"
+            ></div>
+            <div
+              x-remote-component="/examples/ui-components.html"
+              data-rc-swap="inner"
+              data-rc-trigger="reactive"
+              data-rc-name="ui-components"
+              x-effect="_rc.triggerEffect(route === 'ui-components')"
+              x-show="isCompleted"
+              x-transition.opacity
+            >
+            </div>
           </div>
         </div>
       </div>
