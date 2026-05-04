@@ -1,4 +1,93 @@
 (() => {
+  // remote-component/options.js
+  var validOptions = ["trigger", "swap", "name", "script", "tags"];
+  var validTriggers = ["load", "event", "reactive", "intersect", "custom"];
+  var validSwap = ["inner", "outer", "target"];
+  var parseTriggerValue = (s) => {
+    let [trigger, requestDelay = 0, swapDelay = 0] = s.trim().split(" ");
+    return {
+      trigger,
+      requestDelay: parseInt(requestDelay),
+      swapDelay: parseInt(swapDelay)
+    };
+  };
+  var getOptions = (el) => {
+    let options = {};
+    validOptions.forEach((option) => {
+      let value = el.getAttribute("data-rc-" + option);
+      if (value !== null) {
+        if (option === "trigger") {
+          let parsed = parseTriggerValue(value);
+          if (validTriggers.includes(parsed.trigger)) {
+            Object.assign(options, parsed);
+          }
+          return;
+        }
+        if (option === "swap" && !validSwap.includes(value)) {
+          return;
+        }
+        if (option === "tags") {
+          options.tags = Object.fromEntries(
+            value.split(" ").map((tag) => {
+              return [tag, true];
+            })
+          );
+          return;
+        }
+        options[option] = value;
+      }
+    });
+    return options;
+  };
+
+  // remote-component/custom-elements.js
+  var renameAttribute = (el, name, newName) => {
+    if (el.hasAttribute(name)) {
+      let value = el.getAttribute(name);
+      el.removeAttribute(name);
+      el.setAttribute(newName, value);
+    }
+  };
+  var makeGenericComponent = () => {
+    class GenericComponent extends HTMLElement {
+      connectedCallback() {
+        renameAttribute(this, "source", "x-remote-component");
+        validOptions.forEach((option) => {
+          renameAttribute(this, option, "data-rc-" + option);
+        });
+      }
+    }
+    customElements.define(
+      Alpine.prefixed() + "component",
+      GenericComponent
+    );
+  };
+  var makeCustomElementComponents = (components, prefix = Alpine.prefixed()) => {
+    if (!Array.isArray(components)) {
+      return;
+    }
+    components.forEach((c) => {
+      if (!c.tag || !c.source) {
+        return;
+      }
+      class Component extends HTMLElement {
+        connectedCallback() {
+          this.setAttribute("x-remote-component", c.source);
+          validOptions.forEach((option) => {
+            if (c[option] !== void 0) {
+              this.setAttribute("data-rc-" + option, c[option]);
+            }
+            renameAttribute(this, option, "data-rc-" + option);
+          });
+        }
+      }
+      customElements.define(prefix + c.tag, Component);
+      if (c.components) {
+        makeCustomElementComponents(c.components);
+      }
+    });
+  };
+
   // remote-component/index.js
   function index_default(Alpine2) {
     const defaultConfig = {
@@ -15,17 +104,9 @@
       script: "",
       tags: {}
     };
-    const globalConfig = {
-      urlPrefix: "",
-      fetchOptions: null,
-      componentPrefix: Alpine2.prefixed()
-    };
-    let validOptions = ["trigger", "swap", "name", "script", "tags"];
-    let validTriggers = ["load", "event", "reactive", "intersect", "custom"];
-    let validSwap = ["inner", "outer", "target"];
     let sendRequest = async (url) => {
       try {
-        let res = await fetch(url, globalConfig.fetchOptions || {});
+        let res = await fetch(url);
         if (!res.ok) throw res.status;
         return await res.text();
       } catch (error) {
@@ -112,60 +193,6 @@
       });
       toRemove.forEach((el2) => el2.remove());
     };
-    let renameAttribute = (el, name, newName) => {
-      if (el.hasAttribute(name)) {
-        let value = el.getAttribute(name);
-        el.removeAttribute(name);
-        el.setAttribute(newName, value);
-      }
-    };
-    let makeGenericComponent = () => {
-      class GenericComponent extends HTMLElement {
-        connectedCallback() {
-          renameAttribute(this, "source", "x-remote-component");
-          validOptions.forEach((option) => {
-            renameAttribute(this, option, "data-rc-" + option);
-          });
-        }
-      }
-      customElements.define(
-        globalConfig.componentPrefix + "component",
-        GenericComponent
-      );
-    };
-    let makeCustomElementComponents = (components) => {
-      if (!Array.isArray(components)) {
-        return;
-      }
-      components.forEach((c) => {
-        if (!c.tag || !c.source) {
-          return;
-        }
-        class Component extends HTMLElement {
-          connectedCallback() {
-            this.setAttribute("x-remote-component", c.source);
-            validOptions.forEach((option) => {
-              if (c[option] !== void 0) {
-                this.setAttribute("data-rc-" + option, c[option]);
-              }
-              renameAttribute(this, option, "data-rc-" + option);
-            });
-          }
-        }
-        customElements.define(globalConfig.componentPrefix + c.tag, Component);
-        if (c.components) {
-          makeCustomElementComponents(c.components);
-        }
-      });
-    };
-    let parseTriggerValue = (s) => {
-      let [trigger, requestDelay = 0, swapDelay = 0] = s.trim().split(" ");
-      return {
-        trigger,
-        requestDelay: parseInt(requestDelay),
-        swapDelay: parseInt(swapDelay)
-      };
-    };
     let dispatch = (el, name, detail = {}) => {
       el.dispatchEvent(
         new CustomEvent(name, {
@@ -181,7 +208,6 @@
     let isId = (s) => s[0] === "#";
     Alpine2.$rc = {
       defaultConfig,
-      globalConfig,
       makeCustomElementComponents
     };
     makeGenericComponent();
@@ -216,8 +242,8 @@
             let html;
             try {
               [html, script] = await Promise.all([
-                sendRequest(globalConfig.urlPrefix + exp),
-                config.script && import(globalConfig.urlPrefix + config.script)
+                sendRequest(exp),
+                config.script && import(config.script)
               ]);
               config.responseHTML = html;
               let parsedHtml = parseResponseHtml(html);
@@ -306,30 +332,8 @@
           scopeCleanup.forEach((c) => c());
         });
         config.rawSource = expression;
-        validOptions.forEach((option) => {
-          let value = el.getAttribute("data-rc-" + option);
-          if (value !== null) {
-            if (option === "trigger") {
-              let parsed = parseTriggerValue(value);
-              if (validTriggers.includes(parsed.trigger)) {
-                Object.assign(config, parsed);
-              }
-              return;
-            }
-            if (option === "swap" && !validSwap.includes(value)) {
-              return;
-            }
-            if (option === "tags") {
-              config.tags = Object.fromEntries(
-                value.split(" ").map((tag) => {
-                  return [tag, true];
-                })
-              );
-              return;
-            }
-            config[option] = value;
-          }
-        });
+        let options = getOptions(el);
+        Object.assign(config, options);
         dispatch(el, "rc-initialized", Alpine2.$data(el)._rc);
         if (config.trigger === "load") {
           initRemoteComponent();

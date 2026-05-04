@@ -1,5 +1,94 @@
+// remote-component/options.js
+var validOptions = ["trigger", "swap", "name", "script", "tags"];
+var validTriggers = ["load", "event", "reactive", "intersect", "custom"];
+var validSwap = ["inner", "outer", "target"];
+var parseTriggerValue = (s) => {
+  let [trigger, requestDelay = 0, swapDelay = 0] = s.trim().split(" ");
+  return {
+    trigger,
+    requestDelay: parseInt(requestDelay),
+    swapDelay: parseInt(swapDelay)
+  };
+};
+var getOptions = (el) => {
+  let options = {};
+  validOptions.forEach((option) => {
+    let value = el.getAttribute("data-rc-" + option);
+    if (value !== null) {
+      if (option === "trigger") {
+        let parsed = parseTriggerValue(value);
+        if (validTriggers.includes(parsed.trigger)) {
+          Object.assign(options, parsed);
+        }
+        return;
+      }
+      if (option === "swap" && !validSwap.includes(value)) {
+        return;
+      }
+      if (option === "tags") {
+        options.tags = Object.fromEntries(
+          value.split(" ").map((tag) => {
+            return [tag, true];
+          })
+        );
+        return;
+      }
+      options[option] = value;
+    }
+  });
+  return options;
+};
+
+// remote-component/custom-elements.js
+var renameAttribute = (el, name, newName) => {
+  if (el.hasAttribute(name)) {
+    let value = el.getAttribute(name);
+    el.removeAttribute(name);
+    el.setAttribute(newName, value);
+  }
+};
+var makeGenericComponent = () => {
+  class GenericComponent extends HTMLElement {
+    connectedCallback() {
+      renameAttribute(this, "source", "x-remote-component");
+      validOptions.forEach((option) => {
+        renameAttribute(this, option, "data-rc-" + option);
+      });
+    }
+  }
+  customElements.define(
+    Alpine.prefixed() + "component",
+    GenericComponent
+  );
+};
+var makeCustomElementComponents = (components, prefix = Alpine.prefixed()) => {
+  if (!Array.isArray(components)) {
+    return;
+  }
+  components.forEach((c) => {
+    if (!c.tag || !c.source) {
+      return;
+    }
+    class Component extends HTMLElement {
+      connectedCallback() {
+        this.setAttribute("x-remote-component", c.source);
+        validOptions.forEach((option) => {
+          if (c[option] !== void 0) {
+            this.setAttribute("data-rc-" + option, c[option]);
+          }
+          renameAttribute(this, option, "data-rc-" + option);
+        });
+      }
+    }
+    customElements.define(prefix + c.tag, Component);
+    if (c.components) {
+      makeCustomElementComponents(c.components);
+    }
+  });
+};
+
 // remote-component/index.js
-function index_default(Alpine) {
+function index_default(Alpine2) {
   const defaultConfig = {
     swap: "outer",
     trigger: "load",
@@ -14,17 +103,9 @@ function index_default(Alpine) {
     script: "",
     tags: {}
   };
-  const globalConfig = {
-    urlPrefix: "",
-    fetchOptions: null,
-    componentPrefix: Alpine.prefixed()
-  };
-  let validOptions = ["trigger", "swap", "name", "script", "tags"];
-  let validTriggers = ["load", "event", "reactive", "intersect", "custom"];
-  let validSwap = ["inner", "outer", "target"];
   let sendRequest = async (url) => {
     try {
-      let res = await fetch(url, globalConfig.fetchOptions || {});
+      let res = await fetch(url);
       if (!res.ok) throw res.status;
       return await res.text();
     } catch (error) {
@@ -111,60 +192,6 @@ function index_default(Alpine) {
     });
     toRemove.forEach((el2) => el2.remove());
   };
-  let renameAttribute = (el, name, newName) => {
-    if (el.hasAttribute(name)) {
-      let value = el.getAttribute(name);
-      el.removeAttribute(name);
-      el.setAttribute(newName, value);
-    }
-  };
-  let makeGenericComponent = () => {
-    class GenericComponent extends HTMLElement {
-      connectedCallback() {
-        renameAttribute(this, "source", "x-remote-component");
-        validOptions.forEach((option) => {
-          renameAttribute(this, option, "data-rc-" + option);
-        });
-      }
-    }
-    customElements.define(
-      globalConfig.componentPrefix + "component",
-      GenericComponent
-    );
-  };
-  let makeCustomElementComponents = (components) => {
-    if (!Array.isArray(components)) {
-      return;
-    }
-    components.forEach((c) => {
-      if (!c.tag || !c.source) {
-        return;
-      }
-      class Component extends HTMLElement {
-        connectedCallback() {
-          this.setAttribute("x-remote-component", c.source);
-          validOptions.forEach((option) => {
-            if (c[option] !== void 0) {
-              this.setAttribute("data-rc-" + option, c[option]);
-            }
-            renameAttribute(this, option, "data-rc-" + option);
-          });
-        }
-      }
-      customElements.define(globalConfig.componentPrefix + c.tag, Component);
-      if (c.components) {
-        makeCustomElementComponents(c.components);
-      }
-    });
-  };
-  let parseTriggerValue = (s) => {
-    let [trigger, requestDelay = 0, swapDelay = 0] = s.trim().split(" ");
-    return {
-      trigger,
-      requestDelay: parseInt(requestDelay),
-      swapDelay: parseInt(swapDelay)
-    };
-  };
   let dispatch = (el, name, detail = {}) => {
     el.dispatchEvent(
       new CustomEvent(name, {
@@ -178,13 +205,12 @@ function index_default(Alpine) {
   let delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   let isPath = (s) => s[0] === "/";
   let isId = (s) => s[0] === "#";
-  Alpine.$rc = {
+  Alpine2.$rc = {
     defaultConfig,
-    globalConfig,
     makeCustomElementComponents
   };
   makeGenericComponent();
-  Alpine.directive(
+  Alpine2.directive(
     "remote-component",
     (el, { expression }, { evaluate, cleanup }) => {
       let handleError = (error, data) => {
@@ -200,7 +226,7 @@ function index_default(Alpine) {
         dispatch(el, "rc-before-load", config);
         let fragment = null;
         let exp = expression;
-        let data = Alpine.$data(el);
+        let data = Alpine2.$data(el);
         let script;
         if (!isPath(expression) && !isId(expression)) {
           exp = evaluate(expression);
@@ -215,8 +241,8 @@ function index_default(Alpine) {
           let html;
           try {
             [html, script] = await Promise.all([
-              sendRequest(globalConfig.urlPrefix + exp),
-              config.script && import(globalConfig.urlPrefix + config.script)
+              sendRequest(exp),
+              config.script && import(config.script)
             ]);
             config.responseHTML = html;
             let parsedHtml = parseResponseHtml(html);
@@ -244,33 +270,33 @@ function index_default(Alpine) {
           swapSlotsWithTemplates(el, fragment);
           copyPrefixedAttributes(el, fragment.firstElementChild);
           if (script && script.default) {
-            Alpine.plugin(script.default);
+            Alpine2.plugin(script.default);
           }
           dispatch(el, "rc-before-insert", config);
           if (config.swap === "inner") {
-            Alpine.mutateDom(() => {
+            Alpine2.mutateDom(() => {
               el.replaceChildren(fragment);
             });
             dispatch(el, "rc-inserted", config);
-            Alpine.initTree(el);
+            Alpine2.initTree(el);
           } else if (config.swap === "outer") {
             let fragmentFirstChild = fragment.firstElementChild;
             let fragmentChildren = [...fragment.children];
-            Alpine.mutateDom(() => {
-              Alpine.destroyTree(el);
+            Alpine2.mutateDom(() => {
+              Alpine2.destroyTree(el);
               el.replaceWith(fragment);
             });
             dispatch(fragmentFirstChild, "rc-inserted", config);
             fragmentChildren.forEach((el2) => {
-              Alpine.initTree(el2);
+              Alpine2.initTree(el2);
             });
           } else if (config.swap === "target") {
             let target = el.querySelector("[data-target]");
             if (target) {
-              Alpine.mutateDom(() => {
+              Alpine2.mutateDom(() => {
                 target.replaceChildren(fragment);
               });
-              Alpine.initTree(target);
+              Alpine2.initTree(target);
             }
           }
         }
@@ -278,9 +304,9 @@ function index_default(Alpine) {
         config.initialized = true;
         config.isRunning = false;
       };
-      let config = { ...Alpine.$rc.defaultConfig };
+      let config = { ...Alpine2.$rc.defaultConfig };
       let scopeCleanup = [
-        Alpine.addScopeToNode(el, {
+        Alpine2.addScopeToNode(el, {
           _rc: {
             config,
             trigger: initRemoteComponent,
@@ -291,9 +317,9 @@ function index_default(Alpine) {
             }
           }
         }),
-        Alpine.addScopeToNode(
+        Alpine2.addScopeToNode(
           el,
-          Alpine.reactive({
+          Alpine2.reactive({
             _rcIsLoading: false,
             _rcIsLoadingWithDelay: false,
             _rcIsLoaded: false,
@@ -305,37 +331,15 @@ function index_default(Alpine) {
         scopeCleanup.forEach((c) => c());
       });
       config.rawSource = expression;
-      validOptions.forEach((option) => {
-        let value = el.getAttribute("data-rc-" + option);
-        if (value !== null) {
-          if (option === "trigger") {
-            let parsed = parseTriggerValue(value);
-            if (validTriggers.includes(parsed.trigger)) {
-              Object.assign(config, parsed);
-            }
-            return;
-          }
-          if (option === "swap" && !validSwap.includes(value)) {
-            return;
-          }
-          if (option === "tags") {
-            config.tags = Object.fromEntries(
-              value.split(" ").map((tag) => {
-                return [tag, true];
-              })
-            );
-            return;
-          }
-          config[option] = value;
-        }
-      });
-      dispatch(el, "rc-initialized", Alpine.$data(el)._rc);
+      let options = getOptions(el);
+      Object.assign(config, options);
+      dispatch(el, "rc-initialized", Alpine2.$data(el)._rc);
       if (config.trigger === "load") {
         initRemoteComponent();
       }
     }
   ).before("show");
-  Alpine.magic("rcRoot", (el) => {
+  Alpine2.magic("rcRoot", (el) => {
     return el.closest("[x-remote-component]");
   });
 }
