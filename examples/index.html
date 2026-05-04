@@ -174,7 +174,7 @@
         x-intersect:leave="examples[$el.id].isVisible = false"
         class="scroll-mt-16"
       >
-        <div class="flex flex-col gap-y-6">
+        <div class="flex flex-col gap-y-8">
           <div class="flex items-center justify-between">
             <h2 class="text-2xl font-semibold">
               <div data-slot="title"></div>
@@ -187,7 +187,7 @@
 
           <div class="relative" x-show="isExampleLoaded">
             <pre
-              class="overflow-hidden rounded-xl text-sm"
+              class="overflow-hidden rounded-xl text-sm shadow-lg shadow-gray-200 border border-gray-100"
             ><code class="language-html" x-text="html">
             </code></pre>
             <a
